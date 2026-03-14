@@ -1402,6 +1402,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
     <div class="t-sub">IDLE RPG</div>
   </div>
   <div id="title-tap">▶ 탭하여 시작</div>
+  <div style="position:absolute;bottom:12px;right:12px;font-size:9px;color:var(--text3);z-index:1;letter-spacing:1px;opacity:0.6" id="title-version"></div>
 </div>
 
 <!-- NAME SCREEN -->
@@ -1969,7 +1970,7 @@ const SAVE_KEY = 'milkAdv_v6';
 // ══════════════════════════════════════════
 //  VERSION CHECK
 // ══════════════════════════════════════════
-const GAME_VERSION = 'v02_27';
+const GAME_VERSION = 'v02_30';
 // GitHub Pages 배포 시 아래 URL을 본인 레포로 변경하세요
 // 예: 'https://[계정].github.io/[레포]/version.json'
 const VERSION_CHECK_URL = 'version.json';
@@ -6329,6 +6330,8 @@ function initGameUI(){
 // ══════════════════════════════════════════
 createStars();
 const hasSave=loadGame();
+// 타이틀 버전 표시
+(()=>{const el=document.getElementById('title-version');if(el)el.textContent=GAME_VERSION;})()
 if(!hasSave){G.gold=1500;G.shards=50;G.tickets=20;}
 
 document.getElementById('title-screen').addEventListener('click',e=>{
