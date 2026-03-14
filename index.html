@@ -30,10 +30,10 @@
 </style>
 <style>
 :root {
-  --bg:#0d1117; --bg2:#161b22; --bg3:#1c2333; --bg4:#21262d;
-  --panel:#1e2a3a; --panel2:#243040;
-  --border:#30363d; --border2:#3d4f61;
-  --text:#e6edf3; --text2:#8b949e; --text3:#4a6070;
+  --bg:#141c26; --bg2:#1c2535; --bg3:#232e42; --bg4:#2a3550;
+  --panel:#243348; --panel2:#2c3d58;
+  --border:#3a4a5c; --border2:#4d6478;
+  --text:#e6edf3; --text2:#9baab8; --text3:#5a7080;
   --accent:#58a6ff; --accent2:#1f6feb;
   --gold:#e3b341; --gold2:#f0c040;
   --shard:#3fb950; --ticket:#f78166;
@@ -46,7 +46,7 @@
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{
-  background:#060a0f; color:var(--text);
+  background:#0d131c; color:var(--text);
   font-family:var(--font); font-weight:bold;
   height:100dvh;width:100vw; overflow:hidden;
   display:flex;justify-content:center;align-items:flex-start;
@@ -308,17 +308,17 @@ input[type=range]{width:100%;accent-color:var(--accent)}
   flex:1;min-height:0;position:relative;overflow:hidden;
   display:flex;flex-direction:column;
 }
-/* Chapter backgrounds */
-.chap-bg-1{background:linear-gradient(180deg,#0a1a0a,#0d2010)}
-.chap-bg-2{background:linear-gradient(180deg,#1a0a00,#2a1000)}
-.chap-bg-3{background:linear-gradient(180deg,#0a0f1a,#0d1525)}
-.chap-bg-4{background:linear-gradient(180deg,#1a1400,#201800)}
-.chap-bg-5{background:linear-gradient(180deg,#150010,#200015)}
-.chap-bg-6{background:linear-gradient(180deg,#001020,#001530)}
-.chap-bg-7{background:linear-gradient(180deg,#0d1020,#101530)}
-.chap-bg-8{background:linear-gradient(180deg,#080808,#0d0d0d)}
-.chap-bg-9{background:linear-gradient(180deg,#0d0020,#100025)}
-.chap-bg-10{background:linear-gradient(180deg,#000d20,#001030)}
+/* Stage backgrounds (10스테이지 단위, 총 10구간) — 기존보다 전체적으로 밝게 */
+.stage-bg-0{background:linear-gradient(180deg,#1a3a1a,#1e3a28)}   /* 1~10   초록 숲 */
+.stage-bg-1{background:linear-gradient(180deg,#1e3a1a,#2a3a12)}   /* 11~20  연두/황록 */
+.stage-bg-2{background:linear-gradient(180deg,#1a2e3a,#12283a)}   /* 21~30  청록 습지 */
+.stage-bg-3{background:linear-gradient(180deg,#2e1a2e,#3a1a38)}   /* 31~40  보라 독림 */
+.stage-bg-4{background:linear-gradient(180deg,#3a2010,#3a2818)}   /* 41~50  갈색 고목 */
+.stage-bg-5{background:linear-gradient(180deg,#101e3a,#18183a)}   /* 51~60  심야 파랑 */
+.stage-bg-6{background:linear-gradient(180deg,#3a1010,#3a1e18)}   /* 61~70  붉은 황혼 */
+.stage-bg-7{background:linear-gradient(180deg,#3a3010,#382a08)}   /* 71~80  황금 사막 */
+.stage-bg-8{background:linear-gradient(180deg,#101838,#180e38)}   /* 81~90  심연 암흑 */
+.stage-bg-9{background:linear-gradient(180deg,#1a1428,#281428)}   /* 91~100 마계 심층 */
 
 #boss-alert{
   position:absolute;top:0;left:0;right:0;height:3px;
@@ -516,16 +516,17 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 @keyframes buffIn{0%{transform:scale(0.6);opacity:0}100%{transform:scale(1);opacity:1}}
 .buff-icon.new{animation:buffIn .2s ease}
 
-/* Damage popups */
+/* Damage popups — 메이플 스타일 층층이 */
 .dmg-popup{
   position:absolute;font-size:13px;font-weight:bold;
   pointer-events:none;z-index:30;
-  animation:dmgFloat .95s ease forwards;
-  text-shadow:1px 1px 0 rgba(0,0,0,0.9),2px 2px 0 rgba(0,0,0,0.5)
+  animation:dmgFloat 1.1s ease forwards;
+  text-shadow:1px 1px 0 rgba(0,0,0,0.9),2px 2px 0 rgba(0,0,0,0.5);
+  white-space:nowrap;
 }
 .dmg-popup.crit{font-size:16px}
 .dmg-popup.skill{font-size:15px}
-@keyframes dmgFloat{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-14px)}}
+@keyframes dmgFloat{0%{opacity:1;transform:translateY(0)}80%{opacity:1;transform:translateY(-28px)}100%{opacity:0;transform:translateY(-36px)}}
 @keyframes monsterAttackShake{0%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(4px)}100%{transform:translateX(0)}}
 @keyframes monHit{0%{filter:brightness(1)}20%{filter:brightness(1.2) sepia(0.7) saturate(4) hue-rotate(-30deg) drop-shadow(0 0 7px rgba(255,50,50,0.9))}65%{filter:brightness(1.1) sepia(0.4) saturate(2) hue-rotate(-20deg) drop-shadow(0 0 4px rgba(255,50,50,0.5))}100%{filter:brightness(1)}}
 @keyframes healFloat{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-12px)}}
@@ -1158,14 +1159,21 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 .skill-eff{font-size:11px;color:var(--shard);margin-top:2px}
 .skill-next-eff{font-size:10px;color:var(--text3)}
 .skill-unlock-at{font-size:10px;color:var(--hp);margin-top:2px}
-.sk-btns{display:flex;gap:3px;flex-shrink:0}
+.sk-btns{display:flex;gap:3px;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end;align-items:center}
 .skill-up-btn{
-  padding:4px 7px;font-size:11px;
+  padding:4px 8px;font-size:13px;min-width:26px;
   background:rgba(188,140,255,0.08);border:2px solid var(--skill);
   border-radius:var(--radius);color:var(--skill);font-family:var(--font);font-weight:bold;cursor:pointer;
-  box-shadow:2px 2px 0 rgba(0,0,0,0.4)
+  box-shadow:2px 2px 0 rgba(0,0,0,0.4);line-height:1
 }
 .skill-up-btn:disabled{opacity:.4;cursor:not-allowed}
+.skill-up-bulk{
+  padding:4px 7px;font-size:10px;
+  background:rgba(88,166,255,0.08);border:2px solid var(--accent);
+  border-radius:var(--radius);color:var(--accent);font-family:var(--font);font-weight:bold;cursor:pointer;
+  box-shadow:2px 2px 0 rgba(0,0,0,0.4)
+}
+.skill-up-bulk:disabled{opacity:.4;cursor:not-allowed}
 .skill-equip-btn{
   padding:4px 7px;font-size:11px;
   background:rgba(63,185,80,0.15);border:2px solid #3fb950;
@@ -1203,9 +1211,13 @@ input[type=range]{width:100%;accent-color:var(--accent)}
   border-radius:var(--radius);box-shadow:2px 2px 0 rgba(0,0,0,0.4)
 }
 .coll-mon-item.unknown{filter:brightness(0.2);border-color:var(--border)}
-.coll-mon-item.collected{border-color:var(--shard)}
-.coll-mon-item.boss-item.collected{border-color:var(--hp)}
-.coll-mon-item.vip-item.collected{border-color:var(--shard);box-shadow:0 0 6px rgba(63,185,80,0.4)}
+/* 일반몹: 일반(회색) */
+.coll-mon-item.collected{border-color:var(--common)}
+/* 보스(normal): 희귀(파랑) */
+.coll-mon-item.boss-item.collected{border-color:var(--rare);box-shadow:0 0 5px rgba(88,166,255,0.3)}
+/* vip보스: 영웅(보라) */
+.coll-mon-item.vip-item.collected{border-color:var(--hero);box-shadow:0 0 6px rgba(188,140,255,0.4)}
+/* 엘리트보스: 전설(금색) */
 .coll-mon-item.elite-item.collected{border-color:var(--gold);box-shadow:0 0 8px rgba(227,179,65,0.5)}
 .coll-soul-row{display:flex;align-items:center;gap:3px;flex-wrap:wrap;justify-content:center}
 .coll-soul-stars{font-size:9px;letter-spacing:1px}
@@ -1615,7 +1627,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 <div id="battle">
   <div id="boss-alert"></div>
   <div id="stage-flash"></div>
-  <div id="battle-bg" class="chap-bg-1">
+  <div id="battle-bg" class="stage-bg-0">
     <div id="stage-info-box" onclick="toggleStagePopup()">
       <div style="position:relative">
         <div style="display:flex;align-items:center;gap:5px">
@@ -1897,7 +1909,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
       <div class="growth-sticky-hdr">
         <div id="skill-pts-row" style="display:flex;align-items:center;gap:6px">
           <h3 style="font-size:11px;color:var(--skill);margin:0">스킬</h3>
-          <span id="skill-pts-badge" style="flex:1">스킬P <span id="skill-pt-val">0</span></span>
+          <span id="skill-pts-badge" style="flex:1">P <span id="skill-pt-val">0</span></span>
           <button class="reset-icon-btn" onclick="confirmAction('skillReset')" title="스킬 초기화">↺</button>
         </div>
       </div>
@@ -1973,7 +1985,7 @@ const SAVE_KEY = 'milkAdv_v6';
 // ══════════════════════════════════════════
 //  VERSION CHECK
 // ══════════════════════════════════════════
-const GAME_VERSION = 'v02_47';
+const GAME_VERSION = 'v02_52';
 // GitHub Pages 배포 시 아래 URL을 본인 레포로 변경하세요
 // 예: 'https://[계정].github.io/[레포]/version.json'
 const VERSION_CHECK_URL = 'version.json';
@@ -2028,18 +2040,15 @@ function startVersionCheck(){
 }
 const OLD_KEY = 'milkAdv_v5';
 
-// ── 10개 테마 세트 (챕터 10마다 순환) ──
-// 각 테마: 10개 세그먼트(10스테이지씩) × 각 세그먼트당
-//   monster: 일반 몬스터 1종
-//   boss: 일반 보스 (st%10 != 0인 스테이지)
-//   eliteBoss: 정예 보스 (st%10 == 0, st != 100)
-// 100스테이지: 테마의 eliteFinal (엘리트 보스)
-// bgClass, emoji는 테마 단위
+// ── 단일 테마 (모든 챕터 공통) ──
+// 모든 챕터는 동일한 숲 테마를 사용합니다.
+// 1-1스테이지와 n-1스테이지의 몬스터/맵/브금이 완전히 동일하며,
+// 도감 수집 키도 themeIdx=0 고정으로 챕터 구분 없이 통합됩니다.
 const THEMES=[
-  { // 테마 1 - 자연/숲
-    emoji:'🌲', bgClass:'chap-bg-1',
-    bgClasses:['chap-bg-1','chap-bg-1','chap-bg-1','chap-bg-1','chap-bg-1','chap-bg-1','chap-bg-1','chap-bg-1','chap-bg-1','chap-bg-1'],
-    bgm:[1,1,1,1,1,2,2,2,2,5],
+  { // 테마 1 - 자연/숲 (10스테이지마다 배경·브금 변화)
+    emoji:'🌲', bgClass:'stage-bg-0',
+    bgClasses:['stage-bg-0','stage-bg-1','stage-bg-2','stage-bg-3','stage-bg-4','stage-bg-5','stage-bg-6','stage-bg-7','stage-bg-8','stage-bg-9'],
+    bgm:[1,1,2,2,3,3,4,4,5,5],
     segments:[
       {name:'숲 1구역', monster:{n:'풀잎슬라임',e:'🟢'}, boss:{n:'고목왕',e:'🌳'}, eliteBoss:{n:'숲의 정령왕',e:'🌲'}},
       {name:'숲 2구역', monster:{n:'숲도깨비',e:'🔮'},   boss:{n:'숲의 군주',e:'🦌'}, eliteBoss:{n:'고대 엔트',e:'🌿'}},
@@ -2054,186 +2063,24 @@ const THEMES=[
     ],
     eliteFinal:{n:'자연의 신왕',e:'👑'},
   },
-  { // 테마 2 - 불꽃의 땅
-    emoji:'🌋', bgClass:'chap-bg-2',
-    bgClasses:['chap-bg-2','chap-bg-2','chap-bg-2','chap-bg-2','chap-bg-2','chap-bg-2','chap-bg-2','chap-bg-2','chap-bg-2','chap-bg-2'],
-    bgm:[2,2,2,2,2,3,3,3,3,5],
-    segments:[
-      {name:'화염 1구역', monster:{n:'라바슬라임',e:'🔴'},  boss:{n:'용암의 수호자',e:'🌋'},   eliteBoss:{n:'용암의 정령',e:'🔥'}},
-      {name:'화염 2구역', monster:{n:'신더뱃',e:'🦇'},      boss:{n:'화염 군주',e:'🔥'},eliteBoss:{n:'화염 망령',e:'😈'}},
-      {name:'화염 3구역', monster:{n:'볼케이노',e:'🟠'},    boss:{n:'분화의 지배자',e:'🔱'},  eliteBoss:{n:'분화의 군주',e:'🌋'}},
-      {name:'화염 4구역', monster:{n:'라바크랩',e:'🦀'},    boss:{n:'용암의 군주',e:'🔴'},  eliteBoss:{n:'용암 타이탄',e:'🪨'}},
-      {name:'화염 5구역', monster:{n:'애쉬오크',e:'🪨'},    boss:{n:'재의 지배자',e:'🦎'},eliteBoss:{n:'고원의 화신',e:'⚔️'}},
-      {name:'화염 6구역', monster:{n:'파이어팽',e:'🐺'},    boss:{n:'불꽃 군주',e:'👊'},eliteBoss:{n:'협곡의 악마',e:'😈'}},
-      {name:'화염 7구역', monster:{n:'애쉬스피릿',e:'💨'},  boss:{n:'재의 군주',e:'💀'},  eliteBoss:{n:'재의 지배자',e:'☠️'}},
-      {name:'화염 8구역', monster:{n:'살라만더',e:'🦎'},    boss:{n:'화룡',e:'🐲'},  eliteBoss:{n:'화룡 군주',e:'🐉'}},
-      {name:'화염 9구역', monster:{n:'파이로맨서',e:'🔮'}, boss:{n:'불꽃 마법사',e:'🔥'},  eliteBoss:{n:'마계 화염',e:'🔥'}},
-      {name:'화염 심층부', monster:{n:'화염 팰러딘',e:'⚔️'},boss:{n:'화염 근위대장',e:'🛡️'},eliteBoss:{n:'화염의 신왕',e:'👑'}},
-    ],
-    eliteFinal:{n:'화염의 신왕',e:'👑'},
-  },
-  { // 테마 3 - 설국
-    emoji:'❄️', bgClass:'chap-bg-3',
-    bgClasses:['chap-bg-3','chap-bg-3','chap-bg-3','chap-bg-3','chap-bg-3','chap-bg-3','chap-bg-3','chap-bg-3','chap-bg-3','chap-bg-3'],
-    bgm:[3,3,3,3,3,4,4,4,4,5],
-    segments:[
-      {name:'설원 1구역', monster:{n:'프로스트버니',e:'🐰'},boss:{n:'설원의 군주',e:'🏔️'},eliteBoss:{n:'설원의 수호자',e:'⛄'}},
-      {name:'설원 2구역', monster:{n:'아이스팽',e:'🐺'},    boss:{n:'빙결의 군주',e:'🧊'},eliteBoss:{n:'동굴 빙령',e:'❄️'}},
-      {name:'설원 3구역', monster:{n:'빙결슬라임',e:'🔵'},  boss:{n:'빙하의 지배자',e:'❄️'},  eliteBoss:{n:'빙하의 정령',e:'🌨️'}},
-      {name:'설원 4구역', monster:{n:'스노우맨',e:'⛄'},    boss:{n:'눈보라의 군주',e:'🌨️'},eliteBoss:{n:'눈보라의 화신',e:'🌪️'}},
-      {name:'설원 5구역', monster:{n:'프로스트스피릿',e:'💨'},boss:{n:'냉기 지배자',e:'🌿'},eliteBoss:{n:'숲의 빙신',e:'🌲'}},
-      {name:'설원 6구역', monster:{n:'아이스크랩',e:'🦀'},  boss:{n:'빙결 군주',e:'🐊'}, eliteBoss:{n:'얼어붙은 군주',e:'💀'}},
-      {name:'설원 7구역', monster:{n:'아이스나이트',e:'⚔️'},boss:{n:'설원 장군',e:'🛡️'},eliteBoss:{n:'폐허의 수호자',e:'👻'}},
-      {name:'설원 8구역', monster:{n:'프로스트서펀트',e:'🐍'},boss:{n:'절대냉기의 군주',e:'🧊'},eliteBoss:{n:'절대냉기',e:'❄️'}},
-      {name:'설원 9구역', monster:{n:'아이스드레이크',e:'🐲'},boss:{n:'빙룡',e:'🐉'},   eliteBoss:{n:'빙룡의 어미',e:'🐉'}},
-      {name:'설원 심층부', monster:{n:'설국 팰러딘',e:'⚔️'},boss:{n:'설원 근위대장',e:'🛡️'},eliteBoss:{n:'설원의 신왕',e:'👑'}},
-    ],
-    eliteFinal:{n:'빙결의 신왕',e:'👑'},
-  },
-  { // 테마 4 - 사막
-    emoji:'🏜️', bgClass:'chap-bg-4',
-    bgClasses:['chap-bg-4','chap-bg-4','chap-bg-4','chap-bg-4','chap-bg-4','chap-bg-4','chap-bg-4','chap-bg-4','chap-bg-4','chap-bg-4'],
-    bgm:[4,4,4,4,4,1,1,1,1,5],
-    segments:[
-      {name:'사막 1구역', monster:{n:'샌디슬라임',e:'🟡'}, boss:{n:'사막의 수호자',e:'🏺'},eliteBoss:{n:'사막 정령왕',e:'🦂'}},
-      {name:'사막 2구역', monster:{n:'페넥',e:'🦊'},        boss:{n:'오아시스 군주',e:'💧'},eliteBoss:{n:'오아시스의 신',e:'🌊'}},
-      {name:'사막 3구역', monster:{n:'샌드리자드',e:'🦎'},  boss:{n:'모래폭풍 지배자',e:'🌪️'},eliteBoss:{n:'폭풍의 화신',e:'💨'}},
-      {name:'사막 4구역', monster:{n:'스콜피온',e:'🦂'},     boss:{n:'전갈 군주',e:'🦂'},  eliteBoss:{n:'거대 전갈왕',e:'🦂'}},
-      {name:'사막 5구역', monster:{n:'커스드스톤',e:'🗿'},   boss:{n:'신전 수호자',e:'🏺'},eliteBoss:{n:'고대 신의 분노',e:'😤'}},
-      {name:'사막 6구역', monster:{n:'앤시언트',e:'🧟'},     boss:{n:'불멸의 군주',e:'🧟'},     eliteBoss:{n:'불멸의 지배자',e:'💀'}},
-      {name:'사막 7구역', monster:{n:'골드고렘',e:'🥇'},     boss:{n:'황금 골렘왕',e:'🥇'},eliteBoss:{n:'미궁의 수호신',e:'🗿'}},
-      {name:'사막 8구역', monster:{n:'샌드드레이크',e:'🐲'},boss:{n:'사막룡',e:'🐉'}, eliteBoss:{n:'사막룡의 군주',e:'🐉'}},
-      {name:'사막 9구역', monster:{n:'앤시언트프리스트',e:'🔮'},boss:{n:'고대 사제왕',e:'🔮'},eliteBoss:{n:'금단의 신관',e:'☠️'}},
-      {name:'사막 심층부', monster:{n:'사막 팰러딘',e:'⚔️'}, boss:{n:'사막 근위대장',e:'🛡️'},eliteBoss:{n:'사막의 신왕',e:'👑'}},
-    ],
-    eliteFinal:{n:'사막의 신왕',e:'👑'},
-  },
-  { // 테마 5 - 마계
-    emoji:'👿', bgClass:'chap-bg-5',
-    bgClasses:['chap-bg-5','chap-bg-5','chap-bg-5','chap-bg-5','chap-bg-5','chap-bg-5','chap-bg-5','chap-bg-5','chap-bg-5','chap-bg-5'],
-    bgm:[5,5,5,5,5,5,5,5,5,5],
-    segments:[
-      {name:'마계 1구역', monster:{n:'스몰임프',e:'😈'},    boss:{n:'마계 문지기',e:'🚪'}, eliteBoss:{n:'마계의 지배자',e:'😈'}},
-      {name:'마계 2구역', monster:{n:'헬하운드',e:'🐕'},     boss:{n:'지옥 군주',e:'🐕'},eliteBoss:{n:'황야의 악령',e:'👹'}},
-      {name:'마계 3구역', monster:{n:'데몬슬라임',e:'🟣'},   boss:{n:'데몬 군주',e:'🌿'},eliteBoss:{n:'숲의 악마신',e:'😈'}},
-      {name:'마계 4구역', monster:{n:'본워리어',e:'💀'},     boss:{n:'피의 군주',e:'🩸'},  eliteBoss:{n:'불사 전사왕',e:'💀'}},
-      {name:'마계 5구역', monster:{n:'데몬오크',e:'👹'},    boss:{n:'오크 군주',e:'👹'},eliteBoss:{n:'오크 대왕',e:'👑'}},
-      {name:'마계 6구역', monster:{n:'쉐도우울프',e:'🐺'},   boss:{n:'그림자 군주',e:'🌑'},eliteBoss:{n:'그림자의 지배자',e:'🌑'}},
-      {name:'마계 7구역', monster:{n:'다크위치',e:'🧙'},     boss:{n:'암흑 마법왕',e:'🔮'}, eliteBoss:{n:'암흑 마법신',e:'💜'}},
-      {name:'마계 8구역', monster:{n:'쉐도우나이트',e:'⚔️'},boss:{n:'심연의 기사왕',e:'⚔️'},eliteBoss:{n:'심연의 지배자',e:'🌑'}},
-      {name:'마계 9구역', monster:{n:'다크뱃',e:'🦇'},       boss:{n:'마왕의 신하',e:'😈'},eliteBoss:{n:'마왕의 그림자',e:'👿'}},
-      {name:'마계 심층부', monster:{n:'마계 팰러딘',e:'⚔️'},boss:{n:'마왕 근위대장',e:'🛡️'},eliteBoss:{n:'마계의 신왕',e:'👑'}},
-    ],
-    eliteFinal:{n:'마계의 신왕',e:'👑'},
-  },
-  { // 테마 6 - 심해
-    emoji:'🌊', bgClass:'chap-bg-6',
-    bgClasses:['chap-bg-6','chap-bg-6','chap-bg-6','chap-bg-6','chap-bg-6','chap-bg-6','chap-bg-6','chap-bg-6','chap-bg-6','chap-bg-6'],
-    bgm:[3,3,3,3,3,2,2,2,2,5],
-    segments:[
-      {name:'심해 1구역', monster:{n:'젤리피쉬',e:'🪼'},  boss:{n:'조류의 군주',e:'🌊'},eliteBoss:{n:'해안의 수호자',e:'🦀'}},
-      {name:'심해 2구역', monster:{n:'크랩',e:'🦀'},         boss:{n:'산호초 군주',e:'🦀'},  eliteBoss:{n:'거대 크랩',e:'🦀'}},
-      {name:'심해 3구역', monster:{n:'씨서펀트',e:'🐍'},     boss:{n:'협곡의 뱀왕',e:'🐍'},eliteBoss:{n:'고대 바다뱀',e:'🐍'}},
-      {name:'심해 4구역', monster:{n:'옥토퍼스',e:'🐙'},     boss:{n:'해저 문어왕',e:'🐙'},eliteBoss:{n:'심해 문어신',e:'🐙'}},
-      {name:'심해 5구역', monster:{n:'샤크',e:'🦈'},         boss:{n:'심해 상어왕',e:'🦈'},eliteBoss:{n:'고대 상어신',e:'🦈'}},
-      {name:'심해 6구역', monster:{n:'라바피쉬',e:'🔴'},     boss:{n:'화산 해룡',e:'🐲'},  eliteBoss:{n:'해저 화산신',e:'🌋'}},
-      {name:'심해 7구역', monster:{n:'심연어',e:'🐟'},       boss:{n:'심연의 포식자',e:'🦑'},eliteBoss:{n:'심연의 군주',e:'🌑'}},
-      {name:'심해 8구역', monster:{n:'스타피쉬',e:'⭐'},     boss:{n:'조류 군주',e:'🌀'},eliteBoss:{n:'조류 신',e:'🌊'}},
-      {name:'심해 9구역', monster:{n:'씨드레이크',e:'🐲'},   boss:{n:'해룡',e:'🐉'},       eliteBoss:{n:'해룡 군주',e:'🐉'}},
-      {name:'심해 심층부', monster:{n:'심해 팰러딘',e:'⚔️'}, boss:{n:'심해 근위대장',e:'🛡️'},eliteBoss:{n:'심해의 신왕',e:'👑'}},
-    ],
-    eliteFinal:{n:'심해의 신왕',e:'👑'},
-  },
-  { // 테마 7 - 천공
-    emoji:'☁️', bgClass:'chap-bg-7',
-    bgClasses:['chap-bg-7','chap-bg-7','chap-bg-7','chap-bg-7','chap-bg-7','chap-bg-7','chap-bg-7','chap-bg-7','chap-bg-7','chap-bg-7'],
-    bgm:[4,4,4,4,4,3,3,3,3,5],
-    segments:[
-      {name:'천공 1구역', monster:{n:'클라우드버니',e:'🐰'},boss:{n:'구름 군주',e:'☁️'},  eliteBoss:{n:'구름의 신',e:'⛅'}},
-      {name:'천공 2구역', monster:{n:'윈드버드',e:'🐦'},     boss:{n:'바람의 군주',e:'🌬️'}, eliteBoss:{n:'바람신',e:'💨'}},
-      {name:'천공 3구역', monster:{n:'선버드',e:'🌞'},       boss:{n:'태양 군주',e:'🌞'},  eliteBoss:{n:'태양의 화신',e:'🔥'}},
-      {name:'천공 4구역', monster:{n:'썬더버드',e:'⚡'},     boss:{n:'번개의 군주',e:'⚡'},eliteBoss:{n:'번개신',e:'⚡'}},
-      {name:'천공 5구역', monster:{n:'스카이폭스',e:'🦊'},   boss:{n:'계곡 수호자',e:'🦊'},eliteBoss:{n:'성운의 영주',e:'🌌'}},
-      {name:'천공 6구역', monster:{n:'이글',e:'🦅'},         boss:{n:'이글 군주',e:'🦅'},   eliteBoss:{n:'이글 신왕',e:'🦅'}},
-      {name:'천공 7구역', monster:{n:'스톰슬라임',e:'🌪️'}, boss:{n:'폭풍 마법사',e:'🧙'},eliteBoss:{n:'폭풍의 신관',e:'⚡'}},
-      {name:'천공 8구역', monster:{n:'셀레스티얼',e:'✨'},   boss:{n:'성천의 수호자',e:'🛡️'},eliteBoss:{n:'성천의 왕',e:'👑'}},
-      {name:'천공 9구역', monster:{n:'디바인가드',e:'😇'},   boss:{n:'신의 전령',e:'😇'},  eliteBoss:{n:'천사 대군주',e:'😇'}},
-      {name:'천공 심층부', monster:{n:'천공 팰러딘',e:'⚔️'},boss:{n:'천공 근위대장',e:'🛡️'},eliteBoss:{n:'천공의 신왕',e:'👑'}},
-    ],
-    eliteFinal:{n:'천공의 신왕',e:'👑'},
-  },
-  { // 테마 8 - 암흑 차원
-    emoji:'🌑', bgClass:'chap-bg-8',
-    bgClasses:['chap-bg-8','chap-bg-8','chap-bg-8','chap-bg-8','chap-bg-8','chap-bg-8','chap-bg-8','chap-bg-8','chap-bg-8','chap-bg-8'],
-    bgm:[5,5,5,5,5,5,5,5,5,5],
-    segments:[
-      {name:'암흑 1구역', monster:{n:'다크슬라임',e:'🌑'},  boss:{n:'암흑 군주',e:'🌑'},  eliteBoss:{n:'어둠의 수호자',e:'👥'}},
-      {name:'암흑 2구역', monster:{n:'쉐도우스피릿',e:'👥'},boss:{n:'그림자 군주',e:'🌑'},eliteBoss:{n:'그림자 신',e:'🌑'}},
-      {name:'암흑 3구역', monster:{n:'보이드슬라임',e:'🫧'}, boss:{n:'공허의 지배자',e:'🌀'},eliteBoss:{n:'공허신',e:'🌀'}},
-      {name:'암흑 4구역', monster:{n:'다크뱃',e:'🦇'},       boss:{n:'박쥐 군주',e:'🦇'},     eliteBoss:{n:'고대 박쥐신',e:'🦇'}},
-      {name:'암흑 5구역', monster:{n:'리프트크랩',e:'🦀'},   boss:{n:'균열의 군주',e:'🌀'},eliteBoss:{n:'차원의 지배자',e:'🌌'}},
-      {name:'암흑 6구역', monster:{n:'다크울프',e:'🐺'},     boss:{n:'어둠 늑대왕',e:'🐺'},eliteBoss:{n:'태초의 어둠늑대',e:'🐺'}},
-      {name:'암흑 7구역', monster:{n:'다크오크',e:'👹'},     boss:{n:'암흑 대군주',e:'👹'},eliteBoss:{n:'오크 어둠신',e:'👹'}},
-      {name:'암흑 8구역', monster:{n:'보이드나이트',e:'⚔️'},boss:{n:'무한의 기사',e:'⚔️'},eliteBoss:{n:'암흑 기사신',e:'🌑'}},
-      {name:'암흑 9구역', monster:{n:'보이드위치',e:'🧙'},   boss:{n:'차원 마법왕',e:'🔮'},eliteBoss:{n:'차원 마법신',e:'🔮'}},
-      {name:'암흑 심층부', monster:{n:'암흑 팰러딘',e:'⚔️'},boss:{n:'암흑 근위대장',e:'🛡️'},eliteBoss:{n:'암흑의 신왕',e:'👑'}},
-    ],
-    eliteFinal:{n:'암흑의 신왕',e:'👑'},
-  },
-  { // 테마 9 - 마법탑
-    emoji:'🔮', bgClass:'chap-bg-9',
-    bgClasses:['chap-bg-9','chap-bg-9','chap-bg-9','chap-bg-9','chap-bg-9','chap-bg-9','chap-bg-9','chap-bg-9','chap-bg-9','chap-bg-9'],
-    bgm:[1,1,2,2,3,3,4,4,5,5],
-    segments:[
-      {name:'마법탑 1층', monster:{n:'마나슬라임',e:'🔮'},  boss:{n:'탑의 수호자',e:'🔮'},eliteBoss:{n:'마나 정령왕',e:'✨'}},
-      {name:'마법탑 2층', monster:{n:'리빙북',e:'📚'},      boss:{n:'마법서 군주',e:'📚'},eliteBoss:{n:'지식의 수호자',e:'📚'}},
-      {name:'마법탑 3층', monster:{n:'스펠뱃',e:'🦇'},      boss:{n:'마법 박쥐왕',e:'🦇'},eliteBoss:{n:'마법 박쥐신',e:'🔮'}},
-      {name:'마법탑 4층', monster:{n:'마나스피릿',e:'✨'},  boss:{n:'마나 군주',e:'✨'},eliteBoss:{n:'순수 마나신',e:'🌟'}},
-      {name:'마법탑 5층', monster:{n:'스펠나이트',e:'⚔️'}, boss:{n:'마법 기사왕',e:'⚔️'},eliteBoss:{n:'마법검 신관',e:'🔮'}},
-      {name:'마법탑 6층', monster:{n:'룬워리어',e:'🗿'},    boss:{n:'룬의 군주',e:'🗿'},  eliteBoss:{n:'고대 룬신',e:'🗿'}},
-      {name:'마법탑 7층', monster:{n:'아르카나봇',e:'🤖'}, boss:{n:'마법 자동인형',e:'🤖'},eliteBoss:{n:'고대 마법기계',e:'⚙️'}},
-      {name:'마법탑 8층', monster:{n:'엘리멘탈',e:'🌀'},    boss:{n:'엘리멘탈 왕',e:'🌀'},eliteBoss:{n:'원소의 신',e:'🌌'}},
-      {name:'마법탑 9층', monster:{n:'마법 드레이크',e:'🐲'},boss:{n:'마법룡',e:'🐉'},  eliteBoss:{n:'마법룡 신왕',e:'🐉'}},
-      {name:'마법탑 꼭대기', monster:{n:'아르카나 팰러딘',e:'⚔️'},boss:{n:'탑의 최고 수호자',e:'🛡️'},eliteBoss:{n:'마법탑의 신왕',e:'👑'}},
-    ],
-    eliteFinal:{n:'마법탑의 신왕',e:'👑'},
-  },
-  { // 테마 10 - 별의 세계
-    emoji:'⭐', bgClass:'chap-bg-10',
-    bgClasses:['chap-bg-10','chap-bg-10','chap-bg-10','chap-bg-10','chap-bg-10','chap-bg-10','chap-bg-10','chap-bg-10','chap-bg-10','chap-bg-10'],
-    bgm:[1,2,3,4,5,4,3,2,1,5],
-    segments:[
-      {name:'성계 1구역', monster:{n:'스타슬라임',e:'⭐'},  boss:{n:'별빛 군주',e:'⭐'},  eliteBoss:{n:'별의 수호자',e:'🌟'}},
-      {name:'성계 2구역', monster:{n:'갤럭시버드',e:'🌌'},  boss:{n:'은하 군주',e:'🌌'},  eliteBoss:{n:'은하신',e:'🌌'}},
-      {name:'성계 3구역', monster:{n:'코스모스버니',e:'🐰'},boss:{n:'성운의 군주',e:'🌌'},  eliteBoss:{n:'성운 지배자',e:'💫'}},
-      {name:'성계 4구역', monster:{n:'스타뱃',e:'🦇'},      boss:{n:'초신성 군주',e:'💥'},eliteBoss:{n:'초신성 신',e:'💥'}},
-      {name:'성계 5구역', monster:{n:'보이드스타',e:'🌑'},  boss:{n:'블랙홀의 군주',e:'🌑'},eliteBoss:{n:'블랙홀신',e:'🌌'}},
-      {name:'성계 6구역', monster:{n:'스타크랩',e:'🦀'},   boss:{n:'성진 군주',e:'⭐'},eliteBoss:{n:'우주먼지의 신',e:'✨'}},
-      {name:'성계 7구역', monster:{n:'스타나이트',e:'⚔️'}, boss:{n:'항성의 기사왕',e:'⚔️'},eliteBoss:{n:'항성 신관',e:'⭐'}},
-      {name:'성계 8구역', monster:{n:'플래닛가드',e:'🌍'},  boss:{n:'행성 수호신',e:'🌍'},eliteBoss:{n:'태양계의 왕',e:'☀️'}},
-      {name:'성계 9구역', monster:{n:'스타드레이크',e:'🐲'},boss:{n:'성룡',e:'🐉'},       eliteBoss:{n:'별의 용신',e:'🐉'}},
-      {name:'성계 심층부', monster:{n:'별빛 팰러딘',e:'⚔️'},boss:{n:'별의 근위대장',e:'🛡️'},eliteBoss:{n:'성계의 신왕',e:'👑'}},
-    ],
-    eliteFinal:{n:'성계의 신왕',e:'👑'},
-  },
 ];
 
-// ── 챕터 데이터 동적 생성 헬퍼 ──
-function getTheme(chap){return THEMES[(chap-1)%THEMES.length];}
-function getChapterEmoji(chap){return getTheme(chap).emoji;}
-// 기본 bgClass는 테마의 기본값 (하위 호환)
-function getChapterBgClass(chap){return getTheme(chap).bgClass;}
+// ── 단일 테마 헬퍼 (모든 챕터 공통 THEMES[0]) ──
+// 챕터 번호와 무관하게 항상 숲 테마를 반환합니다.
+function getTheme(){return THEMES[0];}
+function getChapterEmoji(){return '';} // 아이콘 없음
+function getChapterBgClass(){return 'stage-bg-0';}
 // 세그먼트(10스테이지 단위)별 배경 클래스
 function getStageBgClass(chap,stage){
-  const theme=getTheme(chap);
+  const theme=THEMES[0];
   const si=getSegIdx(stage);
   return (theme.bgClasses&&theme.bgClasses[si])||theme.bgClass;
 }
 // 세그먼트(10스테이지 단위)별 BGM 키
 function getStageBgm(chap,stage){
-  const theme=getTheme(chap);
+  const theme=THEMES[0];
   const si=getSegIdx(stage);
-  return (theme.bgm&&theme.bgm[si])||Math.min(5,chap);
+  return (theme.bgm&&theme.bgm[si])||1;
 }
 // 스테이지 → 세그먼트 인덱스 (0~9)
 function getSegIdx(stage){return Math.min(9,Math.floor((stage-1)/10));}
@@ -2244,7 +2091,7 @@ function getBossType(stage){
   return'normal';
 }
 function getMonsterData(chap,stage){
-  const theme=getTheme(chap);
+  const theme=THEMES[0];
   const seg=theme.segments[getSegIdx(stage)];
   const bossType=getBossType(stage);
   const boss=bossType==='elite'?theme.eliteFinal:bossType==='vip'?seg.eliteBoss:seg.boss;
@@ -2270,12 +2117,12 @@ const GACHA_PROBS=[
   [55,32,11,2,0,0,0],         // Lv4  - 영웅 (2%)
   [50,31,14,4,1,0,0],         // Lv5  - 전설 개방 (1%)
   [44,30,18,6,1.8,0.2,0],     // Lv6  - 전설 (1.8%)
-  [36,28,22,10,3,0.8,0.2],    // Lv7  - 신화 개방 (0.2%)
-  [28,26,26,14,4,1.5,0.5],    // Lv8  - 신화 (1.5%)
-  [20,22,30,18,6,2.5,1.5],    // Lv9  - 성물 개방 (1.5%)
-  [13,18,32,22,9,4,2],        // Lv10
-  [7,13,31,27,13,6,3],        // Lv11
-  [3,8,28,31,18,8,4],         // Lv12 max
+  [38,29,22,8,2.5,0.5,0],     // Lv7  - 전설 강화 (2.5%), 신화 아직 없음
+  [31,27,26,12,3.5,0.5,0],    // Lv8  - 전설 강화 (3.5%), 신화 아직 없음
+  [24,24,28,16,5,1.5,0.5],    // Lv9  - 신화 개방 (1.5%), 성물 극소 (0.5%)
+  [16,20,30,20,8,4,2],        // Lv10 - 신화 강화
+  [8,14,30,25,13,7,3],        // Lv11 - 성물 개방 (3%)
+  [3,8,27,30,19,9,4],         // Lv12 max
 ];
 const GACHA_THRESH=[0,50,150,350,700,1200,2000,3200,5000,8000,12000,18000];
 const GACHA_LV_COST=[0,3000,8000,20000,50000,120000,300000,700000,1500000,3000000,6000000,12000000];
@@ -2324,68 +2171,80 @@ const STAT_DEFS=[
 
 const ACTIVE_SKILLS=[
   // ── 초반 ──
+  // 강타: 단타. lv10 목표 dmg≈3600 → base200+lv*16, bonus5: +40%
   {id:'strike',name:'강타',emoji:'⚔️',unlockLv:10,cd:4,
-    descFull:'기본 강타. 레벨당 배율이 크게 오르는 단타 일격.',
-    desc:lv=>`공격력의 ${400+lv*20}% / 5레벨마다 +100% 보너스`,
-    nextDesc:lv=>`공격력의 ${400+(lv+1)*20}%`,
-    bonus5:lv=>Math.floor(lv/5)*100},
+    descFull:'기본 강타. 빠른 쿨타임의 단타 일격. 초반 주력기.',
+    desc:lv=>`공격력의 ${200+lv*16}% / 5레벨마다 +40%`,
+    nextDesc:lv=>`공격력의 ${200+(lv+1)*16}%`,
+    bonus5:lv=>Math.floor(lv/5)*40},
+  // 연속베기: 다단히트. lv10 목표 dps>강타(1100) → 4타 × base80+lv*8%, bonus5: +15% 데미지
   {id:'combo',name:'연속베기',emoji:'🗡️',unlockLv:20,cd:6,
-    descFull:'빠른 연속 베기. 타수와 배율이 함께 성장하는 다단히트.',
-    desc:lv=>`${3+Math.floor(lv/6)}회 × 공격력의 ${120+lv*4}% / 5레벨마다 타수 +1`,
-    nextDesc:lv=>`${3+Math.floor((lv+1)/6)}회 × ${120+(lv+1)*4}%`,
-    bonus5:lv=>Math.floor(lv/5)},  // 타수 추가
+    descFull:'빠른 연속 베기. 타수 고정 4회, 레벨마다 배율 성장. 5레벨마다 각 타격 데미지 +15%.',
+    desc:lv=>`4회 × 공격력의 ${80+lv*8}% / 5레벨마다 각 타 +15%${Math.floor(lv/5)>0?' (현재 +'+Math.floor(lv/5)*15+'%)':''}`,
+    nextDesc:lv=>`4회 × 공격력의 ${80+(lv+1)*8}%`,
+    bonus5:lv=>Math.floor(lv/5)*15},  // 각 타 데미지 % 추가
+  // 횡참: cd5 빠른 중타. lv10 목표 dmg≈6500 → base420+lv*23%, bonus5: +60%
   {id:'slash',name:'횡참',emoji:'🌙',unlockLv:35,cd:5,
-    descFull:'빠른 쿨타임의 횡베기. 짧은 딜레이로 자주 쓸 수 있는 중거리 일격.',
-    desc:lv=>`공격력의 ${300+lv*18}% / 5레벨마다 +80% 보너스`,
-    nextDesc:lv=>`공격력의 ${300+(lv+1)*18}%`,
-    bonus5:lv=>Math.floor(lv/5)*80},
+    descFull:'빠른 쿨타임의 횡베기. 자주 쓸 수 있는 중거리 일격.',
+    desc:lv=>`공격력의 ${420+lv*23}% / 5레벨마다 +60%`,
+    nextDesc:lv=>`공격력의 ${420+(lv+1)*23}%`,
+    bonus5:lv=>Math.floor(lv/5)*60},
+  // 찌르기: cd3 초단쿨 2연타. lv10 목표 dmg≈4500 → 2타 × base160+lv*7%, bonus5: +40%
   {id:'stab',name:'찌르기',emoji:'🔱',unlockLv:55,cd:3,
-    descFull:'짧은 쿨타임 2연타. 갑옷 틈을 파고드는 빠른 찌르기.',
-    desc:lv=>`2회 × 공격력의 ${180+lv*6}% / 5레벨마다 +50% 보너스`,
-    nextDesc:lv=>`2회 × ${180+(lv+1)*6}%`,
-    bonus5:lv=>Math.floor(lv/5)*50},
+    descFull:'초단 쿨타임 2연타. 갑옷 틈을 파고드는 빠른 찌르기.',
+    desc:lv=>`2회 × 공격력의 ${160+lv*7}% / 5레벨마다 +40%`,
+    nextDesc:lv=>`2회 × ${160+(lv+1)*7}%`,
+    bonus5:lv=>Math.floor(lv/5)*40},
   // ── 중반 ──
-  {id:'pierce_shot',name:'관통격',emoji:'🏹',unlockLv:80,cd:9,
-    descFull:'방어구 관통 + 3초 방어 약화. 탱킹 몬스터에 효과적인 일격.',
-    desc:lv=>`공격력의 ${550+lv*25}% + 취약(받는 피해 +25%, 3초) / 5레벨마다 +120%`,
-    nextDesc:lv=>`공격력의 ${550+(lv+1)*25}%`,
+  // 관통격: cd7 방어 약화. lv10 목표 dps>찌르기(2066) → base1100+lv*40%, bonus5: +120%
+  {id:'pierce_shot',name:'관통격',emoji:'🏹',unlockLv:80,cd:7,
+    descFull:'방어구 관통 + 3초 방어 약화. 탱킹 몬스터에 효과적.',
+    desc:lv=>`공격력의 ${1100+lv*40}% + 취약(받는 피해 +25%, 3초) / 5레벨마다 +120%`,
+    nextDesc:lv=>`공격력의 ${1100+(lv+1)*40}%`,
     bonus5:lv=>Math.floor(lv/5)*120},
+  // 선풍참: cd11 HP비례. lv10 목표 기본dps>관통격(2485) → base2000+lv*50%, bonus5: +140%
   {id:'whirlwind',name:'선풍참',emoji:'🌪️',unlockLv:110,cd:11,
     descFull:'단타이지만 몬스터 현재 HP 비례 추가 피해. 고체력 적에게 강력.',
-    desc:lv=>`공격력의 ${450+lv*20}% + 현재HP의 ${(5+lv*.15).toFixed(1)}% / 5레벨마다 +100%`,
-    nextDesc:lv=>`공격력의 ${450+(lv+1)*20}% + 현재HP ${(5+(lv+1)*.15).toFixed(1)}%`,
-    bonus5:lv=>Math.floor(lv/5)*100},
-  {id:'skyfall',name:'낙하참',emoji:'⬇️',unlockLv:150,cd:13,
+    desc:lv=>`공격력의 ${2000+lv*50}% + 현재HP의 ${(4+lv*.12).toFixed(1)}% / 5레벨마다 +140%`,
+    nextDesc:lv=>`공격력의 ${2000+(lv+1)*50}% + 현재HP ${(4+(lv+1)*.12).toFixed(1)}%`,
+    bonus5:lv=>Math.floor(lv/5)*140},
+  // 낙하참: cd12 보스특화. lv10 목표 dps>선풍참(2527) → base2200+lv*60%, bonus5: +180%
+  {id:'skyfall',name:'낙하참',emoji:'⬇️',unlockLv:150,cd:12,
     descFull:'전신 무게를 실은 낙하 일격. 보스에게 추가 배율 적용.',
-    desc:lv=>`공격력의 ${700+lv*30}% (보스 +50%) / 5레벨마다 +150%`,
-    nextDesc:lv=>`공격력의 ${700+(lv+1)*30}%`,
-    bonus5:lv=>Math.floor(lv/5)*150},
-  {id:'explosion',name:'폭쇄',emoji:'💥',unlockLv:200,cd:12,
-    descFull:'검기 폭발로 현재 HP 비례 충격파 발사. 잔피 보스에게 특히 강력.',
-    desc:lv=>`공격력의 ${300+lv*15}% + 현재HP의 ${(8+lv*.2).toFixed(1)}% / 5레벨마다 +70%`,
-    nextDesc:lv=>`+현재HP ${(8+(lv+1)*.2).toFixed(1)}%`,
-    bonus5:lv=>Math.floor(lv/5)*70},
+    desc:lv=>`공격력의 ${2200+lv*60}% (보스 +50%) / 5레벨마다 +180%`,
+    nextDesc:lv=>`공격력의 ${2200+(lv+1)*60}%`,
+    bonus5:lv=>Math.floor(lv/5)*180},
+  // 폭쇄: cd11 HP비례 강화. lv10 목표 dps>낙하참(2958) → base2400+lv*60%, bonus5: +160%
+  {id:'explosion',name:'폭쇄',emoji:'💥',unlockLv:200,cd:11,
+    descFull:'검기 폭발로 현재 HP 비례 충격파. 잔피 보스에게 특히 강력.',
+    desc:lv=>`공격력의 ${2400+lv*60}% + 현재HP의 ${(6+lv*.2).toFixed(1)}% / 5레벨마다 +160%`,
+    nextDesc:lv=>`공격력의 ${2400+(lv+1)*60}% +현재HP ${(6+(lv+1)*.2).toFixed(1)}%`,
+    bonus5:lv=>Math.floor(lv/5)*160},
   // ── 후반 ──
+  // 십자참: cd8 2연타 후반. lv10 목표 dmg≈23200 → 2타 × base950+lv*40%, bonus5: +120%
   {id:'cross_slash',name:'십자참',emoji:'✝️',unlockLv:260,cd:8,
-    descFull:'X자 2타 합산 화력이 높은 딜링기. 레벨당 배율 성장이 우수.',
-    desc:lv=>`2회 × 공격력의 ${500+lv*25}% / 5레벨마다 타수 +1(최대 4회)`,
-    nextDesc:lv=>`2회 × ${500+(lv+1)*25}%`,
-    bonus5:lv=>Math.min(2,Math.floor(lv/5))},  // 타수 추가 (최대+2)
+    descFull:'X자 2타 강타. 레벨당 배율 성장이 우수한 딜링기.',
+    desc:lv=>`2회 × 공격력의 ${950+lv*40}% / 5레벨마다 +120%`,
+    nextDesc:lv=>`2회 × ${950+(lv+1)*40}%`,
+    bonus5:lv=>Math.floor(lv/5)*120},
+  // 처단격: cd10 처단기. lv10 목표 dps>십자참(4575) → base3400+lv*80%, bonus5: +300%
   {id:'execute_slash',name:'처단격',emoji:'🩸',unlockLv:330,cd:10,
     descFull:'HP 35% 이하 즉시 처단. 초과 시도 강력한 단타 발동.',
-    desc:lv=>`HP 35% 이하 즉처치 / 초과 시 공격력의 ${600+lv*30}% / 5레벨마다 +200%`,
-    nextDesc:lv=>`공격력의 ${600+(lv+1)*30}%`,
-    bonus5:lv=>Math.floor(lv/5)*200},
+    desc:lv=>`HP 35% 이하 즉처치 / 초과 시 공격력의 ${3400+lv*80}% / 5레벨마다 +300%`,
+    nextDesc:lv=>`공격력의 ${3400+(lv+1)*80}%`,
+    bonus5:lv=>Math.floor(lv/5)*300},
+  // 검풍진: cd18 5~7타 체증. lv10 목표 dmg≈68400 → 5타×base800+lv*28%(체증+20%), bonus5: 타수+1
   {id:'blade_storm',name:'검풍진',emoji:'🌀',unlockLv:420,cd:18,
     descFull:'5연속 검기 폭풍. 타격마다 배율 20% 체증으로 후반 타격이 강력.',
-    desc:lv=>`5회 × 공격력의 ${250+lv*12}%(타수마다 +20%) / 5레벨마다 타수 +1`,
-    nextDesc:lv=>`5회 × ${250+(lv+1)*12}%`,
+    desc:lv=>`${5+Math.floor(lv/5)}회 × 공격력의 ${800+lv*28}%(타수마다 +20%) / 5레벨마다 타수 +1`,
+    nextDesc:lv=>`${5+Math.floor((lv+1)/5)}회 × ${800+(lv+1)*28}%`,
     bonus5:lv=>Math.floor(lv/5)},  // 타수 추가
-  {id:'chaos',name:'절대검',emoji:'🌑',unlockLv:500,cd:25,
+  // 절대검: cd20 궁극. lv10 목표 dps>검풍진(6720) → base10000+lv*200%, bonus5: +800%
+  {id:'chaos',name:'절대검',emoji:'🌑',unlockLv:500,cd:20,
     descFull:'모든 검술의 정수를 담은 궁극 단타. 압도적인 단일 화력.',
-    desc:lv=>`공격력의 ${1500+lv*50}% / 5레벨마다 +500% 보너스`,
-    nextDesc:lv=>`공격력의 ${1500+(lv+1)*50}%`,
-    bonus5:lv=>Math.floor(lv/5)*500},
+    desc:lv=>`공격력의 ${10000+lv*200}% / 5레벨마다 +800%`,
+    nextDesc:lv=>`공격력의 ${10000+(lv+1)*200}%`,
+    bonus5:lv=>Math.floor(lv/5)*800},
 ];
 
 const PASSIVE_SKILLS=[
@@ -2444,11 +2303,11 @@ const ACHIEVEMENTS=[
   {id:'gacha50',name:'장비뽑기 입문',desc:'뽑기를 50회 시도했습니다.',cond:g=>g.totalGachaCount>=50,reward:{gold:3000},icon:'🎰'},
   {id:'gacha100',name:'장비뽑기 중독',desc:'뽑기를 100회 시도했습니다. 멈출 수 없군요.',cond:g=>g.totalGachaCount>=100,reward:{gold:8000},icon:'🎲'},
   {id:'gacha500',name:'장비뽑기 광신도',desc:'뽑기를 500회 시도한 진정한 광신도.',cond:g=>g.totalGachaCount>=500,reward:{shards:80},icon:'🎪'},
-  {id:'chap1clear',name:'첫 구역 정복',desc:'1-100스테이지를 완전히 정복했습니다.',cond:g=>g.chaptersCleared>=1,reward:{skillPts:3},icon:'⚔️'},
-  {id:'chap3clear',name:'3구역의 용사',desc:'3개 구역을 클리어했습니다.',cond:g=>g.chaptersCleared>=3,reward:{skillPts:8},icon:'🏆'},
-  {id:'chap5clear',name:'5구역의 정복자',desc:'5개 구역을 클리어했습니다.',cond:g=>g.chaptersCleared>=5,reward:{skillPts:15},icon:'👑'},
-  {id:'chap7clear',name:'7구역의 군주',desc:'7개 구역을 클리어했습니다.',cond:g=>g.chaptersCleared>=7,reward:{permAllPct:2},icon:'💎'},
-  {id:'chap10clear',name:'10구역의 신',desc:'10개 구역을 클리어한 전설.',cond:g=>g.chaptersCleared>=10,reward:{permAllPct:5},icon:'🌟'},
+  {id:'chap1clear',name:'첫 챕터 정복',desc:'1-100스테이지를 완전히 정복했습니다.',cond:g=>g.chaptersCleared>=1,reward:{skillPts:3},icon:'⚔️'},
+  {id:'chap3clear',name:'3챕터의 용사',desc:'3개 챕터를 클리어했습니다.',cond:g=>g.chaptersCleared>=3,reward:{skillPts:8},icon:'🏆'},
+  {id:'chap5clear',name:'5챕터의 정복자',desc:'5개 챕터를 클리어했습니다.',cond:g=>g.chaptersCleared>=5,reward:{skillPts:15},icon:'👑'},
+  {id:'chap7clear',name:'7챕터의 군주',desc:'7개 챕터를 클리어했습니다.',cond:g=>g.chaptersCleared>=7,reward:{permAllPct:2},icon:'💎'},
+  {id:'chap10clear',name:'10챕터의 신',desc:'10개 챕터를 클리어한 전설.',cond:g=>g.chaptersCleared>=10,reward:{permAllPct:5},icon:'🌟'},
   {id:'coll30',name:'몬스터 연구가',desc:'도감에 30종의 몬스터를 기록했습니다.',cond:g=>Object.keys(g.monsterColl).length>=30,reward:{shards:30},icon:'📖'},
   {id:'coll80',name:'몬스터 박사',desc:'도감에 80종의 몬스터를 기록한 박사.',cond:g=>Object.keys(g.monsterColl).length>=80,reward:{shards:80},icon:'🔬'},
   {id:'coll150',name:'몬스터 대백과',desc:'도감에 150종. 이 세계의 모든 생명체를 기록했습니다.',cond:g=>Object.keys(g.monsterColl).length>=150,reward:{permAllPct:2},icon:'📚'},
@@ -2479,12 +2338,12 @@ const ACHIEVEMENTS=[
 const TITLES=[
   {id:'newcomer',name:'우유의 모험가',desc:'모험을 시작한 신참 용사',cond:g=>true,bonus:{allPct:1}},
   {id:'milk',name:'진짜 멋진 우유',desc:'이름이 특별한 자만이 얻을 수 있는 칭호',cond:g=>g.name==='멋진 우유',bonus:{allPct:2}},
-  {id:'chap1',name:'첫 구역의 용사',desc:'첫 구역을 정복한 자',cond:g=>g.chaptersCleared>=1,bonus:{atkPct:2}},
-  {id:'chap2',name:'두 번째 정복자',desc:'두 구역을 정복한 자',cond:g=>g.chaptersCleared>=2,bonus:{atkPct:2,hpPct:1}},
-  {id:'chap3',name:'세 구역의 전사',desc:'세 구역을 정복한 자',cond:g=>g.chaptersCleared>=3,bonus:{defPct:3}},
-  {id:'chap5',name:'다섯 구역의 군주',desc:'다섯 구역을 지배한 자',cond:g=>g.chaptersCleared>=5,bonus:{atkPct:5}},
-  {id:'chap7',name:'일곱 구역의 지배자',desc:'일곱 구역을 평정한 자',cond:g=>g.chaptersCleared>=7,bonus:{allPct:5}},
-  {id:'chap10',name:'열 구역의 신',desc:'열 구역에서 신의 경지에 오른 자',cond:g=>g.chaptersCleared>=10,bonus:{allPct:10}},
+  {id:'chap1',name:'첫 챕터의 용사',desc:'첫 챕터를 정복한 자',cond:g=>g.chaptersCleared>=1,bonus:{atkPct:2}},
+  {id:'chap2',name:'두 번째 정복자',desc:'두 챕터를 정복한 자',cond:g=>g.chaptersCleared>=2,bonus:{atkPct:2,hpPct:1}},
+  {id:'chap3',name:'세 챕터의 전사',desc:'세 챕터를 정복한 자',cond:g=>g.chaptersCleared>=3,bonus:{defPct:3}},
+  {id:'chap5',name:'다섯 챕터의 군주',desc:'다섯 챕터를 지배한 자',cond:g=>g.chaptersCleared>=5,bonus:{atkPct:5}},
+  {id:'chap7',name:'일곱 챕터의 지배자',desc:'일곱 챕터를 평정한 자',cond:g=>g.chaptersCleared>=7,bonus:{allPct:5}},
+  {id:'chap10',name:'열 챕터의 신',desc:'열 챕터에서 신의 경지에 오른 자',cond:g=>g.chaptersCleared>=10,bonus:{allPct:10}},
   {id:'hunter',name:'처치의 달인',desc:'1,000마리 이상을 쓰러뜨린 전사',cond:g=>g.totalKills>=1000,bonus:{atkPct:3}},
   {id:'slayer5000',name:'피의 검사',desc:'5,000마리를 처치한 피의 검사',cond:g=>g.totalKills>=5000,bonus:{atkPct:5}},
   {id:'slayer30000',name:'대재앙',desc:'30,000마리를 쓰러뜨린 살아있는 재앙',cond:g=>g.totalKills>=30000,bonus:{atkPct:8,hpPct:3}},
@@ -2504,22 +2363,22 @@ const TITLES=[
 const QUEST_POOL=[
   {title:'몬스터 처치하기',type:'kills',base:30},
   {title:'뽑기 시도하기',type:'gacha',base:3},
-  {title:'스테이지 5개 돌파',type:'stagereach',base:5},
+  {title:'스테이지 3개 돌파',type:'stagereach',base:3},
   {title:'보스 처치하기',type:'boss',base:2},
   {title:'강화 업그레이드',type:'enhance',base:1},
-  {title:'스테이지 10개 돌파',type:'stagereach',base:10},
+  {title:'스테이지 3개 돌파',type:'stagereach',base:3},
   {title:'스탯 투자하기',type:'stat',base:3},
   {title:'스킬 발동하기',type:'skilluse',base:5},
-  {title:'스테이지 20개 돌파',type:'stagereach',base:20},
+  {title:'스테이지 3개 돌파',type:'stagereach',base:3},
   {title:'몬스터 대량 처치',type:'kills',base:100},
   {title:'뽑기 여러 번 하기',type:'gacha',base:8},
-  {title:'스테이지 30개 돌파',type:'stagereach',base:30},
+  {title:'스테이지 3개 돌파',type:'stagereach',base:3},
   {title:'보스 연속 처치',type:'boss',base:6},
   {title:'강화 집중 업그레이드',type:'enhance',base:3},
-  {title:'스테이지 50개 돌파',type:'stagereach',base:50},
+  {title:'스테이지 3개 돌파',type:'stagereach',base:3},
   {title:'스탯 집중 투자',type:'stat',base:8},
   {title:'스킬 집중 발동',type:'skilluse',base:20},
-  {title:'스테이지 100개 돌파',type:'stagereach',base:100},
+  {title:'스테이지 3개 돌파',type:'stagereach',base:3},
 ];
 const QUEST_REWARDS=[
   {gold:500},
@@ -2866,8 +2725,9 @@ function getBaseDef(){return 5+Math.floor(Math.log(G.level+1)*6)+G.ptDef*1.5;}
 
 function getFinalAtk(){
   const base=getBaseAtk();
-  const eq=getEq('weapon','atk')+getEq('gloves','atk');
-  const sl=getSlotBonus('weapon','atk')+getSlotBonus('gloves','atk');
+  const eq=getEq('weapon','atk')+getEq('gloves','atk')+getEq('bracelet','atk');
+  // base: weapon/gloves/bracelet → atk | base2: ring→none, earring→none
+  const sl=getSlotBonus('weapon','atk')+getSlotBonus('gloves','atk')+getSlotBonus('bracelet','atk');
   const totalPct=getEnhPct('atk')+getAllPctBonus('atk');
   const rage=G.rageStacks>0?(getPassiveStat('rage')||{ragePerStack:0}).ragePerStack*(G.rageStacks||0):0;
   return Math.floor((base+eq+sl)*(1+(totalPct+rage)/100));
@@ -2875,7 +2735,9 @@ function getFinalAtk(){
 function getFinalHp(){
   const base=getBaseHp();
   const eq=getEq('armor','hp')+getEq('helmet','hp')+getEq('necklace','hp');
-  const sl=getSlotBonus('armor','hp')+getSlotBonus('helmet','hp')+getSlotBonus('necklace','hp');
+  // base: helmet/necklace/shoulder(b2)/belt(b2)/offhand
+  const sl=getSlotBonus('armor','hp')+getSlotBonus('helmet','hp')+getSlotBonus('necklace','hp')
+    +getSlotBonus('shoulder','hp')+getSlotBonus('belt','hp')+getSlotBonus('offhand','hp');
   const vit=(getPassiveStat('vitality')||{hpPct:0}).hpPct;
   const totalPct=getEnhPct('hp')+getAllPctBonus('hp')+vit;
   return Math.floor((base+eq+sl)*(1+totalPct/100));
@@ -2883,7 +2745,10 @@ function getFinalHp(){
 function getFinalDef(){
   const base=getBaseDef();
   const eq=getEq('armor','def')+getEq('shoulder','def');
-  const sl=getSlotBonus('armor','def')+getSlotBonus('shoulder','def');
+  // base: armor/shoulder | base2: helmet(b2)/necklace(b2)/belt(b2)/offhand(b2)
+  const sl=getSlotBonus('armor','def')+getSlotBonus('shoulder','def')
+    +getSlotBonus('helmet','def')+getSlotBonus('necklace','def')
+    +getSlotBonus('belt','def')+getSlotBonus('offhand','def');
   const totalPct=getEnhPct('def')+getAllPctBonus('def');
   return Math.floor((base+eq+sl)*(1+totalPct/100));
 }
@@ -3321,57 +3186,84 @@ function fireSkill(sid){
   let ed=0;
 
   if(sid==='strike'){
-    ed=getFinalAtk()*(400+lv*20+b5)/100*om;
+    ed=getFinalAtk()*(200+lv*16+b5)/100*om;
   }
   else if(sid==='combo'){
-    const baseHits=3+Math.floor(lv/6);
-    const hits=baseHits+b5; // bonus5 = 타수 추가
-    ed=getFinalAtk()*(120+lv*4)/100*hits*om;
+    // 연속베기: 타수 고정 4회, 각 타 데미지 = base+lv성장+b5(5레벨마다 +15%)
+    const perHitPct=(80+lv*8+b5)/100;
+    const hits=4;
+    let total=0;
+    for(let i=0;i<hits;i++){
+      const hitDmg=getFinalAtk()*perHitPct*om;
+      total+=hitDmg;
+      // 실제 다단 히트: 각 타마다 몬스터 HP 차감 + 데미지 팝업
+      if(i>0){
+        G.monsterCurHp=Math.max(0,G.monsterCurHp-Math.floor(hitDmg));
+        showDmgPopup(Math.floor(hitDmg),false,true);
+        if(G.monsterCurHp<=0)break;
+      }
+    }
+    ed=Math.floor(getFinalAtk()*perHitPct*om); // 첫 타는 아래 공통 처리
   }
   else if(sid==='slash'){
-    ed=getFinalAtk()*(300+lv*18+b5)/100*om;
+    ed=getFinalAtk()*(420+lv*23+b5)/100*om;
   }
   else if(sid==='stab'){
-    ed=getFinalAtk()*(180+lv*6+b5)/100*2*om;
+    // 2연타: 각 타 독립 팝업
+    const perHit=getFinalAtk()*(160+lv*7+b5)/100*om;
+    ed=Math.floor(perHit);
+    G.monsterCurHp=Math.max(0,G.monsterCurHp-ed);
+    showDmgPopup(ed,false,true);
+    ed=Math.floor(perHit); // 2타도 동일, 아래서 처리
   }
   else if(sid==='pierce_shot'){
-    ed=getFinalAtk()*(550+lv*25+b5)/100*om;
+    ed=getFinalAtk()*(1100+lv*40+b5)/100*om;
     const ticks=Math.round(3000/getTickSpeed());
     addBuff({id:'vulnerable',label:'취약',emoji:'💢',ticks,type:'debuff',mDmgTakenMult:1.25});
   }
   else if(sid==='whirlwind'){
-    const hpBonus=G.monsterCurHp*(5+lv*.15)/100*om;
-    ed=getFinalAtk()*(450+lv*20+b5)/100*om+hpBonus;
+    const hpBonus=G.monsterCurHp*(4+lv*.12)/100*om;
+    ed=getFinalAtk()*(2000+lv*50+b5)/100*om+hpBonus;
   }
   else if(sid==='skyfall'){
     const bossMult=G.isBoss?1.5:1;
-    ed=getFinalAtk()*(700+lv*30+b5)/100*om*bossMult;
+    ed=getFinalAtk()*(2200+lv*60+b5)/100*om*bossMult;
   }
   else if(sid==='explosion'){
-    const hpPart=G.monsterCurHp*(8+lv*.2)/100*om;
-    ed=getFinalAtk()*(300+lv*15+b5)/100*om+hpPart;
+    const hpPart=G.monsterCurHp*(6+lv*.2)/100*om;
+    ed=getFinalAtk()*(2400+lv*60+b5)/100*om+hpPart;
   }
   else if(sid==='cross_slash'){
-    const hits=2+Math.min(2,b5); // bonus5 = 타수 추가 최대 +2
-    ed=getFinalAtk()*(500+lv*25)/100*hits*om;
+    // 2타, 5레벨마다 +120% 추가
+    const perHit=getFinalAtk()*(950+lv*40+b5)/100*om;
+    ed=Math.floor(perHit);
+    G.monsterCurHp=Math.max(0,G.monsterCurHp-ed);
+    showDmgPopup(ed,false,true);
+    ed=Math.floor(perHit);
   }
   else if(sid==='execute_slash'){
     if(G.monsterCurHp/G.monsterMaxHp<0.35){
       G.monsterCurHp=0;
     } else {
-      ed=getFinalAtk()*(600+lv*30+b5)/100*om;
+      ed=getFinalAtk()*(3400+lv*80+b5)/100*om;
     }
   }
   else if(sid==='blade_storm'){
     const baseHits=5+b5;
     let total=0;
     for(let i=0;i<baseHits;i++){
-      total+=getFinalAtk()*(250+lv*12)/100*om*(1+i*0.2);
+      const hitDmg=Math.floor(getFinalAtk()*(800+lv*28)/100*om*(1+i*0.2));
+      total+=hitDmg;
+      if(i>0){
+        G.monsterCurHp=Math.max(0,G.monsterCurHp-hitDmg);
+        showDmgPopup(hitDmg,false,true);
+        if(G.monsterCurHp<=0)break;
+      }
     }
-    ed=total;
+    ed=Math.floor(getFinalAtk()*(800+lv*28)/100*om); // 첫 타
   }
   else if(sid==='chaos'){
-    ed=getFinalAtk()*(1500+lv*50+b5)/100*om;
+    ed=getFinalAtk()*(10000+lv*200+b5)/100*om;
   }
 
   if(ed>0){
@@ -3624,8 +3516,8 @@ function spawnMonster(){
     updateMonsterHpBar();
   }
   updateBattleBg();
-  // 도감 키: themeIdx_segIdx_type (type: 'mob','boss_normal','boss_vip','boss_elite')
-  const themeIdx=(G.chapter-1)%THEMES.length;
+  // 도감 키: 0_segIdx_type — 모든 챕터 공통(themeIdx=0 고정)
+  const themeIdx=0;
   const segIdx=getSegIdx(G.stage);
   const collKey=G.isBoss?`${themeIdx}_${segIdx}_boss_${bt}`:`${themeIdx}_${segIdx}_mob`;
   G.monsterColl[collKey]=true;
@@ -3685,7 +3577,7 @@ function updateKillCounter(){
   if(old)old.style.display='none';
 }
 function _dropSoul(type){
-  const themeIdx=(G.chapter-1)%THEMES.length;
+  const themeIdx=0; // 모든 챕터 공통
   const segIdx=getSegIdx(G.stage);
   const key=type==='mob'?`${themeIdx}_${segIdx}_mob`:`${themeIdx}_${segIdx}_boss_${type}`;
   if(!G.monsterSouls)G.monsterSouls={};
@@ -3970,6 +3862,8 @@ function autoDistStat(){
     G.pts--;remaining--;distributed++;
   }
   G.playerCurHp=Math.min(G.playerCurHp,getFinalHp());
+  G.questProg.stat=(G.questProg.stat||0)+distributed;
+  checkQuestProgress();
   showCPChange(prevCP,calcCP());
   showNotif(`⚡ ${distributed}포인트 자동배분 완료`,'reward');
   updateUI();renderStatTab();
@@ -3999,6 +3893,8 @@ function autoDistEnhance(){
     spent+=cost;upgraded++;
   }
   if(upgraded===0){showNotif('💰 골드가 부족하거나 강화 가능한 항목이 없습니다','top');return;}
+  G.questProg.enhance=(G.questProg.enhance||0)+upgraded;
+  checkQuestProgress();
   showCPChange(prevCP,calcCP());
   showNotif(`⚡ ${upgraded}회 자동강화 완료 (💰-${fmtNum(spent)})`,'reward');
   updateUI();renderEnhanceTab();
@@ -4082,26 +3978,24 @@ function renderStatTab(){
 function enhCost(item,lv){
   const n=lv+1;
   const base=item.base;
-  const mult=item.costMult||1;
-  // 치명타 확률: 매우 가파른 비용 (마스터 Lv.50이 장기 목표)
+  // 치명타 확률: 완화된 비용 (마스터 Lv.50 장기 목표)
   if(item.id==='crit'){
-    if(n<=5) return Math.floor(base*Math.pow(2.2,n-1));
-    if(n<=15)return Math.floor(base*Math.pow(1.9,n-1)*2);
-    if(n<=30)return Math.floor(base*Math.pow(1.55,n-1)*10);
-    if(n<=50)return Math.floor(base*Math.pow(1.30,n-1)*80);
-    return Math.floor(base*Math.pow(1.15,n-1)*500);
+    if(n<=10)return Math.floor(base*Math.pow(1.6,n-1));
+    if(n<=25)return Math.floor(base*Math.pow(1.35,n-1)*1.5);
+    if(n<=50)return Math.floor(base*Math.pow(1.18,n-1)*8);
+    return Math.floor(base*Math.pow(1.08,n-1)*60);
   }
   // 잠금 해제 항목
   if(item.unlockReq){
-    if(n<=20)return Math.floor(base*Math.pow(1.6,n-1));
-    if(n<=50)return Math.floor(base*Math.pow(1.3,n-1)*2);
-    return Math.floor(base*Math.pow(1.13,n-1)*6);
+    if(n<=20)return Math.floor(base*Math.pow(1.35,n-1));
+    if(n<=50)return Math.floor(base*Math.pow(1.18,n-1)*1.5);
+    return Math.floor(base*Math.pow(1.07,n-1)*4);
   }
-  // 일반 (costMult 적용 가능)
-  if(n<=20)return Math.floor(base*mult*Math.pow(1.5,n-1));
-  if(n<=50)return Math.floor(base*mult*Math.pow(1.25,n-1)*1.5);
-  if(n<=100)return Math.floor(base*mult*Math.pow(1.12,n-1)*4);
-  return Math.floor(base*mult*Math.pow(1.06,n-1)*12);
+  // 일반 — 완화: 초반 완만, 후반도 억제
+  if(n<=20) return Math.floor(base*Math.pow(1.25,n-1));
+  if(n<=50) return Math.floor(base*Math.pow(1.12,n-1)*1.5);
+  if(n<=100)return Math.floor(base*Math.pow(1.06,n-1)*3);
+  return Math.floor(base*Math.pow(1.03,n-1)*8);
 }
 function enhMax(item){
   let lv=G.enhanceLevels[item.id];
@@ -5004,6 +4898,27 @@ function upgradeSkill(id,type){
   else G.passiveSkillLevels[id]=(G.passiveSkillLevels[id]||0)+1;
   showCPChange(prevCP,calcCP());updateUI();renderSkillTab();
 }
+function upgradeSkillBulk(id,type,amt){
+  const actual=G.skillPts; // 잔여 포인트 전부
+  if(actual<=0){showNotif('✨ 스킬포인트 부족!','top');return;}
+  const prevCP=calcCP();
+  for(let i=0;i<actual;i++){
+    G.skillPts--;
+    if(type==='active')G.activeSkillLevels[id]=(G.activeSkillLevels[id]||0)+1;
+    else G.passiveSkillLevels[id]=(G.passiveSkillLevels[id]||0)+1;
+  }
+  showNotif(`✨ +${actual} 전부 강화!`,'reward');
+  showCPChange(prevCP,calcCP());updateUI();renderSkillTab();
+}
+function downgradeSkill(id,type){
+  const cur=type==='active'?(G.activeSkillLevels[id]||0):(G.passiveSkillLevels[id]||0);
+  if(cur<=0){showNotif('💡 더 이상 내릴 수 없습니다','top');return;}
+  const prevCP=calcCP();
+  if(type==='active')G.activeSkillLevels[id]=cur-1;
+  else G.passiveSkillLevels[id]=cur-1;
+  G.skillPts++;
+  showCPChange(prevCP,calcCP());updateUI();renderSkillTab();
+}
 function equipSkill(id){
   if(!G.equippedSkills)G.equippedSkills=[];
   const idx=G.equippedSkills.indexOf(id);
@@ -5050,7 +4965,9 @@ function renderSkillTab(){
           ${!unlocked?`<div class="skill-unlock-at">🔒 Lv.${sk.unlockLv} 해금</div>`:''}
         </div>
         ${unlocked?`<div class="sk-btns">
-          <button class="skill-up-btn" onclick="upgradeSkill('${sk.id}','active')" ${G.skillPts<=0?'disabled':''}>강화</button>
+          <button class="skill-up-btn" onclick="upgradeSkill('${sk.id}','active')" ${G.skillPts<=0?'disabled':''}>+</button>
+          <button class="skill-up-btn" onclick="downgradeSkill('${sk.id}','active')" ${lv<=0?'disabled':''} style="border-color:var(--text3);color:var(--text3);background:rgba(139,148,158,0.08)">-</button>
+          <button class="skill-up-bulk" onclick="upgradeSkillBulk('${sk.id}','active',5)" ${G.skillPts<=0?'disabled':''}>일괄강화</button>
           <button class="skill-equip-btn${eq?' equipped':''}" onclick="equipSkill('${sk.id}')">${eq?'해제':'장착'}</button>
         </div>`:''}
       </div>
@@ -5070,7 +4987,11 @@ function renderSkillTab(){
           ${unlocked&&lv>0?`<div class="skill-next-eff">▶ 다음: ${sk.desc(lv+1)}</div>`:''}
           ${!unlocked?`<div class="skill-unlock-at">🔒 Lv.${sk.unlockLv} 해금</div>`:''}
         </div>
-        ${unlocked?`<button class="skill-up-btn" onclick="upgradeSkill('${sk.id}','passive')" ${G.skillPts<=0?'disabled':''}>강화</button>`:''}
+        ${unlocked?`<div class="sk-btns">
+          <button class="skill-up-btn" onclick="upgradeSkill('${sk.id}','passive')" ${G.skillPts<=0?'disabled':''}>+</button>
+          <button class="skill-up-btn" onclick="downgradeSkill('${sk.id}','passive')" ${lv<=0?'disabled':''} style="border-color:var(--text3);color:var(--text3);background:rgba(139,148,158,0.08)">-</button>
+          <button class="skill-up-bulk" onclick="upgradeSkillBulk('${sk.id}','passive',5)" ${G.skillPts<=0?'disabled':''}>일괄강화</button>
+        </div>`:''}
       </div>
     </div>`;
   }).join('');
@@ -5144,7 +5065,7 @@ function renderCollTab(){
     const bCol=G.monsterColl[bKey];
     const vCol=G.monsterColl[vKey];
     collHtml+=`<div class="coll-seg-row">
-      <div class="coll-seg-name" style="color:var(--text3);font-size:9px">${seg.name} <span style="opacity:.6">(${si*10+1}~${si*10+10}스테이지)</span></div>
+      <div class="coll-seg-name" style="color:var(--text3);font-size:9px">${si*10+1}~${si*10+10}스테이지</div>
       <div class="coll-mon-group">
         <div class="coll-mon-entry">
           <div class="coll-mon-item${mobCol?' collected':' unknown'}" title="${seg.monster.n}">${seg.monster.e}</div>
@@ -5506,7 +5427,7 @@ function updateNotifDots(){
 function updateStageLbl(){
   const d=getMonsterData(G.chapter,G.stage);
   document.getElementById('stage-label-main').textContent=`${G.chapter}-${G.stage}스테이지`;
-  document.getElementById('stage-label-sub').textContent=`${getChapterEmoji(G.chapter)} ${G.chapter}구역 ${G.stage}스테이지`;
+  document.getElementById('stage-label-sub').textContent=`${G.chapter}챕터 ${G.stage}스테이지`;
 }
 let stagePopupTab2='info';
 let _popupChapOpen={};
@@ -5531,7 +5452,7 @@ function renderStagePopup(){
     const expPerKill=Math.floor(stats.exp*pm);
     const bossGold=Math.floor(bs.gold*pm);
     const bossExp=Math.floor(bs.exp*pm);
-    let html=`<div style="font-size:9px;color:var(--accent);margin-bottom:3px">${getChapterEmoji(G.chapter)} ${G.chapter}구역 ${G.stage}스테이지</div>`;
+    let html=`<div style="font-size:9px;color:var(--accent);margin-bottom:3px">${G.chapter}챕터 ${G.stage}스테이지</div>`;
     html+=`<div class="popup-monster-row"><span>${d.monster.e} ${d.monster.n}</span><span style="color:var(--text3)">HP:${fmtNum(stats.hp)} ATK:${fmtNum(stats.atk)}</span></div>`;
     html+=`<div style="font-size:10px;color:var(--gold);padding:2px 0;border-bottom:1px solid var(--border)">💰 ${fmtNum(goldPerKill)} &nbsp;<span style="display:inline-block;background:#1a4d2a;color:#3fb950;font-size:8px;font-weight:bold;padding:1px 4px;border-radius:3px;border:1px solid #2ea043;vertical-align:middle">EXP</span> ${fmtNum(expPerKill)}</div>`;
     html+=`<div class="popup-monster-row" style="color:var(--hp);margin-top:2px"><span>${d.boss.e} ${d.boss.n} <span style="font-size:9px;opacity:.7">(${bossLabel})</span></span><span style="color:var(--text3)">HP:${fmtNum(bs.hp)} ⏱${bs.bossTimer}s</span></div>`;
@@ -5574,7 +5495,7 @@ function renderStagePopup(){
       const isCur=c===G.chapter;
       const isBest=c===bestChap;
       chapHtml+=`<div class="popup-chap-header${isOpen?' open':''}" onclick="togglePopupChap(${c})" style="${isBest?'border-color:var(--accent)':''}">
-        ${getChapterEmoji(c)} ${c}챕터${isCur?' 🔵':''}${isBest?' ⭐':''}
+        ${c}챕터${isCur?' 🔵':''}${isBest?' ⭐':''}
         <span style="font-size:9px;color:var(--text3)">${isBest?'최고':'1-'+maxS} ${isOpen?'▲':'▼'}</span>
       </div>`;
       if(isOpen){
@@ -6186,14 +6107,30 @@ function _popupAt(b,el,anchorId,offsetX,offsetY){
     el.style.left='50%';el.style.top='50%';
   }
 }
+// 데미지 팝업 스택 — 동시에 여러 데미지가 위로 층층이 쌓임
+const _dmgStack=[];
+const DMG_STACK_GAP=18; // px per slot
+const DMG_STACK_MAX=6;  // 최대 동시 표시 개수
 function showDmgPopup(dmg,isCrit,isSkill=false){
-  const b=document.getElementById('battle');const el=document.createElement('div');
+  const b=document.getElementById('battle');
+  if(!b)return;
+  const el=document.createElement('div');
   el.className='dmg-popup'+(isCrit?' crit':isSkill?' skill':'');
   el.textContent=(isCrit?'💥':isSkill?'⚡':'')+fmtNum(dmg);
   el.style.color=isSkill?'#bc8cff':isCrit?'#e3b341':'#ff6b6b';
-  const rx=(Math.random()-0.5)*8;
-  _popupAt(b,el,'monster-emoji',rx-10,-36);
-  b.appendChild(el);setTimeout(()=>el.remove(),950);
+
+  // 현재 살아있는 팝업 수로 Y오프셋 결정
+  const slot=Math.min(_dmgStack.length, DMG_STACK_MAX-1);
+  const rx=(Math.random()-0.5)*14+(slot%2===0?-6:6);
+  const baseY=-36-slot*DMG_STACK_GAP;
+  _popupAt(b,el,'monster-emoji',rx,baseY);
+  b.appendChild(el);
+  _dmgStack.push(el);
+  setTimeout(()=>{
+    el.remove();
+    const idx=_dmgStack.indexOf(el);
+    if(idx!==-1)_dmgStack.splice(idx,1);
+  },1100);
 }
 function showHealPopup(amt){
   const b=document.getElementById('battle');const el=document.createElement('div');
@@ -6418,7 +6355,7 @@ function saveGame(){
   G.lastSaveTime=Date.now();
   // 전투 중 임시 상태는 세이브에서 제외 (로드 시 비정상 전투 상태 방지)
   const COMBAT_TEMP=['rageStacks','focusStacks','buffs',
-    'monsterCurHp','monsterMaxHp','skillCooldowns','tickCount','_farmMode'];
+    'monsterCurHp','monsterMaxHp','skillCooldowns','tickCount'];
   const saveObj={};
   for(const k in G){if(!COMBAT_TEMP.includes(k))saveObj[k]=G[k];}
   try{localStorage.setItem(SAVE_KEY,JSON.stringify(saveObj));
@@ -6433,14 +6370,27 @@ function loadGame(){
       if(!G.monsterSouls)G.monsterSouls={};
       if(!G.monsterCollLv)G.monsterCollLv={};
       if(G.stageKillCount===undefined)G.stageKillCount=0;
-      // 구버전 monsterColl 키 형식 감지 (챕터_스테이지_idx 형식이면 초기화)
-      const keys=Object.keys(G.monsterColl);
-      if(keys.length>0&&keys[0].split('_').length>=3&&!isNaN(Number(keys[0].split('_')[0]))&&Number(keys[0].split('_')[0])>10){
-        // 새 형식(themeIdx 0~9)이므로 유지
-      } else if(keys.length>0){
-        // 구버전 키 감지 → 초기화
-        G.monsterColl={};
-      }
+      // 구버전 monsterColl/monsterSouls 키 마이그레이션:
+      // themeIdx(1~9) → 0으로 통합 (모든 챕터 공통)
+      const migrateKeys=(obj)=>{
+        const newObj={};
+        for(const k of Object.keys(obj)){
+          const parts=k.split('_');
+          if(parts.length>=3&&!isNaN(Number(parts[0]))){
+            parts[0]='0';
+            const newKey=parts.join('_');
+            if(typeof obj[k]==='number')newObj[newKey]=(newObj[newKey]||0)+obj[k];
+            else newObj[newKey]=obj[k];
+          } else {
+            if(typeof obj[k]==='number')newObj[k]=(newObj[k]||0)+obj[k];
+            else newObj[k]=obj[k];
+          }
+        }
+        return newObj;
+      };
+      G.monsterColl=migrateKeys(G.monsterColl);
+      G.monsterSouls=migrateKeys(G.monsterSouls);
+      if(G.monsterCollLv)G.monsterCollLv=migrateKeys(G.monsterCollLv);
       return true;
     }
   }catch(e){}
