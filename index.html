@@ -308,17 +308,49 @@ input[type=range]{width:100%;accent-color:var(--accent)}
   flex:1;min-height:0;position:relative;overflow:hidden;
   display:flex;flex-direction:column;
 }
-/* Stage backgrounds (10스테이지 단위, 총 10구간) — 기존보다 전체적으로 밝게 */
-.stage-bg-0{background:linear-gradient(180deg,#1a3a1a,#1e3a28)}   /* 1~10   초록 숲 */
-.stage-bg-1{background:linear-gradient(180deg,#1e3a1a,#2a3a12)}   /* 11~20  연두/황록 */
-.stage-bg-2{background:linear-gradient(180deg,#1a2e3a,#12283a)}   /* 21~30  청록 습지 */
-.stage-bg-3{background:linear-gradient(180deg,#2e1a2e,#3a1a38)}   /* 31~40  보라 독림 */
-.stage-bg-4{background:linear-gradient(180deg,#3a2010,#3a2818)}   /* 41~50  갈색 고목 */
-.stage-bg-5{background:linear-gradient(180deg,#101e3a,#18183a)}   /* 51~60  심야 파랑 */
-.stage-bg-6{background:linear-gradient(180deg,#3a1010,#3a1e18)}   /* 61~70  붉은 황혼 */
-.stage-bg-7{background:linear-gradient(180deg,#3a3010,#382a08)}   /* 71~80  황금 사막 */
-.stage-bg-8{background:linear-gradient(180deg,#101838,#180e38)}   /* 81~90  심연 암흑 */
-.stage-bg-9{background:linear-gradient(180deg,#1a1428,#281428)}   /* 91~100 마계 심층 */
+/* Stage backgrounds (10스테이지 단위, 총 10구간) */
+.stage-bg-0{background:linear-gradient(180deg,#1a3a1a,#1e3a28)}
+.stage-bg-1{background:linear-gradient(180deg,#1e3a1a,#2a3a12)}
+.stage-bg-2{background:linear-gradient(180deg,#1a2e3a,#12283a)}
+.stage-bg-3{background:linear-gradient(180deg,#2e1a2e,#3a1a38)}
+.stage-bg-4{background:linear-gradient(180deg,#3a2010,#3a2818)}
+.stage-bg-5{background:linear-gradient(180deg,#101e3a,#18183a)}
+.stage-bg-6{background:linear-gradient(180deg,#3a1010,#3a1e18)}
+.stage-bg-7{background:linear-gradient(180deg,#3a3010,#382a08)}
+.stage-bg-8{background:linear-gradient(180deg,#101838,#180e38)}
+.stage-bg-9{background:linear-gradient(180deg,#1a1428,#281428)}
+
+/* ── 맵 생동감 파티클 ── */
+#map-particles{
+  position:absolute;inset:0;pointer-events:none;z-index:1;overflow:hidden;
+}
+.map-particle{
+  position:absolute;border-radius:50%;opacity:0;
+  animation:particleDrift linear infinite;
+}
+@keyframes particleDrift{
+  0%  {opacity:0;transform:translateY(0) scale(0.5)}
+  15% {opacity:0.6}
+  85% {opacity:0.4}
+  100%{opacity:0;transform:translateY(-80px) scale(1.2)}
+}
+/* 지면 줄 — 캐릭터가 서있는 느낌 */
+#map-ground{
+  position:absolute;bottom:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,0.08) 30%,rgba(255,255,255,0.15) 50%,rgba(255,255,255,0.08) 70%,transparent 100%);
+  animation:groundShimmer 3s ease-in-out infinite;
+  pointer-events:none;z-index:1;
+}
+@keyframes groundShimmer{
+  0%,100%{opacity:0.5}50%{opacity:1}
+}
+/* 배경 빛 안개 */
+#map-fog{
+  position:absolute;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(ellipse 80% 40% at 50% 100%, rgba(255,255,255,0.03) 0%, transparent 70%);
+  animation:fogPulse 4s ease-in-out infinite;
+}
+@keyframes fogPulse{0%,100%{opacity:0.5}50%{opacity:1}}
 
 #boss-alert{
   position:absolute;top:0;left:0;right:0;height:3px;
@@ -1628,6 +1660,9 @@ input[type=range]{width:100%;accent-color:var(--accent)}
   <div id="boss-alert"></div>
   <div id="stage-flash"></div>
   <div id="battle-bg" class="stage-bg-0">
+    <div id="map-fog"></div>
+    <div id="map-particles"></div>
+    <div id="map-ground"></div>
     <div id="stage-info-box" onclick="toggleStagePopup()">
       <div style="position:relative">
         <div style="display:flex;align-items:center;gap:5px">
@@ -1643,6 +1678,10 @@ input[type=range]{width:100%;accent-color:var(--accent)}
       </div>
     </div>
     <div id="boss-gauge-wrap"><div id="boss-gauge-fill" style="width:100%"></div></div>
+    <!-- 파밍 중일 때 최고 스테이지 복귀 버튼 -->
+    <div id="farm-return-bar" style="display:none;padding:2px 8px 2px">
+      <button onclick="moveToMaxStage()" style="width:100%;padding:3px 8px;font-size:10px;background:rgba(88,166,255,0.15);border:2px solid var(--accent);border-radius:var(--radius);color:var(--accent);font-family:var(--font);font-weight:bold;cursor:pointer;box-shadow:1px 1px 0 rgba(0,0,0,0.4)" id="farm-return-btn">🏆 최고 스테이지로 복귀</button>
+    </div>
     <div id="boss-retry-bar" style="display:none;padding:3px 8px 2px;text-align:center">
       <button id="boss-retry-btn" onclick="retryBoss()" style="font-size:11px;padding:3px 12px;background:rgba(255,71,87,0.15);border:2px solid var(--hp);border-radius:var(--radius);color:var(--hp);font-family:var(--font);font-weight:bold;cursor:pointer;animation:pulse2 .9s infinite">⚔️ 보스 재도전</button>
     </div>
@@ -1985,7 +2024,7 @@ const SAVE_KEY = 'milkAdv_v6';
 // ══════════════════════════════════════════
 //  VERSION CHECK
 // ══════════════════════════════════════════
-const GAME_VERSION = 'v02_52';
+const GAME_VERSION = 'v02_53';
 // GitHub Pages 배포 시 아래 URL을 본인 레포로 변경하세요
 // 예: 'https://[계정].github.io/[레포]/version.json'
 const VERSION_CHECK_URL = 'version.json';
@@ -2463,7 +2502,7 @@ function getTotalSoulBonus(){
   return total;
 }
 
-const UNLOCK_STAGES={skill:30,coll:50,tower:100};
+const UNLOCK_STAGES={skill:30,coll:50,tower:101};
 
 const TUTORIALS=[
   // 1. 전투 - 전투 영역
@@ -2493,7 +2532,7 @@ const CTX_TUTORIALS={
   skillTab:{title:'✨ 스킬 탭 해금!',body:'1-30스테이지 돌파! 스킬 탭이 열렸습니다. 액티브 스킬(전투 중 자동 발동)과 패시브 스킬(항상 적용)을 스킬포인트로 습득·레벨업하세요. 장착 슬롯은 최대 5개입니다.',highlight:'👆 하단 스킬 탭 → ⚡ 액티브 / 🌀 패시브 탭',target:'tab-skill',arrowDir:'down'},
   collTab:{title:'📖 도감 탭 해금!',body:'1-50스테이지 돌파! 처치한 몬스터가 도감에 자동 등록됩니다. 수집 종수가 늘수록 스탯 보너스가 증가하고, 혼(Soul)을 모아 레벨업하면 추가 보너스를 얻습니다. 업적 탭에서 업적 보상도 수령하세요.',highlight:'👆 하단 도감 탭 → 몬스터 / 업적 서브탭',target:'tab-coll',arrowDir:'down'},
   firstSoulUp:{title:'👻 혼(Soul) 레벨업!',body:'도감에 등록된 몬스터의 혼이 충분히 모였습니다! 혼을 레벨업(★ 1→5)할수록 전체 스탯 보너스가 영구 증가합니다. 일괄 레벨업 버튼으로 한 번에 처리하세요.',highlight:'👆 도감 탭 → 몬스터 항목 ↑ 버튼 또는 일괄 레벨업',target:'coll-bulk-lvup',arrowDir:'up'},
-  towerTab:{title:'🏰 던전 탭 해금!',body:'1-100스테이지 돌파! 던전 탭이 열렸습니다. 무한의 탑에서 층마다 강력한 적과 싸우며 끝없이 도전하세요. 5층마다 뽑기권, 10층마다 파편, 50층마다 스킬포인트를 받습니다.',highlight:'👆 하단 던전 탭 → 무한의 탑 도전하기',target:'tab-tower',arrowDir:'down'},
+  towerTab:{title:'🏰 던전 탭 해금!',body:'2-1스테이지 진입! 던전 탭이 열렸습니다. 무한의 탑에서 층마다 강력한 적과 싸우며 끝없이 도전하세요. 5층마다 뽑기권, 10층마다 파편, 50층마다 스킬포인트를 받습니다.',highlight:'👆 하단 던전 탭 → 무한의 탑 도전하기',target:'tab-tower',arrowDir:'down'},
   firstVipBoss:{title:'💎 정예 보스 등장!',body:'10스테이지마다 등장하는 정예 보스(💎)입니다! 일반 보스보다 훨씬 강력하며 제한 시간도 30초로 동일합니다.\n\n일반 보스 HP의 약 4배 수준이므로 충분한 강화 없이는 처치가 어렵습니다. 처치 시 파편·골드를 대량 획득합니다.',highlight:'💎 보라색 이름 = 정예 보스 — 단단히 준비하세요!',target:'monster-count',arrowDir:'up'},
   firstEliteBoss:{title:'👑 엘리트 보스 등장!',body:'100스테이지마다 등장하는 최강의 엘리트 보스(👑)입니다! 정예 보스보다 강하며 제한 시간은 90초입니다.\n\n처치 시 스킬포인트와 대량의 골드·경험치를 획득합니다. 모든 강화를 끌어올린 뒤 도전하세요.',highlight:'👑 빨간색 이름 = 엘리트 보스 — 최고의 도전!',target:'monster-count',arrowDir:'up'},
   autoDistStat:{title:'⚡ 스탯 자동배분 해금!',body:'총 100포인트 투자로 자동배분 기능이 해금되었습니다!\n현재 생존력·화력 상황을 분석해 가장 필요한 스탯에 포인트를 자동으로 배분합니다.\n\n[red]🚨 주의: 이 기능은 알고리즘 추천 기반입니다.\n실제 최적 배분과 다를 수 있으니 반드시 결과를 확인하고 필요 시 수동으로 조정하세요.[/red]',highlight:'',target:null,arrowDir:'down'},
@@ -2595,11 +2634,26 @@ let audioCtx=null,bgmGain=null,sfxGain=null,bgmTimer=null,bgmIdx=0;
 let lastGachaSfxTime=0;
 const BGM_MELODIES={
   title:[[262,.3],[294,.3],[330,.3],[349,.3],[392,.5],[330,.3],[294,.3],[262,.5],[196,.3],[220,.3],[262,.6]],
-  1:[[262,.3],[294,.3],[330,.3],[349,.3],[392,.5],[330,.3],[294,.3],[262,.5]],
-  2:[[220,.2],[246,.2],[261,.2],[220,.2],[174,.4],[196,.2],[220,.4]],
-  3:[[523,.3],[494,.3],[440,.3],[392,.3],[349,.5],[392,.3],[440,.5]],
-  4:[[349,.3],[392,.3],[440,.3],[392,.3],[349,.3],[330,.3],[294,.5]],
-  5:[[174,.4],[164,.3],[155,.3],[146,.5],[130,.3],[138,.3],[146,.5]],
+  // BGM 1: 밝고 경쾌한 숲 테마 (20음)
+  1:[[262,.25],[294,.25],[330,.25],[349,.25],[392,.4],[330,.25],[294,.25],[262,.35],
+     [330,.25],[349,.25],[392,.25],[440,.25],[392,.4],[349,.25],[330,.25],[294,.35],
+     [262,.25],[294,.25],[330,.4],[262,.5]],
+  // BGM 2: 신비로운 중간 테마 (18음)
+  2:[[220,.3],[246,.3],[261,.3],[220,.3],[174,.4],[196,.3],[220,.4],
+     [246,.3],[261,.3],[293,.3],[261,.3],[246,.4],[220,.3],[196,.3],
+     [174,.4],[196,.3],[220,.3],[174,.5]],
+  // BGM 3: 긴장감 있는 후반 테마 (18음)
+  3:[[523,.25],[494,.25],[440,.25],[392,.25],[349,.4],[392,.25],[440,.4],
+     [494,.25],[523,.25],[587,.25],[523,.25],[494,.4],[440,.25],[392,.25],
+     [349,.4],[330,.25],[349,.25],[392,.5]],
+  // BGM 4: 웅장한 고층 테마 (20음)
+  4:[[349,.25],[392,.25],[440,.25],[392,.25],[349,.25],[330,.25],[294,.4],
+     [330,.25],[349,.25],[392,.25],[440,.25],[494,.25],[440,.4],[392,.25],
+     [349,.25],[330,.25],[294,.25],[262,.4],[294,.25],[349,.5]],
+  // BGM 5: 어둡고 긴박한 심층 테마 (18음)
+  5:[[174,.35],[164,.3],[155,.3],[146,.4],[130,.3],[138,.3],[146,.4],
+     [155,.3],[164,.3],[174,.4],[164,.3],[155,.3],[146,.35],[138,.3],
+     [130,.4],[123,.3],[130,.3],[146,.5]],
 };
 function initAudio(){
   if(audioCtx)return;
@@ -2871,19 +2925,28 @@ function getFarmPenalty(){
 function updateFarmPenaltyLabel(){
   const el=document.getElementById('farm-penalty-label');
   const tt=document.getElementById('penalty-tooltip');
+  const bar=document.getElementById('farm-return-bar');
   if(!el)return;
   const p=getFarmPenalty();
   if(p.pct<=0){
     el.style.display='none';el.textContent='';
     if(tt)tt.style.display='none';
+    if(bar)bar.style.display='none';
   }else{
     el.style.display='inline';
     el.textContent=`경험치&재화 획득량 감소${p.label}`;
+    if(bar)bar.style.display='block';
+    // 버튼에 현재 최고 스테이지 표시
+    const bestGs=G.highestGlobalStage||currGS();
+    const bestChap=Math.ceil(bestGs/100);
+    const bestSt=((bestGs-1)%100)+1;
+    const btn=document.getElementById('farm-return-btn');
+    if(btn)btn.textContent=`🏆 최고 스테이지로 복귀 (${bestChap}-${bestSt})`;
     // 툴팁 내용 갱신
     if(tt){
       const curGs=currGS();
-      const bestGs=G.highestGlobalStage||curGs;
-      const stageRatio=(getBaseHpForGS(bestGs)/getBaseHpForGS(curGs)).toFixed(1);
+      const bestGs2=G.highestGlobalStage||curGs;
+      const stageRatio=(getBaseHpForGS(bestGs2)/getBaseHpForGS(curGs)).toFixed(1);
       const domRatio=(getFinalAtk()/getBaseHpForGS(curGs)).toFixed(1);
       tt.innerHTML=`<div style="color:var(--hp);font-weight:bold;margin-bottom:3px">🌾 경험치&재화 획득량 감소 ${p.label}</div>`+
         `<div>골드·경험치·파편·혼 드롭에 적용됩니다.</div>`+
@@ -3589,6 +3652,42 @@ function updateBattleBg(){
   const bg=document.getElementById('battle-bg');
   bg.className=getStageBgClass(G.chapter,G.stage);
   bg.style.filter='';
+  spawnMapParticles();
+}
+// 스테이지별 파티클 색상·특성
+const PARTICLE_THEMES=[
+  {color:'rgba(100,220,80,',count:8,size:3,speed:5},   // 0: 숲 — 초록 반딧불
+  {color:'rgba(160,220,60,',count:8,size:3,speed:5},   // 1: 황록
+  {color:'rgba(60,180,200,',count:7,size:3,speed:4},   // 2: 청록 습지 — 물방울
+  {color:'rgba(180,80,220,',count:7,size:3,speed:4},   // 3: 보라 독림 — 포자
+  {color:'rgba(180,100,40,',count:6,size:4,speed:6},   // 4: 고목 — 먼지
+  {color:'rgba(80,100,220,',count:8,size:2,speed:3},   // 5: 심야 — 별
+  {color:'rgba(220,60,40,', count:8,size:3,speed:5},   // 6: 황혼 — 불씨
+  {color:'rgba(220,180,40,',count:7,size:3,speed:5},   // 7: 사막 — 모래
+  {color:'rgba(80,60,220,', count:6,size:2,speed:3},   // 8: 심연 — 에너지
+  {color:'rgba(140,40,160,',count:7,size:3,speed:4},   // 9: 마계 — 마력
+];
+function spawnMapParticles(){
+  const container=document.getElementById('map-particles');
+  if(!container)return;
+  container.innerHTML='';
+  const si=Math.min(9,Math.floor((G.stage-1)/10));
+  const pt=PARTICLE_THEMES[si];
+  for(let i=0;i<pt.count;i++){
+    const el=document.createElement('div');
+    el.className='map-particle';
+    const x=Math.random()*100;
+    const startY=20+Math.random()*60; // 화면 중간~아래
+    const dur=(pt.speed+Math.random()*3).toFixed(1);
+    const delay=(Math.random()*dur).toFixed(1);
+    const sz=pt.size+Math.random()*2;
+    const op=(0.3+Math.random()*0.5).toFixed(2);
+    el.style.cssText=`left:${x}%;bottom:${startY}%;width:${sz}px;height:${sz}px;`+
+      `background:${pt.color}${op});`+
+      `box-shadow:0 0 ${sz*2}px ${pt.color}0.6);`+
+      `animation-duration:${dur}s;animation-delay:-${delay}s;`;
+    container.appendChild(el);
+  }
 }
 
 // ══════════════════════════════════════════
@@ -5465,10 +5564,8 @@ function renderStagePopup(){
     const bestStInChap=((bestGs-1)%100)+1;
     const isCurBest=(G.chapter===bestChap&&G.stage===bestStInChap);
 
-    // ── 고정 상단: 최고 스테이지 버튼 + 즐겨찾기 ──
-    let fixedHtml=`<button onclick="moveToMaxStage()" style="width:100%;padding:4px 8px;font-size:11px;background:rgba(88,166,255,0.12);border:2px solid var(--accent);border-radius:var(--radius);color:var(--accent);font-family:var(--font);font-weight:bold;cursor:pointer;margin-bottom:5px${isCurBest?';opacity:.4;pointer-events:none':''}">
-      🏆 최고 스테이지 (${bestChap}-${bestStInChap})
-    </button>`;
+    // ── 고정 상단: 즐겨찾기 (최고 스테이지 버튼은 파밍바에서 표시) ──
+    let fixedHtml='';
     // 즐겨찾기 칩
     if((G._favStages||[]).length>0){
       fixedHtml+=`<div class="fav-chip-row">`;
@@ -5883,19 +5980,27 @@ function nextTutorial(){
 //  무한의 탑
 // ══════════════════════════════════════════
 function towerEnemyHP(floor){
-  // 층이 높을수록 기하급수적으로 강해짐
-  return Math.floor(getFinalHp()*1.5*Math.pow(1.08,floor-1));
+  // 1층: 플레이어 HP의 약 2배, 10층까지 무난히 클리어 가능
+  if(floor<=10) return Math.floor(getFinalHp()*2.0*Math.pow(1.12,floor-1));
+  if(floor<=30) return Math.floor(getFinalHp()*2.0*Math.pow(1.12,9)*Math.pow(1.09,floor-10));
+  if(floor<=50) return Math.floor(getFinalHp()*2.0*Math.pow(1.12,9)*Math.pow(1.09,20)*Math.pow(1.06,floor-30));
+  return Math.floor(getFinalHp()*2.0*Math.pow(1.12,9)*Math.pow(1.09,20)*Math.pow(1.06,20)*Math.pow(1.04,floor-50));
 }
 function towerEnemyATK(floor){
-  return Math.floor(getFinalAtk()*0.8*Math.pow(1.06,floor-1));
+  // 1층: 플레이어 HP의 2% → 여유로운 생존, 10층: 4% → 적당한 긴장감
+  if(floor<=10) return Math.floor(getFinalHp()*0.02*Math.pow(1.08,floor-1));
+  if(floor<=30) return Math.floor(getFinalHp()*0.02*Math.pow(1.08,9)*Math.pow(1.07,floor-10));
+  if(floor<=50) return Math.floor(getFinalHp()*0.02*Math.pow(1.08,9)*Math.pow(1.07,20)*Math.pow(1.05,floor-30));
+  return Math.floor(getFinalHp()*0.02*Math.pow(1.08,9)*Math.pow(1.07,20)*Math.pow(1.05,20)*Math.pow(1.03,floor-50));
 }
 function towerReward(floor){
-  // 5층 단위: 뽑기권, 10층 단위: 파편, 50층 단위: 스킬포인트
+  // 골드: 1층부터 현실적인 보상
   const r=[];
-  r.push({label:'💰 골드',val:Math.floor(500*Math.pow(1.15,floor-1))});
-  if(floor%5===0)r.push({label:'🎫 뽑기권',val:Math.ceil(floor/10)});
-  if(floor%10===0)r.push({label:'🔩 파편',val:Math.ceil(floor/5)});
-  if(floor%50===0)r.push({label:'✨ 스킬포인트',val:Math.ceil(floor/50)});
+  r.push({label:'💰 골드',val:Math.floor(2000*Math.pow(1.18,floor-1))});
+  if(floor%5===0) r.push({label:'🎫 뽑기권',val:Math.ceil(floor/8)});
+  if(floor%10===0)r.push({label:'🔩 파편',val:Math.ceil(floor/4)});
+  if(floor%25===0)r.push({label:'✨ 스킬포인트',val:Math.ceil(floor/25)});
+  if(floor%50===0)r.push({label:'⚡ 스탯포인트',val:Math.ceil(floor/50)*2});
   return r;
 }
 function switchDungeonTab(id){
@@ -5968,6 +6073,7 @@ function startTowerChallenge(){
         else if(r.label.includes('뽑기권'))G.tickets=Math.min(999,G.tickets+r.val);
         else if(r.label.includes('파편'))G.shards+=r.val;
         else if(r.label.includes('스킬포인트'))G.skillPts+=r.val;
+        else if(r.label.includes('스탯포인트'))G.pts=(G.pts||0)+r.val;
       });
       G.towerFloor++;
       if(G.towerFloor>G.towerBestFloor)G.towerBestFloor=G.towerFloor;
