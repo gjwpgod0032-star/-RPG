@@ -1490,7 +1490,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
     <p id="confirm-msg">정말 진행하시겠습니까?</p>
     <div class="confirm-btns">
       <button id="confirm-ok" style="border-color:#ff4757;color:#ff4757;background:rgba(255,71,87,0.08)" onclick="doConfirm()">확인</button>
-      <button id="confirm-cancel" style="border-color:var(--border2);color:var(--text2);background:var(--bg2)" onclick="closeModal('confirm-modal')">취소</button>
+      <button id="confirm-cancel" style="border-color:var(--border2);color:var(--text2);background:var(--bg2)" onclick="cancelConfirm()">취소</button>
     </div>
   </div>
 </div>
@@ -1619,7 +1619,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
           <div id="stage-label-main">1-1스테이지</div>
           <span id="farm-penalty-label" style="display:none;font-size:10px;color:var(--hp);font-weight:bold;cursor:pointer" onclick="event.stopPropagation();togglePenaltyTooltip()"></span>
         </div>
-        <div id="stage-label-sub">버드나무 평원</div>
+        <div id="stage-label-sub">숲 1구역</div>
         <div id="penalty-tooltip" style="display:none;position:absolute;top:28px;left:0;z-index:30;background:var(--panel);border:2px solid var(--hp);border-radius:var(--radius);padding:6px 8px;font-size:10px;color:var(--text2);min-width:160px;line-height:1.6;box-shadow:3px 3px 0 rgba(0,0,0,0.5)"></div>
       </div>
       <div id="stage-right">
@@ -1881,7 +1881,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
       </div>
       <div id="auto-slot-enh-row" style="margin-top:6px;margin-bottom:2px">
         <button id="auto-slot-enh-btn" onclick="toggleAutoSlotEnh()" style="width:100%;padding:6px;background:rgba(63,185,80,0.08);border:2px solid var(--shard);border-radius:var(--radius);color:var(--shard);font-family:var(--font);font-size:11px;font-weight:bold;cursor:pointer">⚡ 슬롯 자동 강화</button>
-        <div style="font-size:9px;color:var(--text3);margin-top:2px;text-align:center">강화 수치 낮은 순 · 파편 소진 시 자동 중단</div>
+        <div id="auto-slot-enh-hint" style="font-size:9px;color:var(--text3);margin-top:2px;text-align:center">강화 수치 낮은 순 · 파편 소진 시 자동 중단</div>
       </div>
       <div id="frag-exchange-box" style="margin-top:6px">
         <div class="fex-title">🔩 파편 교환</div>
@@ -1970,7 +1970,7 @@ const SAVE_KEY = 'milkAdv_v6';
 // ══════════════════════════════════════════
 //  VERSION CHECK
 // ══════════════════════════════════════════
-const GAME_VERSION = 'v02_30';
+const GAME_VERSION = 'v02_31';
 // GitHub Pages 배포 시 아래 URL을 본인 레포로 변경하세요
 // 예: 'https://[계정].github.io/[레포]/version.json'
 const VERSION_CHECK_URL = 'version.json';
@@ -2033,172 +2033,205 @@ const OLD_KEY = 'milkAdv_v5';
 // 100스테이지: 테마의 eliteFinal (엘리트 보스)
 // bgClass, emoji는 테마 단위
 const THEMES=[
-  { // 테마 1 - 에버그린 왕국 (자연/숲)
+  { // 테마 1 - 자연/숲
     emoji:'🌲', bgClass:'chap-bg-1',
+    bgClasses:['chap-bg-1','chap-bg-1','chap-bg-1','chap-bg-1','chap-bg-1','chap-bg-1','chap-bg-1','chap-bg-1','chap-bg-1','chap-bg-1'],
+    bgm:[1,1,1,1,1,2,2,2,2,5],
     segments:[
-      {name:'버드나무 평원', monster:{n:'풀잎슬라임',e:'🟢'}, boss:{n:'고목왕',e:'🌳'}, eliteBoss:{n:'숲의 정령왕',e:'🌲'}},
-      {name:'속삭이는 숲',   monster:{n:'숲도깨비',e:'🔮'},   boss:{n:'케른로드',e:'🦌'}, eliteBoss:{n:'고대 엔트',e:'🌿'}},
-      {name:'저주받은 독림', monster:{n:'독포자',e:'🍄'},      boss:{n:'벨라도나',e:'🌑'}, eliteBoss:{n:'독의 군주',e:'☠️'}},
-      {name:'거미여왕의 동굴',monster:{n:'크롤러',e:'🕷️'},   boss:{n:'아라크네',e:'🕸️'},eliteBoss:{n:'독거미 여왕',e:'🕷️'}},
-      {name:'용의 둥지',    monster:{n:'드레이크',e:'🐲'},    boss:{n:'이그나르',e:'🐉'}, eliteBoss:{n:'용의 어미',e:'🐉'}},
-      {name:'버려진 왕성',  monster:{n:'데드나이트',e:'🧟'},  boss:{n:'아르카인',e:'🏰'}, eliteBoss:{n:'왕성의 망령',e:'👻'}},
-      {name:'안개 늪지대',  monster:{n:'미스트',e:'🌫️'},     boss:{n:'레비아스',e:'🌊'}, eliteBoss:{n:'늪의 지배자',e:'🐊'}},
-      {name:'폭풍 고원',    monster:{n:'썬더호크',e:'🦅'},    boss:{n:'템페스트',e:'⚡'}, eliteBoss:{n:'폭풍의 신',e:'🌪️'}},
-      {name:'분노의 화산',  monster:{n:'인페르노',e:'🔥'},    boss:{n:'발칸',e:'🌋'},     eliteBoss:{n:'화산의 화신',e:'🌋'}},
-      {name:'에버그린 왕성',monster:{n:'왕국 팰러딘',e:'⚔️'},boss:{n:'근위대장',e:'🛡️'},eliteBoss:{n:'말레딕투스',e:'👑'}},
+      {name:'숲 1구역', monster:{n:'풀잎슬라임',e:'🟢'}, boss:{n:'고목왕',e:'🌳'}, eliteBoss:{n:'숲의 정령왕',e:'🌲'}},
+      {name:'숲 2구역', monster:{n:'숲도깨비',e:'🔮'},   boss:{n:'숲의 군주',e:'🦌'}, eliteBoss:{n:'고대 엔트',e:'🌿'}},
+      {name:'숲 3구역', monster:{n:'독포자',e:'🍄'},      boss:{n:'독의 지배자',e:'🌑'}, eliteBoss:{n:'독의 군주',e:'☠️'}},
+      {name:'숲 4구역', monster:{n:'크롤러',e:'🕷️'},   boss:{n:'거미 군주',e:'🕸️'},eliteBoss:{n:'독거미 여왕',e:'🕷️'}},
+      {name:'숲 5구역', monster:{n:'드레이크',e:'🐲'},    boss:{n:'숲의 용',e:'🐉'}, eliteBoss:{n:'용의 어미',e:'🐉'}},
+      {name:'숲 6구역', monster:{n:'데드나이트',e:'🧟'},  boss:{n:'망령 기사',e:'🏰'}, eliteBoss:{n:'왕성의 망령',e:'👻'}},
+      {name:'숲 7구역', monster:{n:'미스트',e:'🌫️'},     boss:{n:'늪의 군주',e:'🌊'}, eliteBoss:{n:'늪의 지배자',e:'🐊'}},
+      {name:'숲 8구역', monster:{n:'썬더호크',e:'🦅'},    boss:{n:'폭풍의 군주',e:'⚡'}, eliteBoss:{n:'폭풍의 신',e:'🌪️'}},
+      {name:'숲 9구역', monster:{n:'인페르노',e:'🔥'},    boss:{n:'화염 수호자',e:'🌋'},     eliteBoss:{n:'화산의 화신',e:'🌋'}},
+      {name:'숲 심층부', monster:{n:'왕국 팰러딘',e:'⚔️'},boss:{n:'구역 근위대장',e:'🛡️'},eliteBoss:{n:'숲의 신왕',e:'👑'}},
     ],
-    eliteFinal:{n:'에버그린의 신왕',e:'👑'},
+    eliteFinal:{n:'자연의 신왕',e:'👑'},
   },
   { // 테마 2 - 불꽃의 땅
     emoji:'🌋', bgClass:'chap-bg-2',
+    bgClasses:['chap-bg-2','chap-bg-2','chap-bg-2','chap-bg-2','chap-bg-2','chap-bg-2','chap-bg-2','chap-bg-2','chap-bg-2','chap-bg-2'],
+    bgm:[2,2,2,2,2,3,3,3,3,5],
     segments:[
-      {name:'용암 평원',    monster:{n:'라바슬라임',e:'🔴'},  boss:{n:'몰텐킹',e:'🌋'},   eliteBoss:{n:'용암의 정령',e:'🔥'}},
-      {name:'화염 동굴',   monster:{n:'신더뱃',e:'🦇'},      boss:{n:'플레임가드',e:'🔥'},eliteBoss:{n:'화염 망령',e:'😈'}},
-      {name:'분화구',       monster:{n:'볼케이노',e:'🟠'},    boss:{n:'파이로스',e:'🔱'},  eliteBoss:{n:'분화의 군주',e:'🌋'}},
-      {name:'용암 호수',   monster:{n:'라바크랩',e:'🦀'},    boss:{n:'마그마킹',e:'🔴'},  eliteBoss:{n:'용암 타이탄',e:'🪨'}},
-      {name:'화산 고원',   monster:{n:'애쉬오크',e:'🪨'},    boss:{n:'스코치로드',e:'🦎'},eliteBoss:{n:'고원의 화신',e:'⚔️'}},
-      {name:'불꽃 협곡',   monster:{n:'파이어팽',e:'🐺'},    boss:{n:'인페르나스',e:'👊'},eliteBoss:{n:'협곡의 악마',e:'😈'}},
-      {name:'재의 평원',   monster:{n:'애쉬스피릿',e:'💨'},  boss:{n:'신더로드',e:'💀'},  eliteBoss:{n:'재의 군주',e:'☠️'}},
-      {name:'용의 화산',   monster:{n:'살라만더',e:'🦎'},    boss:{n:'드래곤핀',e:'🐲'},  eliteBoss:{n:'화룡',e:'🐉'}},
-      {name:'이그니스 심부',monster:{n:'파이로맨서',e:'🔮'}, boss:{n:'마법불꽃',e:'🔥'},  eliteBoss:{n:'마계 화염',e:'🔥'}},
-      {name:'이그니스 왕성',monster:{n:'화염 팰러딘',e:'⚔️'},boss:{n:'화염 근위대장',e:'🛡️'},eliteBoss:{n:'이그니스의 왕',e:'👑'}},
+      {name:'화염 1구역', monster:{n:'라바슬라임',e:'🔴'},  boss:{n:'용암의 수호자',e:'🌋'},   eliteBoss:{n:'용암의 정령',e:'🔥'}},
+      {name:'화염 2구역', monster:{n:'신더뱃',e:'🦇'},      boss:{n:'화염 군주',e:'🔥'},eliteBoss:{n:'화염 망령',e:'😈'}},
+      {name:'화염 3구역', monster:{n:'볼케이노',e:'🟠'},    boss:{n:'분화의 지배자',e:'🔱'},  eliteBoss:{n:'분화의 군주',e:'🌋'}},
+      {name:'화염 4구역', monster:{n:'라바크랩',e:'🦀'},    boss:{n:'용암의 군주',e:'🔴'},  eliteBoss:{n:'용암 타이탄',e:'🪨'}},
+      {name:'화염 5구역', monster:{n:'애쉬오크',e:'🪨'},    boss:{n:'재의 지배자',e:'🦎'},eliteBoss:{n:'고원의 화신',e:'⚔️'}},
+      {name:'화염 6구역', monster:{n:'파이어팽',e:'🐺'},    boss:{n:'불꽃 군주',e:'👊'},eliteBoss:{n:'협곡의 악마',e:'😈'}},
+      {name:'화염 7구역', monster:{n:'애쉬스피릿',e:'💨'},  boss:{n:'재의 군주',e:'💀'},  eliteBoss:{n:'재의 지배자',e:'☠️'}},
+      {name:'화염 8구역', monster:{n:'살라만더',e:'🦎'},    boss:{n:'화룡',e:'🐲'},  eliteBoss:{n:'화룡 군주',e:'🐉'}},
+      {name:'화염 9구역', monster:{n:'파이로맨서',e:'🔮'}, boss:{n:'불꽃 마법사',e:'🔥'},  eliteBoss:{n:'마계 화염',e:'🔥'}},
+      {name:'화염 심층부', monster:{n:'화염 팰러딘',e:'⚔️'},boss:{n:'화염 근위대장',e:'🛡️'},eliteBoss:{n:'화염의 신왕',e:'👑'}},
     ],
-    eliteFinal:{n:'술탄 이그니아르',e:'👑'},
+    eliteFinal:{n:'화염의 신왕',e:'👑'},
   },
   { // 테마 3 - 설국
     emoji:'❄️', bgClass:'chap-bg-3',
+    bgClasses:['chap-bg-3','chap-bg-3','chap-bg-3','chap-bg-3','chap-bg-3','chap-bg-3','chap-bg-3','chap-bg-3','chap-bg-3','chap-bg-3'],
+    bgm:[3,3,3,3,3,4,4,4,4,5],
     segments:[
-      {name:'눈덮인 평원',  monster:{n:'프로스트버니',e:'🐰'},boss:{n:'아이스로드',e:'🏔️'},eliteBoss:{n:'설원의 수호자',e:'⛄'}},
-      {name:'얼음 동굴',   monster:{n:'아이스팽',e:'🐺'},    boss:{n:'빙결의 군주',e:'🧊'},eliteBoss:{n:'동굴 빙령',e:'❄️'}},
-      {name:'영원한 빙하', monster:{n:'빙결슬라임',e:'🔵'},  boss:{n:'크리오스',e:'❄️'},  eliteBoss:{n:'빙하의 정령',e:'🌨️'}},
-      {name:'눈보라 고원', monster:{n:'스노우맨',e:'⛄'},    boss:{n:'블리자드킹',e:'🌨️'},eliteBoss:{n:'눈보라의 화신',e:'🌪️'}},
-      {name:'냉기의 숲',   monster:{n:'프로스트스피릿',e:'💨'},boss:{n:'냉기 드루이드',e:'🌿'},eliteBoss:{n:'숲의 빙신',e:'🌲'}},
-      {name:'빙결 늪',     monster:{n:'아이스크랩',e:'🦀'},  boss:{n:'빙결 늪왕',e:'🐊'}, eliteBoss:{n:'얼어붙은 군주',e:'💀'}},
-      {name:'설국 폐허',   monster:{n:'아이스나이트',e:'⚔️'},boss:{n:'설국 장군',e:'🛡️'},eliteBoss:{n:'폐허의 수호자',e:'👻'}},
-      {name:'절대영도 평원',monster:{n:'프로스트서펀트',e:'🐍'},boss:{n:'절대영도의 군주',e:'🧊'},eliteBoss:{n:'절대냉기',e:'❄️'}},
-      {name:'빙룡의 둥지', monster:{n:'아이스드레이크',e:'🐲'},boss:{n:'빙룡',e:'🐉'},   eliteBoss:{n:'빙룡의 어미',e:'🐉'}},
-      {name:'프로스티아 왕성',monster:{n:'설국 팰러딘',e:'⚔️'},boss:{n:'설국 근위대장',e:'🛡️'},eliteBoss:{n:'프로스티아의 왕',e:'👑'}},
+      {name:'설원 1구역', monster:{n:'프로스트버니',e:'🐰'},boss:{n:'설원의 군주',e:'🏔️'},eliteBoss:{n:'설원의 수호자',e:'⛄'}},
+      {name:'설원 2구역', monster:{n:'아이스팽',e:'🐺'},    boss:{n:'빙결의 군주',e:'🧊'},eliteBoss:{n:'동굴 빙령',e:'❄️'}},
+      {name:'설원 3구역', monster:{n:'빙결슬라임',e:'🔵'},  boss:{n:'빙하의 지배자',e:'❄️'},  eliteBoss:{n:'빙하의 정령',e:'🌨️'}},
+      {name:'설원 4구역', monster:{n:'스노우맨',e:'⛄'},    boss:{n:'눈보라의 군주',e:'🌨️'},eliteBoss:{n:'눈보라의 화신',e:'🌪️'}},
+      {name:'설원 5구역', monster:{n:'프로스트스피릿',e:'💨'},boss:{n:'냉기 지배자',e:'🌿'},eliteBoss:{n:'숲의 빙신',e:'🌲'}},
+      {name:'설원 6구역', monster:{n:'아이스크랩',e:'🦀'},  boss:{n:'빙결 군주',e:'🐊'}, eliteBoss:{n:'얼어붙은 군주',e:'💀'}},
+      {name:'설원 7구역', monster:{n:'아이스나이트',e:'⚔️'},boss:{n:'설원 장군',e:'🛡️'},eliteBoss:{n:'폐허의 수호자',e:'👻'}},
+      {name:'설원 8구역', monster:{n:'프로스트서펀트',e:'🐍'},boss:{n:'절대냉기의 군주',e:'🧊'},eliteBoss:{n:'절대냉기',e:'❄️'}},
+      {name:'설원 9구역', monster:{n:'아이스드레이크',e:'🐲'},boss:{n:'빙룡',e:'🐉'},   eliteBoss:{n:'빙룡의 어미',e:'🐉'}},
+      {name:'설원 심층부', monster:{n:'설국 팰러딘',e:'⚔️'},boss:{n:'설원 근위대장',e:'🛡️'},eliteBoss:{n:'설원의 신왕',e:'👑'}},
     ],
-    eliteFinal:{n:'크리오스 절대신',e:'👑'},
+    eliteFinal:{n:'빙결의 신왕',e:'👑'},
   },
   { // 테마 4 - 사막
     emoji:'🏜️', bgClass:'chap-bg-4',
+    bgClasses:['chap-bg-4','chap-bg-4','chap-bg-4','chap-bg-4','chap-bg-4','chap-bg-4','chap-bg-4','chap-bg-4','chap-bg-4','chap-bg-4'],
+    bgm:[4,4,4,4,4,1,1,1,1,5],
     segments:[
-      {name:'황금 모래벌판',monster:{n:'샌디슬라임',e:'🟡'}, boss:{n:'앤시언트킹',e:'🏺'},eliteBoss:{n:'사막의 수호자',e:'🦂'}},
-      {name:'사막 오아시스',monster:{n:'페넥',e:'🦊'},        boss:{n:'오아시스 정령',e:'💧'},eliteBoss:{n:'오아시스의 신',e:'🌊'}},
-      {name:'모래폭풍 지대',monster:{n:'샌드리자드',e:'🦎'},  boss:{n:'모래폭풍 군주',e:'🌪️'},eliteBoss:{n:'폭풍의 화신',e:'💨'}},
-      {name:'전갈의 굴',   monster:{n:'스콜피온',e:'🦂'},     boss:{n:'전갈 여왕',e:'🦂'},  eliteBoss:{n:'거대 전갈왕',e:'🦂'}},
-      {name:'고대 신전',   monster:{n:'커스드스톤',e:'🗿'},   boss:{n:'신전 수호자',e:'🏺'},eliteBoss:{n:'고대 신의 분노',e:'😤'}},
-      {name:'미라의 무덤', monster:{n:'앤시언트',e:'🧟'},     boss:{n:'미라왕',e:'🧟'},     eliteBoss:{n:'불멸의 파라오',e:'💀'}},
-      {name:'황금 미궁',   monster:{n:'골드고렘',e:'🥇'},     boss:{n:'황금 골렘왕',e:'🥇'},eliteBoss:{n:'미궁의 수호신',e:'🗿'}},
-      {name:'사막 용의 영역',monster:{n:'샌드드레이크',e:'🐲'},boss:{n:'사막룡',e:'🐉'}, eliteBoss:{n:'사막룡의 군주',e:'🐉'}},
-      {name:'고대 유적 심부',monster:{n:'앤시언트프리스트',e:'🔮'},boss:{n:'고대 사제왕',e:'🔮'},eliteBoss:{n:'금단의 신관',e:'☠️'}},
-      {name:'아우룸 왕성', monster:{n:'사막 팰러딘',e:'⚔️'}, boss:{n:'사막 근위대장',e:'🛡️'},eliteBoss:{n:'파라오 알아우룸',e:'👑'}},
+      {name:'사막 1구역', monster:{n:'샌디슬라임',e:'🟡'}, boss:{n:'사막의 수호자',e:'🏺'},eliteBoss:{n:'사막 정령왕',e:'🦂'}},
+      {name:'사막 2구역', monster:{n:'페넥',e:'🦊'},        boss:{n:'오아시스 군주',e:'💧'},eliteBoss:{n:'오아시스의 신',e:'🌊'}},
+      {name:'사막 3구역', monster:{n:'샌드리자드',e:'🦎'},  boss:{n:'모래폭풍 지배자',e:'🌪️'},eliteBoss:{n:'폭풍의 화신',e:'💨'}},
+      {name:'사막 4구역', monster:{n:'스콜피온',e:'🦂'},     boss:{n:'전갈 군주',e:'🦂'},  eliteBoss:{n:'거대 전갈왕',e:'🦂'}},
+      {name:'사막 5구역', monster:{n:'커스드스톤',e:'🗿'},   boss:{n:'신전 수호자',e:'🏺'},eliteBoss:{n:'고대 신의 분노',e:'😤'}},
+      {name:'사막 6구역', monster:{n:'앤시언트',e:'🧟'},     boss:{n:'불멸의 군주',e:'🧟'},     eliteBoss:{n:'불멸의 지배자',e:'💀'}},
+      {name:'사막 7구역', monster:{n:'골드고렘',e:'🥇'},     boss:{n:'황금 골렘왕',e:'🥇'},eliteBoss:{n:'미궁의 수호신',e:'🗿'}},
+      {name:'사막 8구역', monster:{n:'샌드드레이크',e:'🐲'},boss:{n:'사막룡',e:'🐉'}, eliteBoss:{n:'사막룡의 군주',e:'🐉'}},
+      {name:'사막 9구역', monster:{n:'앤시언트프리스트',e:'🔮'},boss:{n:'고대 사제왕',e:'🔮'},eliteBoss:{n:'금단의 신관',e:'☠️'}},
+      {name:'사막 심층부', monster:{n:'사막 팰러딘',e:'⚔️'}, boss:{n:'사막 근위대장',e:'🛡️'},eliteBoss:{n:'사막의 신왕',e:'👑'}},
     ],
-    eliteFinal:{n:'신왕 파라오',e:'👑'},
+    eliteFinal:{n:'사막의 신왕',e:'👑'},
   },
   { // 테마 5 - 마계
     emoji:'👿', bgClass:'chap-bg-5',
+    bgClasses:['chap-bg-5','chap-bg-5','chap-bg-5','chap-bg-5','chap-bg-5','chap-bg-5','chap-bg-5','chap-bg-5','chap-bg-5','chap-bg-5'],
+    bgm:[5,5,5,5,5,5,5,5,5,5],
     segments:[
-      {name:'마계 입구',    monster:{n:'스몰임프',e:'😈'},    boss:{n:'게이트키퍼',e:'🚪'}, eliteBoss:{n:'마계의 문지기',e:'😈'}},
-      {name:'저주의 황야', monster:{n:'헬하운드',e:'🐕'},     boss:{n:'헬하운드 왕',e:'🐕'},eliteBoss:{n:'황야의 악령',e:'👹'}},
-      {name:'데몬의 숲',   monster:{n:'데몬슬라임',e:'🟣'},   boss:{n:'데몬 드루이드',e:'🌿'},eliteBoss:{n:'숲의 악마신',e:'😈'}},
-      {name:'피의 강가',   monster:{n:'본워리어',e:'💀'},     boss:{n:'피의 군주',e:'🩸'},  eliteBoss:{n:'불사 전사왕',e:'💀'}},
-      {name:'마계 용암지대',monster:{n:'데몬오크',e:'👹'},    boss:{n:'마계 오크왕',e:'👹'},eliteBoss:{n:'오크 대왕',e:'👑'}},
-      {name:'쉐도우 영역', monster:{n:'쉐도우울프',e:'🐺'},   boss:{n:'쉐도우 알파',e:'🌑'},eliteBoss:{n:'그림자의 군주',e:'🌑'}},
-      {name:'어둠의 탑',   monster:{n:'다크위치',e:'🧙'},     boss:{n:'다크마법왕',e:'🔮'}, eliteBoss:{n:'암흑 마법신',e:'💜'}},
-      {name:'마계 심연',   monster:{n:'쉐도우나이트',e:'⚔️'},boss:{n:'심연의 기사왕',e:'⚔️'},eliteBoss:{n:'심연의 지배자',e:'🌑'}},
-      {name:'마왕의 성',   monster:{n:'다크뱃',e:'🦇'},       boss:{n:'마왕의 신하',e:'😈'},eliteBoss:{n:'마왕의 그림자',e:'👿'}},
-      {name:'아비수스 왕좌',monster:{n:'마계 팰러딘',e:'⚔️'},boss:{n:'마왕 근위대장',e:'🛡️'},eliteBoss:{n:'마왕 루시퍼',e:'👑'}},
+      {name:'마계 1구역', monster:{n:'스몰임프',e:'😈'},    boss:{n:'마계 문지기',e:'🚪'}, eliteBoss:{n:'마계의 지배자',e:'😈'}},
+      {name:'마계 2구역', monster:{n:'헬하운드',e:'🐕'},     boss:{n:'지옥 군주',e:'🐕'},eliteBoss:{n:'황야의 악령',e:'👹'}},
+      {name:'마계 3구역', monster:{n:'데몬슬라임',e:'🟣'},   boss:{n:'데몬 군주',e:'🌿'},eliteBoss:{n:'숲의 악마신',e:'😈'}},
+      {name:'마계 4구역', monster:{n:'본워리어',e:'💀'},     boss:{n:'피의 군주',e:'🩸'},  eliteBoss:{n:'불사 전사왕',e:'💀'}},
+      {name:'마계 5구역', monster:{n:'데몬오크',e:'👹'},    boss:{n:'오크 군주',e:'👹'},eliteBoss:{n:'오크 대왕',e:'👑'}},
+      {name:'마계 6구역', monster:{n:'쉐도우울프',e:'🐺'},   boss:{n:'그림자 군주',e:'🌑'},eliteBoss:{n:'그림자의 지배자',e:'🌑'}},
+      {name:'마계 7구역', monster:{n:'다크위치',e:'🧙'},     boss:{n:'암흑 마법왕',e:'🔮'}, eliteBoss:{n:'암흑 마법신',e:'💜'}},
+      {name:'마계 8구역', monster:{n:'쉐도우나이트',e:'⚔️'},boss:{n:'심연의 기사왕',e:'⚔️'},eliteBoss:{n:'심연의 지배자',e:'🌑'}},
+      {name:'마계 9구역', monster:{n:'다크뱃',e:'🦇'},       boss:{n:'마왕의 신하',e:'😈'},eliteBoss:{n:'마왕의 그림자',e:'👿'}},
+      {name:'마계 심층부', monster:{n:'마계 팰러딘',e:'⚔️'},boss:{n:'마왕 근위대장',e:'🛡️'},eliteBoss:{n:'마계의 신왕',e:'👑'}},
     ],
-    eliteFinal:{n:'루시퍼 마제',e:'👑'},
+    eliteFinal:{n:'마계의 신왕',e:'👑'},
   },
   { // 테마 6 - 심해
     emoji:'🌊', bgClass:'chap-bg-6',
+    bgClasses:['chap-bg-6','chap-bg-6','chap-bg-6','chap-bg-6','chap-bg-6','chap-bg-6','chap-bg-6','chap-bg-6','chap-bg-6','chap-bg-6'],
+    bgm:[3,3,3,3,3,2,2,2,2,5],
     segments:[
-      {name:'해안 얕은 바다',monster:{n:'젤리피쉬',e:'🪼'},  boss:{n:'조류의 군주',e:'🌊'},eliteBoss:{n:'해안의 수호자',e:'🦀'}},
-      {name:'산호초 지대', monster:{n:'크랩',e:'🦀'},         boss:{n:'산호초 왕',e:'🦀'},  eliteBoss:{n:'거대 크랩',e:'🦀'}},
-      {name:'심해 협곡',   monster:{n:'씨서펀트',e:'🐍'},     boss:{n:'협곡의 뱀왕',e:'🐍'},eliteBoss:{n:'고대 바다뱀',e:'🐍'}},
-      {name:'해저 동굴',   monster:{n:'옥토퍼스',e:'🐙'},     boss:{n:'해저 문어왕',e:'🐙'},eliteBoss:{n:'심해 문어신',e:'🐙'}},
-      {name:'어둠의 심해', monster:{n:'샤크',e:'🦈'},         boss:{n:'심해 상어왕',e:'🦈'},eliteBoss:{n:'고대 상어신',e:'🦈'}},
-      {name:'해저 화산',   monster:{n:'라바피쉬',e:'🔴'},     boss:{n:'화산 해룡',e:'🐲'},  eliteBoss:{n:'해저 화산신',e:'🌋'}},
-      {name:'빛없는 심연', monster:{n:'심연어',e:'🐟'},       boss:{n:'심연의 포식자',e:'🦑'},eliteBoss:{n:'심연의 군주',e:'🌑'}},
-      {name:'조류의 미궁', monster:{n:'스타피쉬',e:'⭐'},     boss:{n:'미궁의 조류왕',e:'🌀'},eliteBoss:{n:'조류 신',e:'🌊'}},
-      {name:'해룡의 영역', monster:{n:'씨드레이크',e:'🐲'},   boss:{n:'해룡',e:'🐉'},       eliteBoss:{n:'해룡 군주',e:'🐉'}},
-      {name:'아비살 심해', monster:{n:'심해 팰러딘',e:'⚔️'}, boss:{n:'심해 근위대장',e:'🛡️'},eliteBoss:{n:'크라켄의 왕',e:'👑'}},
+      {name:'심해 1구역', monster:{n:'젤리피쉬',e:'🪼'},  boss:{n:'조류의 군주',e:'🌊'},eliteBoss:{n:'해안의 수호자',e:'🦀'}},
+      {name:'심해 2구역', monster:{n:'크랩',e:'🦀'},         boss:{n:'산호초 군주',e:'🦀'},  eliteBoss:{n:'거대 크랩',e:'🦀'}},
+      {name:'심해 3구역', monster:{n:'씨서펀트',e:'🐍'},     boss:{n:'협곡의 뱀왕',e:'🐍'},eliteBoss:{n:'고대 바다뱀',e:'🐍'}},
+      {name:'심해 4구역', monster:{n:'옥토퍼스',e:'🐙'},     boss:{n:'해저 문어왕',e:'🐙'},eliteBoss:{n:'심해 문어신',e:'🐙'}},
+      {name:'심해 5구역', monster:{n:'샤크',e:'🦈'},         boss:{n:'심해 상어왕',e:'🦈'},eliteBoss:{n:'고대 상어신',e:'🦈'}},
+      {name:'심해 6구역', monster:{n:'라바피쉬',e:'🔴'},     boss:{n:'화산 해룡',e:'🐲'},  eliteBoss:{n:'해저 화산신',e:'🌋'}},
+      {name:'심해 7구역', monster:{n:'심연어',e:'🐟'},       boss:{n:'심연의 포식자',e:'🦑'},eliteBoss:{n:'심연의 군주',e:'🌑'}},
+      {name:'심해 8구역', monster:{n:'스타피쉬',e:'⭐'},     boss:{n:'조류 군주',e:'🌀'},eliteBoss:{n:'조류 신',e:'🌊'}},
+      {name:'심해 9구역', monster:{n:'씨드레이크',e:'🐲'},   boss:{n:'해룡',e:'🐉'},       eliteBoss:{n:'해룡 군주',e:'🐉'}},
+      {name:'심해 심층부', monster:{n:'심해 팰러딘',e:'⚔️'}, boss:{n:'심해 근위대장',e:'🛡️'},eliteBoss:{n:'심해의 신왕',e:'👑'}},
     ],
-    eliteFinal:{n:'크라켄 신왕',e:'👑'},
+    eliteFinal:{n:'심해의 신왕',e:'👑'},
   },
   { // 테마 7 - 천공
     emoji:'☁️', bgClass:'chap-bg-7',
+    bgClasses:['chap-bg-7','chap-bg-7','chap-bg-7','chap-bg-7','chap-bg-7','chap-bg-7','chap-bg-7','chap-bg-7','chap-bg-7','chap-bg-7'],
+    bgm:[4,4,4,4,4,3,3,3,3,5],
     segments:[
-      {name:'구름 평원',    monster:{n:'클라우드버니',e:'🐰'},boss:{n:'구름 정령',e:'☁️'},  eliteBoss:{n:'구름의 신',e:'⛅'}},
-      {name:'바람의 섬',   monster:{n:'윈드버드',e:'🐦'},     boss:{n:'바람의 왕',e:'🌬️'}, eliteBoss:{n:'바람신',e:'💨'}},
-      {name:'태양 고원',   monster:{n:'선버드',e:'🌞'},       boss:{n:'태양 정령',e:'🌞'},  eliteBoss:{n:'태양의 화신',e:'🔥'}},
-      {name:'번개 산맥',   monster:{n:'썬더버드',e:'⚡'},     boss:{n:'번개의 군주',e:'⚡'},eliteBoss:{n:'번개신',e:'⚡'}},
-      {name:'성운의 계곡', monster:{n:'스카이폭스',e:'🦊'},   boss:{n:'계곡의 수호자',e:'🦊'},eliteBoss:{n:'성운의 영주',e:'🌌'}},
-      {name:'구름 성채',   monster:{n:'이글',e:'🦅'},         boss:{n:'이글로드',e:'🦅'},   eliteBoss:{n:'이글 신왕',e:'🦅'}},
-      {name:'폭풍의 탑',   monster:{n:'스톰슬라임',e:'🌪️'}, boss:{n:'폭풍 마법사',e:'🧙'},eliteBoss:{n:'폭풍의 신관',e:'⚡'}},
-      {name:'성천의 궁전', monster:{n:'셀레스티얼',e:'✨'},   boss:{n:'궁전 수호자',e:'🛡️'},eliteBoss:{n:'성천의 왕',e:'👑'}},
-      {name:'신들의 계단', monster:{n:'디바인가드',e:'😇'},   boss:{n:'신의 전령',e:'😇'},  eliteBoss:{n:'천사 대군주',e:'😇'}},
-      {name:'셀레스티아 왕성',monster:{n:'천공 팰러딘',e:'⚔️'},boss:{n:'천공 근위대장',e:'🛡️'},eliteBoss:{n:'천공의 신왕',e:'👑'}},
+      {name:'천공 1구역', monster:{n:'클라우드버니',e:'🐰'},boss:{n:'구름 군주',e:'☁️'},  eliteBoss:{n:'구름의 신',e:'⛅'}},
+      {name:'천공 2구역', monster:{n:'윈드버드',e:'🐦'},     boss:{n:'바람의 군주',e:'🌬️'}, eliteBoss:{n:'바람신',e:'💨'}},
+      {name:'천공 3구역', monster:{n:'선버드',e:'🌞'},       boss:{n:'태양 군주',e:'🌞'},  eliteBoss:{n:'태양의 화신',e:'🔥'}},
+      {name:'천공 4구역', monster:{n:'썬더버드',e:'⚡'},     boss:{n:'번개의 군주',e:'⚡'},eliteBoss:{n:'번개신',e:'⚡'}},
+      {name:'천공 5구역', monster:{n:'스카이폭스',e:'🦊'},   boss:{n:'계곡 수호자',e:'🦊'},eliteBoss:{n:'성운의 영주',e:'🌌'}},
+      {name:'천공 6구역', monster:{n:'이글',e:'🦅'},         boss:{n:'이글 군주',e:'🦅'},   eliteBoss:{n:'이글 신왕',e:'🦅'}},
+      {name:'천공 7구역', monster:{n:'스톰슬라임',e:'🌪️'}, boss:{n:'폭풍 마법사',e:'🧙'},eliteBoss:{n:'폭풍의 신관',e:'⚡'}},
+      {name:'천공 8구역', monster:{n:'셀레스티얼',e:'✨'},   boss:{n:'성천의 수호자',e:'🛡️'},eliteBoss:{n:'성천의 왕',e:'👑'}},
+      {name:'천공 9구역', monster:{n:'디바인가드',e:'😇'},   boss:{n:'신의 전령',e:'😇'},  eliteBoss:{n:'천사 대군주',e:'😇'}},
+      {name:'천공 심층부', monster:{n:'천공 팰러딘',e:'⚔️'},boss:{n:'천공 근위대장',e:'🛡️'},eliteBoss:{n:'천공의 신왕',e:'👑'}},
     ],
-    eliteFinal:{n:'이글 신황',e:'👑'},
+    eliteFinal:{n:'천공의 신왕',e:'👑'},
   },
   { // 테마 8 - 암흑 차원
     emoji:'🌑', bgClass:'chap-bg-8',
+    bgClasses:['chap-bg-8','chap-bg-8','chap-bg-8','chap-bg-8','chap-bg-8','chap-bg-8','chap-bg-8','chap-bg-8','chap-bg-8','chap-bg-8'],
+    bgm:[5,5,5,5,5,5,5,5,5,5],
     segments:[
-      {name:'암흑의 황야',  monster:{n:'다크슬라임',e:'🌑'},  boss:{n:'암흑 정령',e:'🌑'},  eliteBoss:{n:'어둠의 수호자',e:'👥'}},
-      {name:'그림자 숲',   monster:{n:'쉐도우스피릿',e:'👥'},boss:{n:'그림자 군주',e:'🌑'},eliteBoss:{n:'그림자 신',e:'🌑'}},
-      {name:'공허의 평원', monster:{n:'보이드슬라임',e:'🫧'}, boss:{n:'공허의 포식자',e:'🌀'},eliteBoss:{n:'공허신',e:'🌀'}},
-      {name:'어둠의 동굴', monster:{n:'다크뱃',e:'🦇'},       boss:{n:'박쥐왕',e:'🦇'},     eliteBoss:{n:'고대 박쥐신',e:'🦇'}},
-      {name:'차원 균열',   monster:{n:'리프트크랩',e:'🦀'},   boss:{n:'균열의 군주',e:'🌀'},eliteBoss:{n:'차원의 지배자',e:'🌌'}},
-      {name:'멸망의 강가', monster:{n:'다크울프',e:'🐺'},     boss:{n:'어둠 늑대왕',e:'🐺'},eliteBoss:{n:'태초의 어둠늑대',e:'🐺'}},
-      {name:'암흑 마성',   monster:{n:'다크오크',e:'👹'},     boss:{n:'암흑 대군주',e:'👹'},eliteBoss:{n:'오크 어둠신',e:'👹'}},
-      {name:'무한 암흑',   monster:{n:'보이드나이트',e:'⚔️'},boss:{n:'무한의 기사',e:'⚔️'},eliteBoss:{n:'암흑 기사신',e:'🌑'}},
-      {name:'차원의 심연', monster:{n:'보이드위치',e:'🧙'},   boss:{n:'차원 마법왕',e:'🔮'},eliteBoss:{n:'차원 마법신',e:'🔮'}},
-      {name:'테네브라 왕성',monster:{n:'암흑 팰러딘',e:'⚔️'},boss:{n:'암흑 근위대장',e:'🛡️'},eliteBoss:{n:'테네브라의 신왕',e:'👑'}},
+      {name:'암흑 1구역', monster:{n:'다크슬라임',e:'🌑'},  boss:{n:'암흑 군주',e:'🌑'},  eliteBoss:{n:'어둠의 수호자',e:'👥'}},
+      {name:'암흑 2구역', monster:{n:'쉐도우스피릿',e:'👥'},boss:{n:'그림자 군주',e:'🌑'},eliteBoss:{n:'그림자 신',e:'🌑'}},
+      {name:'암흑 3구역', monster:{n:'보이드슬라임',e:'🫧'}, boss:{n:'공허의 지배자',e:'🌀'},eliteBoss:{n:'공허신',e:'🌀'}},
+      {name:'암흑 4구역', monster:{n:'다크뱃',e:'🦇'},       boss:{n:'박쥐 군주',e:'🦇'},     eliteBoss:{n:'고대 박쥐신',e:'🦇'}},
+      {name:'암흑 5구역', monster:{n:'리프트크랩',e:'🦀'},   boss:{n:'균열의 군주',e:'🌀'},eliteBoss:{n:'차원의 지배자',e:'🌌'}},
+      {name:'암흑 6구역', monster:{n:'다크울프',e:'🐺'},     boss:{n:'어둠 늑대왕',e:'🐺'},eliteBoss:{n:'태초의 어둠늑대',e:'🐺'}},
+      {name:'암흑 7구역', monster:{n:'다크오크',e:'👹'},     boss:{n:'암흑 대군주',e:'👹'},eliteBoss:{n:'오크 어둠신',e:'👹'}},
+      {name:'암흑 8구역', monster:{n:'보이드나이트',e:'⚔️'},boss:{n:'무한의 기사',e:'⚔️'},eliteBoss:{n:'암흑 기사신',e:'🌑'}},
+      {name:'암흑 9구역', monster:{n:'보이드위치',e:'🧙'},   boss:{n:'차원 마법왕',e:'🔮'},eliteBoss:{n:'차원 마법신',e:'🔮'}},
+      {name:'암흑 심층부', monster:{n:'암흑 팰러딘',e:'⚔️'},boss:{n:'암흑 근위대장',e:'🛡️'},eliteBoss:{n:'암흑의 신왕',e:'👑'}},
     ],
-    eliteFinal:{n:'보이드 신황',e:'👑'},
+    eliteFinal:{n:'암흑의 신왕',e:'👑'},
   },
   { // 테마 9 - 마법탑
     emoji:'🔮', bgClass:'chap-bg-9',
+    bgClasses:['chap-bg-9','chap-bg-9','chap-bg-9','chap-bg-9','chap-bg-9','chap-bg-9','chap-bg-9','chap-bg-9','chap-bg-9','chap-bg-9'],
+    bgm:[1,1,2,2,3,3,4,4,5,5],
     segments:[
-      {name:'마법탑 1층',   monster:{n:'마나슬라임',e:'🔮'},  boss:{n:'탑의 수호자',e:'🔮'},eliteBoss:{n:'마나 정령왕',e:'✨'}},
-      {name:'마법탑 2층',   monster:{n:'리빙북',e:'📚'},      boss:{n:'마법서의 군주',e:'📚'},eliteBoss:{n:'지식의 수호자',e:'📚'}},
-      {name:'마법탑 3층',   monster:{n:'스펠뱃',e:'🦇'},      boss:{n:'마법 박쥐왕',e:'🦇'},eliteBoss:{n:'마법 박쥐신',e:'🔮'}},
-      {name:'마법탑 4층',   monster:{n:'마나스피릿',e:'✨'},  boss:{n:'마나 정령왕',e:'✨'},eliteBoss:{n:'순수 마나신',e:'🌟'}},
-      {name:'마법탑 5층',   monster:{n:'스펠나이트',e:'⚔️'}, boss:{n:'마법 기사왕',e:'⚔️'},eliteBoss:{n:'마법검 신관',e:'🔮'}},
-      {name:'마법탑 6층',   monster:{n:'룬워리어',e:'🗿'},    boss:{n:'룬의 군주',e:'🗿'},  eliteBoss:{n:'고대 룬신',e:'🗿'}},
-      {name:'마법탑 7층',   monster:{n:'아르카나봇',e:'🤖'}, boss:{n:'자동 마법사',e:'🤖'},eliteBoss:{n:'고대 마법기계',e:'⚙️'}},
-      {name:'마법탑 8층',   monster:{n:'엘리멘탈',e:'🌀'},    boss:{n:'엘리멘탈 왕',e:'🌀'},eliteBoss:{n:'원소의 신',e:'🌌'}},
-      {name:'마법탑 9층',   monster:{n:'마법 드레이크',e:'🐲'},boss:{n:'마법룡',e:'🐉'},  eliteBoss:{n:'마법룡 신왕',e:'🐉'}},
-      {name:'마법탑 꼭대기', monster:{n:'아르카나 팰러딘',e:'⚔️'},boss:{n:'탑의 최고 수호자',e:'🛡️'},eliteBoss:{n:'아르카나의 왕',e:'👑'}},
+      {name:'마법탑 1층', monster:{n:'마나슬라임',e:'🔮'},  boss:{n:'탑의 수호자',e:'🔮'},eliteBoss:{n:'마나 정령왕',e:'✨'}},
+      {name:'마법탑 2층', monster:{n:'리빙북',e:'📚'},      boss:{n:'마법서 군주',e:'📚'},eliteBoss:{n:'지식의 수호자',e:'📚'}},
+      {name:'마법탑 3층', monster:{n:'스펠뱃',e:'🦇'},      boss:{n:'마법 박쥐왕',e:'🦇'},eliteBoss:{n:'마법 박쥐신',e:'🔮'}},
+      {name:'마법탑 4층', monster:{n:'마나스피릿',e:'✨'},  boss:{n:'마나 군주',e:'✨'},eliteBoss:{n:'순수 마나신',e:'🌟'}},
+      {name:'마법탑 5층', monster:{n:'스펠나이트',e:'⚔️'}, boss:{n:'마법 기사왕',e:'⚔️'},eliteBoss:{n:'마법검 신관',e:'🔮'}},
+      {name:'마법탑 6층', monster:{n:'룬워리어',e:'🗿'},    boss:{n:'룬의 군주',e:'🗿'},  eliteBoss:{n:'고대 룬신',e:'🗿'}},
+      {name:'마법탑 7층', monster:{n:'아르카나봇',e:'🤖'}, boss:{n:'마법 자동인형',e:'🤖'},eliteBoss:{n:'고대 마법기계',e:'⚙️'}},
+      {name:'마법탑 8층', monster:{n:'엘리멘탈',e:'🌀'},    boss:{n:'엘리멘탈 왕',e:'🌀'},eliteBoss:{n:'원소의 신',e:'🌌'}},
+      {name:'마법탑 9층', monster:{n:'마법 드레이크',e:'🐲'},boss:{n:'마법룡',e:'🐉'},  eliteBoss:{n:'마법룡 신왕',e:'🐉'}},
+      {name:'마법탑 꼭대기', monster:{n:'아르카나 팰러딘',e:'⚔️'},boss:{n:'탑의 최고 수호자',e:'🛡️'},eliteBoss:{n:'마법탑의 신왕',e:'👑'}},
     ],
-    eliteFinal:{n:'아르카나로드',e:'👑'},
+    eliteFinal:{n:'마법탑의 신왕',e:'👑'},
   },
   { // 테마 10 - 별의 세계
     emoji:'⭐', bgClass:'chap-bg-10',
+    bgClasses:['chap-bg-10','chap-bg-10','chap-bg-10','chap-bg-10','chap-bg-10','chap-bg-10','chap-bg-10','chap-bg-10','chap-bg-10','chap-bg-10'],
+    bgm:[1,2,3,4,5,4,3,2,1,5],
     segments:[
-      {name:'별빛 평원',    monster:{n:'스타슬라임',e:'⭐'},  boss:{n:'별빛 정령',e:'⭐'},  eliteBoss:{n:'별의 수호자',e:'🌟'}},
-      {name:'은하 숲',     monster:{n:'갤럭시버드',e:'🌌'},  boss:{n:'은하 군주',e:'🌌'},  eliteBoss:{n:'은하신',e:'🌌'}},
-      {name:'성운 고원',   monster:{n:'코스모스버니',e:'🐰'},boss:{n:'성운의 왕',e:'🌌'},  eliteBoss:{n:'성운 지배자',e:'💫'}},
-      {name:'초신성 화산', monster:{n:'스타뱃',e:'🦇'},      boss:{n:'초신성 군주',e:'💥'},eliteBoss:{n:'초신성 신',e:'💥'}},
-      {name:'블랙홀 협곡', monster:{n:'보이드스타',e:'🌑'},  boss:{n:'블랙홀의 군주',e:'🌑'},eliteBoss:{n:'블랙홀신',e:'🌌'}},
-      {name:'스타더스트 늪',monster:{n:'스타크랩',e:'🦀'},   boss:{n:'스타더스트 왕',e:'⭐'},eliteBoss:{n:'우주먼지의 신',e:'✨'}},
-      {name:'항성의 탑',   monster:{n:'스타나이트',e:'⚔️'}, boss:{n:'항성의 기사왕',e:'⚔️'},eliteBoss:{n:'항성 신관',e:'⭐'}},
-      {name:'행성의 심장', monster:{n:'플래닛가드',e:'🌍'},  boss:{n:'행성 수호신',e:'🌍'},eliteBoss:{n:'태양계의 왕',e:'☀️'}},
-      {name:'별의 용',     monster:{n:'스타드레이크',e:'🐲'},boss:{n:'성룡',e:'🐉'},       eliteBoss:{n:'별의 용신',e:'🐉'}},
-      {name:'스텔라리움 왕성',monster:{n:'별빛 팰러딘',e:'⚔️'},boss:{n:'별의 근위대장',e:'🛡️'},eliteBoss:{n:'코스모스 신왕',e:'👑'}},
+      {name:'성계 1구역', monster:{n:'스타슬라임',e:'⭐'},  boss:{n:'별빛 군주',e:'⭐'},  eliteBoss:{n:'별의 수호자',e:'🌟'}},
+      {name:'성계 2구역', monster:{n:'갤럭시버드',e:'🌌'},  boss:{n:'은하 군주',e:'🌌'},  eliteBoss:{n:'은하신',e:'🌌'}},
+      {name:'성계 3구역', monster:{n:'코스모스버니',e:'🐰'},boss:{n:'성운의 군주',e:'🌌'},  eliteBoss:{n:'성운 지배자',e:'💫'}},
+      {name:'성계 4구역', monster:{n:'스타뱃',e:'🦇'},      boss:{n:'초신성 군주',e:'💥'},eliteBoss:{n:'초신성 신',e:'💥'}},
+      {name:'성계 5구역', monster:{n:'보이드스타',e:'🌑'},  boss:{n:'블랙홀의 군주',e:'🌑'},eliteBoss:{n:'블랙홀신',e:'🌌'}},
+      {name:'성계 6구역', monster:{n:'스타크랩',e:'🦀'},   boss:{n:'성진 군주',e:'⭐'},eliteBoss:{n:'우주먼지의 신',e:'✨'}},
+      {name:'성계 7구역', monster:{n:'스타나이트',e:'⚔️'}, boss:{n:'항성의 기사왕',e:'⚔️'},eliteBoss:{n:'항성 신관',e:'⭐'}},
+      {name:'성계 8구역', monster:{n:'플래닛가드',e:'🌍'},  boss:{n:'행성 수호신',e:'🌍'},eliteBoss:{n:'태양계의 왕',e:'☀️'}},
+      {name:'성계 9구역', monster:{n:'스타드레이크',e:'🐲'},boss:{n:'성룡',e:'🐉'},       eliteBoss:{n:'별의 용신',e:'🐉'}},
+      {name:'성계 심층부', monster:{n:'별빛 팰러딘',e:'⚔️'},boss:{n:'별의 근위대장',e:'🛡️'},eliteBoss:{n:'성계의 신왕',e:'👑'}},
     ],
-    eliteFinal:{n:'코스모스 신황',e:'👑'},
+    eliteFinal:{n:'성계의 신왕',e:'👑'},
   },
 ];
 
 // ── 챕터 데이터 동적 생성 헬퍼 ──
 function getTheme(chap){return THEMES[(chap-1)%THEMES.length];}
 function getChapterEmoji(chap){return getTheme(chap).emoji;}
+// 기본 bgClass는 테마의 기본값 (하위 호환)
 function getChapterBgClass(chap){return getTheme(chap).bgClass;}
+// 세그먼트(10스테이지 단위)별 배경 클래스
+function getStageBgClass(chap,stage){
+  const theme=getTheme(chap);
+  const si=getSegIdx(stage);
+  return (theme.bgClasses&&theme.bgClasses[si])||theme.bgClass;
+}
+// 세그먼트(10스테이지 단위)별 BGM 키
+function getStageBgm(chap,stage){
+  const theme=getTheme(chap);
+  const si=getSegIdx(stage);
+  return (theme.bgm&&theme.bgm[si])||Math.min(5,chap);
+}
 // 스테이지 → 세그먼트 인덱스 (0~9)
 function getSegIdx(stage){return Math.min(9,Math.floor((stage-1)/10));}
 // 보스 타입: 'elite'(100), 'vip'(10,20..90), 'normal'(나머지)
@@ -2759,7 +2792,7 @@ function playBgm(key){
   bgmTimer=setTimeout(()=>playBgm(key),note[1]*1000);
 }
 function stopBgm(){if(bgmTimer)clearTimeout(bgmTimer);bgmTimer=null;}
-function startBgm(){stopBgm();bgmIdx=0;const k=Math.min(5,G.chapter);playBgm(k);}
+function startBgm(){stopBgm();bgmIdx=0;const k=getStageBgm(G.chapter,G.stage);playBgm(k);}
 function setBgmVol(v){G.bgmVol=+v;if(bgmGain)bgmGain.gain.value=v/100*.12;}
 function setSfxVol(v){G.sfxVol=+v;if(sfxGain)sfxGain.gain.value=v/100*.4;}
 function toggleBgm(){
@@ -3460,7 +3493,17 @@ function onMonsterDead(){
         G.stage=1;updateBattleBg();
         showNotif(`🎉 ${wasChap}-100 클리어!`,'top');
         stopBgm();startBgm();
-      }else{G.stage++;}
+      }else{
+        const prevSeg=getSegIdx(G.stage);
+        G.stage++;
+        const newSeg=getSegIdx(G.stage);
+        if(newSeg!==prevSeg){
+          updateBattleBg();
+          const newBgm=getStageBgm(G.chapter,G.stage);
+          const oldBgm=getStageBgm(G.chapter,G.stage-1);
+          if(newBgm!==oldBgm){stopBgm();startBgm();}
+        }
+      }
       G.questProg.stagereach=(G.questProg.stagereach||0)+1;
       G.stageKillCount=0;G.monsterIdx=0;G.isBoss=false;G.bossDefeated=false;
       G.highestGlobalStage=Math.max(G.highestGlobalStage,currGS());
@@ -3648,7 +3691,7 @@ function _dropSoul(type){
 }
 function updateBattleBg(){
   const bg=document.getElementById('battle-bg');
-  bg.className=getChapterBgClass(G.chapter);
+  bg.className=getStageBgClass(G.chapter,G.stage);
   bg.style.filter='';
 }
 
@@ -4403,7 +4446,18 @@ function _agCountLimitLabel(lv){
 // 팝업 열 때 임시 상태를 G에서 복사
 let _agPreview={};
 function openAutoGachaPopup(){
-  if(G.gachaLevel<2){showNotif('🔒 장비뽑기 Lv.2 달성 시 해금!','top');return;}
+  if(G.gachaLevel<2){
+    const needed=GACHA_THRESH[1];
+    const cur=G.gachaTotalCount;
+    const remain=Math.max(0,needed-cur);
+    showInfoModal(
+      '⚙️ 자동 뽑기 잠금',
+      `장비뽑기 <span style="color:var(--accent)">Lv.2</span> 달성 시 해금됩니다.<br><br>` +
+      `누적 뽑기 <span style="color:var(--gold)">${cur} / ${needed}회</span> 완료<br>` +
+      `<span style="color:var(--shard)">앞으로 ${remain}회</span> 더 뽑으면 해금!`
+    );
+    return;
+  }
   const maxCount=_agMaxCount(G.gachaLevel);
   // 처음 열거나 현재값이 max보다 낮으면 max로 설정
   if(!G.agCount||G.agCount<maxCount)G.agCount=maxCount;
@@ -4627,6 +4681,7 @@ function renderEquipTab(){
     slots.forEach(sid=>el.appendChild(_buildSlotEl(sid)));
   });
   if(_selectedSlot)renderSlotEnhancePanel(_selectedSlot);
+  _updateAutoSlotBtn(!!_autoSlotEnhInterval);
 }
 
 function renderSlotEnhancePanel(slotId){
@@ -4748,6 +4803,10 @@ function getSlotEnhCost(lv){
 
 // ── 장비 자동 강화 ──
 let _autoSlotEnhInterval=null;
+const SLOT_AUTO_UNLOCK_TOTAL=30; // 슬롯 총 강화 횟수 30 이상 시 해금
+function totalSlotEnhLv(){
+  return Object.values(G.slotLevels||{}).reduce((a,b)=>a+(b||0),0);
+}
 function toggleAutoSlotEnh(){
   if(_autoSlotEnhInterval){
     stopAutoSlotEnh();
@@ -4757,6 +4816,9 @@ function toggleAutoSlotEnh(){
 }
 function startAutoSlotEnh(){
   if(_autoSlotEnhInterval)return;
+  if(totalSlotEnhLv()<SLOT_AUTO_UNLOCK_TOTAL){
+    showNotif(`🔒 슬롯 총 강화 ${SLOT_AUTO_UNLOCK_TOTAL} 달성 시 해금!`,'top');return;
+  }
   // 즉시 1회 실행
   if(!_doAutoSlotEnhStep())return;
   _autoSlotEnhInterval=setInterval(()=>{
@@ -4787,17 +4849,27 @@ function _doAutoSlotEnhStep(){
 }
 function _updateAutoSlotBtn(running){
   const btn=document.getElementById('auto-slot-enh-btn');
+  const hint=document.getElementById('auto-slot-enh-hint');
   if(!btn)return;
-  if(running){
+  const unlocked=totalSlotEnhLv()>=SLOT_AUTO_UNLOCK_TOTAL;
+  if(!unlocked){
+    btn.textContent=`🔒 슬롯 자동 강화 (총 강화 ${SLOT_AUTO_UNLOCK_TOTAL} 달성 시 해금)`;
+    btn.style.borderColor='var(--border2)';
+    btn.style.color='var(--text3)';
+    btn.style.background='rgba(0,0,0,0.2)';
+    if(hint)hint.textContent=`현재 슬롯 총 강화: ${totalSlotEnhLv()} / ${SLOT_AUTO_UNLOCK_TOTAL}`;
+  }else if(running){
     btn.textContent='⏹ 자동강화 중단';
     btn.style.borderColor='var(--hp)';
     btn.style.color='var(--hp)';
     btn.style.background='rgba(255,71,87,0.12)';
+    if(hint)hint.textContent='강화 수치 낮은 순 · 파편 소진 시 자동 중단';
   }else{
     btn.textContent='⚡ 슬롯 자동 강화';
     btn.style.borderColor='var(--shard)';
     btn.style.color='var(--shard)';
     btn.style.background='rgba(63,185,80,0.08)';
+    if(hint)hint.textContent='강화 수치 낮은 순 · 파편 소진 시 자동 중단';
   }
 }
 
@@ -5455,7 +5527,7 @@ function moveToStage(chap,stage){
   G._farmMode=!isMaxStage;
   if(bossTimerInterval){clearInterval(bossTimerInterval);bossTimerInterval=null;}
   hideBossGauge();
-  updateStageLbl();updateBattleBg();spawnMonster();
+  updateStageLbl();updateBattleBg();stopBgm();startBgm();spawnMonster();
   updateFarmPenaltyLabel();
   showNotif(G._farmMode?`🌾 ${chap}-${stage} 파밍 중`:`📍 ${chap}-${stage} 이동`,'top');
   document.getElementById('stage-popup').classList.remove('show');
@@ -6117,8 +6189,27 @@ function openModal(id){document.getElementById(id).classList.add('show');}
 function closeModal(id){document.getElementById(id).classList.remove('show');}
 function openSettingsModal(){openModal('settings-modal');}
 let _confirmAction=null;
+function cancelConfirm(){
+  closeModal('confirm-modal');
+  const cancel=document.getElementById('confirm-cancel');
+  if(cancel)cancel.style.display='';
+  const ok=document.getElementById('confirm-ok');
+  if(ok){ok.style.borderColor='#ff4757';ok.style.color='#ff4757';ok.style.background='rgba(255,71,87,0.08)';ok.textContent='확인';}
+  _confirmAction=null;
+}
+// 확인 버튼만 있는 안내 팝업
+function showInfoModal(title, msgHtml){
+  document.getElementById('confirm-title').textContent=title;
+  document.getElementById('confirm-msg').innerHTML=msgHtml;
+  const ok=document.getElementById('confirm-ok');
+  const cancel=document.getElementById('confirm-cancel');
+  ok.style.borderColor='var(--accent)';ok.style.color='var(--accent)';ok.style.background='rgba(88,166,255,0.08)';
+  ok.textContent='확인';
+  cancel.style.display='none';
+  _confirmAction='__info__';
+  openModal('confirm-modal');
+}
 function confirmAction(type){
-  _confirmAction=type;
   const titles={reset:'⚠️ 데이터 초기화',statReset:'🔄 스탯 초기화',enhReset:'🔄 강화 초기화',skillReset:'🔄 스킬 초기화'};
   const statFree=(G.statResetCount||0)===0;
   const skillFree=(G.skillResetCount||0)===0;
@@ -6136,6 +6227,12 @@ function confirmAction(type){
 }
 function doConfirm(){
   closeModal('confirm-modal');
+  // 안내 팝업 닫힘 후 취소 버튼 복원
+  const cancel=document.getElementById('confirm-cancel');
+  if(cancel)cancel.style.display='';
+  const ok=document.getElementById('confirm-ok');
+  if(ok){ok.style.borderColor='#ff4757';ok.style.color='#ff4757';ok.style.background='rgba(255,71,87,0.08)';ok.textContent='확인';}
+  if(_confirmAction==='__info__'){_confirmAction=null;return;}
   if(_confirmAction==='reset')resetData();
   else if(_confirmAction==='statReset')resetStats();
   else if(_confirmAction==='enhReset')resetEnhance();
