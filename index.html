@@ -1970,7 +1970,7 @@ const SAVE_KEY = 'milkAdv_v6';
 // ══════════════════════════════════════════
 //  VERSION CHECK
 // ══════════════════════════════════════════
-const GAME_VERSION = 'v02_31';
+const GAME_VERSION = 'v02_32';
 // GitHub Pages 배포 시 아래 URL을 본인 레포로 변경하세요
 // 예: 'https://[계정].github.io/[레포]/version.json'
 const VERSION_CHECK_URL = 'version.json';
@@ -6210,6 +6210,7 @@ function showInfoModal(title, msgHtml){
   openModal('confirm-modal');
 }
 function confirmAction(type){
+  _confirmAction=type;
   const titles={reset:'⚠️ 데이터 초기화',statReset:'🔄 스탯 초기화',enhReset:'🔄 강화 초기화',skillReset:'🔄 스킬 초기화'};
   const statFree=(G.statResetCount||0)===0;
   const skillFree=(G.skillResetCount||0)===0;
@@ -6223,6 +6224,11 @@ function confirmAction(type){
   };
   document.getElementById('confirm-title').textContent=titles[type]||'확인';
   document.getElementById('confirm-msg').textContent=msgs[type]||'진행하시겠습니까?';
+  // 일반 confirm은 취소 버튼 보이고, 확인 버튼은 위험 색상
+  const _ok=document.getElementById('confirm-ok');
+  const _cancel=document.getElementById('confirm-cancel');
+  if(_ok){_ok.style.borderColor='#ff4757';_ok.style.color='#ff4757';_ok.style.background='rgba(255,71,87,0.08)';_ok.textContent='확인';}
+  if(_cancel)_cancel.style.display='';
   openModal('confirm-modal');
 }
 function doConfirm(){
