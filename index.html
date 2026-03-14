@@ -814,6 +814,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 }
 @keyframes slideUpFade{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 #pts-badge{font-size:11px;color:var(--gold);background:rgba(227,179,65,0.1);border:1px solid var(--gold);border-radius:var(--radius);padding:2px 6px}
+#enh-gold-badge{font-size:11px;color:var(--gold);background:rgba(227,179,65,0.1);border:1px solid var(--gold);border-radius:var(--radius);padding:2px 6px}
 .stat-row{
   display:flex;align-items:center;gap:7px;
   padding:6px 7px;background:var(--bg2);
@@ -1026,9 +1027,9 @@ input[type=range]{width:100%;accent-color:var(--accent)}
   font-size:7px;color:rgba(130,150,175,0.85);
   background:rgba(0,0,0,0.45);border-radius:3px;padding:0 2px;line-height:1.5;
 }
-/* 슬롯강화 배지 (좌하단) */
+/* 슬롯강화 배지 (좌상단) */
 .es-slv-badge{
-  position:absolute;bottom:3px;left:3px;
+  position:absolute;top:3px;left:3px;
   font-size:7px;color:var(--shard);font-weight:bold;
   background:rgba(63,185,80,0.12);border-radius:3px;padding:0 2px;line-height:1.5;
 }
@@ -1354,6 +1355,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
   box-shadow:4px 4px 0 rgba(0,0,0,0.45);
   pointer-events:all;z-index:4;
   left:50%;transform:translateX(-50%);
+  max-height:72dvh;overflow-y:auto;
 }
 .tut-box h4{font-size:13px;color:var(--accent);margin-bottom:7px;
   text-shadow:1px 1px 0 rgba(0,0,0,0.8)}
@@ -1553,6 +1555,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
     <button class="swap-btn-ok" onclick="closeEquipSwap(true)">⚔️ 교체하기</button>
     <button class="swap-btn-cancel" onclick="closeEquipSwap(false)">🔩 파편 분해</button>
   </div>
+  <div id="swap-tut-hint" style="display:none;margin-top:10px;padding:8px 10px;background:rgba(212,175,55,0.12);border:1px solid var(--gold);border-radius:var(--radius);font-size:10px;color:var(--gold);line-height:1.6;text-align:center"></div>
 </div>
 
 <!-- ACHIEVE REWARD POPUP -->
@@ -1696,7 +1699,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
   <!-- Gacha main row -->
   <div class="gacha-row">
     <div id="ticket-count-wrap">
-      <button id="auto-gacha-btn" onclick="openAutoGachaPopup()" disabled>⚙️ Auto</button>
+      <button id="auto-gacha-btn" onclick="openAutoGachaPopup()">⚙️ Auto</button>
     </div>
     <div id="gacha-main-wrap">
       <button id="gacha-main-btn" onclick="doGacha()">
@@ -1832,7 +1835,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
         </div>
         <!-- 강화 서브헤더 -->
         <div id="enh-sub-hdr" class="growth-sub-hdr-row" style="display:none">
-          <span id="enh-overall-badge" style="flex:1;font-size:10px;color:var(--gold)">종합 Lv.<span id="enhance-overall-lv2">0</span></span>
+          <span id="enh-gold-badge" style="flex:1">💰 <span id="enh-gold-val">0</span></span>
           <button id="enh-auto-hdr-btn" class="auto-dist-btn" onclick="autoDistEnhance()" style="padding:3px 7px;font-size:10px">⚡ 자동강화</button>
           <button class="reset-icon-btn" onclick="confirmAction('enhReset')" title="강화 초기화" style="margin-left:4px">↺</button>
         </div>
@@ -1844,7 +1847,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
       </div>
       <!-- 강화 -->
       <div id="growth-content-enhance" style="display:none">
-        <div id="enhance-overall-box" style="margin-bottom:6px">
+        <div id="enhance-overall-box" style="margin-bottom:6px;display:none">
           <div class="eob-title">⚡ 종합 강화 레벨</div>
           <div id="enhance-overall-lv">Lv.0</div>
           <div class="eob-items" id="eob-items"></div>
@@ -1970,7 +1973,7 @@ const SAVE_KEY = 'milkAdv_v6';
 // ══════════════════════════════════════════
 //  VERSION CHECK
 // ══════════════════════════════════════════
-const GAME_VERSION = 'v02_32';
+const GAME_VERSION = 'v02_47';
 // GitHub Pages 배포 시 아래 URL을 본인 레포로 변경하세요
 // 예: 'https://[계정].github.io/[레포]/version.json'
 const VERSION_CHECK_URL = 'version.json';
@@ -2634,9 +2637,10 @@ const CTX_TUTORIALS={
   towerTab:{title:'🏰 던전 탭 해금!',body:'1-100스테이지 돌파! 던전 탭이 열렸습니다. 무한의 탑에서 층마다 강력한 적과 싸우며 끝없이 도전하세요. 5층마다 뽑기권, 10층마다 파편, 50층마다 스킬포인트를 받습니다.',highlight:'👆 하단 던전 탭 → 무한의 탑 도전하기',target:'tab-tower',arrowDir:'down'},
   firstVipBoss:{title:'💎 정예 보스 등장!',body:'10스테이지마다 등장하는 정예 보스(💎)입니다! 일반 보스보다 훨씬 강력하며 제한 시간도 30초로 동일합니다.\n\n일반 보스 HP의 약 4배 수준이므로 충분한 강화 없이는 처치가 어렵습니다. 처치 시 파편·골드를 대량 획득합니다.',highlight:'💎 보라색 이름 = 정예 보스 — 단단히 준비하세요!',target:'monster-count',arrowDir:'up'},
   firstEliteBoss:{title:'👑 엘리트 보스 등장!',body:'100스테이지마다 등장하는 최강의 엘리트 보스(👑)입니다! 정예 보스보다 강하며 제한 시간은 90초입니다.\n\n처치 시 스킬포인트와 대량의 골드·경험치를 획득합니다. 모든 강화를 끌어올린 뒤 도전하세요.',highlight:'👑 빨간색 이름 = 엘리트 보스 — 최고의 도전!',target:'monster-count',arrowDir:'up'},
-  autoDistStat:{title:'⚡ 스탯 자동배분 해금!',body:'총 100포인트 투자로 자동배분 기능이 해금되었습니다!\n현재 생존력·화력 상황을 분석해 가장 필요한 스탯에 포인트를 자동으로 배분합니다.\n\n[red]🚨 주의: 이 기능은 알고리즘 추천 기반입니다.\n실제 최적 배분과 다를 수 있으며, 잘못 사용하면 전투력이 오히려 낮아질 수 있습니다.\n반드시 결과를 확인하고 필요 시 수동으로 조정하세요.[/red]',highlight:'',target:'stat-auto-hdr-btn',arrowDir:'down'},
-  autoDistEnhance:{title:'⚡ 강화 자동분배 해금!',body:'강화 총레벨 50 달성으로 자동강화 기능이 해금되었습니다!\n현재 보유 골드로 가장 효율적인 강화 항목에 자동으로 투자합니다.\n\n[red]🚨 주의: 이 기능은 알고리즘 추천 기반입니다.\n실제 최적 강화 순서와 다를 수 있으며, 골드를 한 번에 대량 소모합니다.\n반드시 강화 탭에서 결과를 확인하세요.[/red]',highlight:'',target:'enh-auto-hdr-btn',arrowDir:'down'},
+  autoDistStat:{title:'⚡ 스탯 자동배분 해금!',body:'총 100포인트 투자로 자동배분 기능이 해금되었습니다!\n현재 생존력·화력 상황을 분석해 가장 필요한 스탯에 포인트를 자동으로 배분합니다.\n\n[red]🚨 주의: 이 기능은 알고리즘 추천 기반입니다.\n실제 최적 배분과 다를 수 있으니 반드시 결과를 확인하고 필요 시 수동으로 조정하세요.[/red]',highlight:'',target:null,arrowDir:'down'},
+  autoDistEnhance:{title:'⚡ 강화 자동분배 해금!',body:'강화 총레벨 50 달성으로 자동강화 기능이 해금되었습니다!\n현재 보유 골드로 가장 효율적인 강화 항목에 자동으로 투자합니다.\n\n[red]🚨 주의: 이 기능은 알고리즘 추천 기반입니다.\n실제 최적 강화 순서와 다를 수 있으며, 골드를 한 번에 대량 소모합니다.\n반드시 강화 탭에서 결과를 확인하세요.[/red]',highlight:'',target:null,arrowDir:'down'},
   critMaxUnlock:{title:'🎯 치명타 Lv.100 달성!',body:'치명타 확률이 최대 레벨에 도달했습니다!\n결정타 시스템이 해금됩니다.\n\n결정타는 HP 30% 이하 적에게 발동하며, 확률과 피해 배율을 강화해 보스 마무리 능력을 극대화합니다.',highlight:'👆 강화 탭 → ⚡ 결정타 확률 · 피해 강화 가능!',target:'enhance-list',arrowDir:'up'},
+  autoSlotEnh:{title:'⚡ 슬롯 자동 강화 해금!',body:'슬롯 총 강화 30 달성! 슬롯 자동 강화 버튼이 해금되었습니다.\n\n강화 수치가 낮은 슬롯부터 우선 강화하며, 파편이 소진되면 자동으로 중단됩니다.\n장비 탭 → 슬롯 탭 → 하단 버튼으로 시작하세요.',highlight:'👆 장비 탭 → 슬롯 선택 → ⚡ 슬롯 자동 강화 버튼',target:'auto-slot-enh-btn',arrowDir:'up'},
 };
 
 // ══════════════════════════════════════════
@@ -2695,7 +2699,7 @@ let G={
   totalKills:0, totalBossKills:0, killSinceTicket:0,
   questIdx:0, questRound:1,
   questProg:{kills:0,gacha:0,boss:0,enhance:0,stat:0,skilluse:0,stagereach:0},
-  gachaLevel:1, gachaTotalCount:0, totalGachaCount:0, autoGacha:false,
+  gachaLevel:1, gachaTotalCount:0, totalGachaCount:0, autoGacha:false, gachaEverAuto:false, slotAutoEver:false, enhAutoEver:false, statAutoEver:false,
   agCount:1, agAutoEquip:false, agAutoShard:false,
   enhanceLevels:{atk:0,hp:0,def:0,critdmg:0,normaldmg:0,bossdmg:0,crit:0,executeChance:0,executeDmg:0,lifeSteal:0},
   overallEnhanceLv:0,
@@ -3473,7 +3477,7 @@ function onMonsterDead(){
     G.killSinceTicket=0;G.tickets=Math.min(999,G.tickets+1);
     showNotif('🎫 뽑기권 +1','reward');
   }
-  if(G.autoGacha&&G.tickets>0)doGacha(true);
+  if(G.autoGacha&&G.tickets>0&&!pendingAutoGachaPaused)doGacha(true);
   checkMilestones();checkAchievements();checkQuestProgress();checkTitles();checkUnlocks();
   if(G.isBoss){
     if(bossTimerInterval){clearInterval(bossTimerInterval);bossTimerInterval=null;}
@@ -3745,14 +3749,17 @@ function addStat(type,amt=1){
 }
 function addStatMax(type){addStat(type,G.pts);}
 function resetStats(){
-  const cost=resetCost('stat');
-  if(G.gold<cost){showNotif('💰 골드 부족! 필요: '+fmtNum(cost),'top');return;}
-  const prevCP=calcCP();if(cost>0)G.gold-=cost;
+  const totalPts=G.ptAtk+G.ptHp+G.ptDef+G.ptCrit+G.ptCritDmg;
+  if(totalPts<=0){showNotif('💡 투자된 포인트가 없습니다','top');return;}
+  const prevCP=calcCP();
+  const prevSeen={...G.tutorialSeen}; // tutorialSeen 백업
   G.statResetCount=(G.statResetCount||0)+1;
-  G.pts+=G.ptAtk+G.ptHp+G.ptDef+G.ptCrit+G.ptCritDmg;
+  G.pts+=totalPts;
   G.ptAtk=0;G.ptHp=0;G.ptDef=0;G.ptCrit=0;G.ptCritDmg=0;
+  G.tutorialSeen=prevSeen; // 튜토리얼 열람 상태 복원
   G.playerCurHp=Math.min(G.playerCurHp,getFinalHp());
   showCPChange(prevCP,calcCP());updateUI();renderStatTab();
+  showNotif('🔄 스탯 초기화 완료 (무료)','top');
 }
 function getStatRecommend(){
   // 스탯 포인트 1개당 DPS/생존 효율 계산
@@ -3898,8 +3905,9 @@ function updateAutoDistButtons(){
   if(enhRow)enhRow.style.display='none';
 
   if(statBtn){
-    const unlocked=spentPts>=STAT_AUTO_UNLOCK_PTS;
+    const unlocked=G.statAutoEver||spentPts>=STAT_AUTO_UNLOCK_PTS;
     if(unlocked){
+      G.statAutoEver=true;
       statBtn.classList.remove('locked');statBtn.disabled=false;
       statBtn.title='현재 상황에 맞게 포인트를 자동 배분합니다';
       statBtn.textContent='⚡ 자동배분';
@@ -3911,8 +3919,9 @@ function updateAutoDistButtons(){
     }
   }
   if(enhBtn){
-    const unlocked=enhLv>=ENH_AUTO_UNLOCK_LV;
+    const unlocked=G.enhAutoEver||enhLv>=ENH_AUTO_UNLOCK_LV;
     if(unlocked){
+      G.enhAutoEver=true;
       enhBtn.classList.remove('locked');enhBtn.disabled=false;
       enhBtn.title='현재 골드로 최우선 강화 항목을 자동 강화합니다';
       enhBtn.textContent='⚡ 자동강화';
@@ -3929,7 +3938,7 @@ function updateAutoDistButtons(){
 }
 
 function autoDistStat(){
-  if(totalSpentPts()<STAT_AUTO_UNLOCK_PTS){
+  if(!G.statAutoEver&&totalSpentPts()<STAT_AUTO_UNLOCK_PTS){
     showNotif(`🔒 총 ${STAT_AUTO_UNLOCK_PTS}포인트 투자 시 해금!`,'top');return;
   }
   if(G.pts<=0){showNotif('💡 배분할 포인트가 없습니다','top');return;}
@@ -3968,7 +3977,7 @@ function autoDistStat(){
 }
 
 function autoDistEnhance(){
-  if(totalEnhLv()<ENH_AUTO_UNLOCK_LV){
+  if(!G.enhAutoEver&&totalEnhLv()<ENH_AUTO_UNLOCK_LV){
     showNotif(`🔒 강화 총레벨 ${ENH_AUTO_UNLOCK_LV} 달성 시 해금!`,'top');return;
   }
   if(G.gold<=0){showNotif('💰 골드가 부족합니다','top');return;}
@@ -4119,12 +4128,22 @@ function doEnhance(id,amt=1){
 }
 function doEnhanceMax(id){doEnhance(id,enhMax(ENHANCE_ITEMS.find(e=>e.id===id)));}
 function resetEnhance(){
-  const cost=resetCost('enhance');
-  if(G.gold<cost){showNotif('💰 골드 부족! 필요: '+fmtNum(cost),'top');return;}
-  const prevCP=calcCP();G.gold-=cost;
+  const totalLv=Object.values(G.enhanceLevels||{}).reduce((a,b)=>a+b,0);
+  if(totalLv<=0){showNotif('💡 강화된 항목이 없습니다','top');return;}
+  const prevCP=calcCP();
+  const prevSeen={...G.tutorialSeen};
+  // 투자한 골드 역산 환급
+  let refund=0;
+  ENHANCE_ITEMS.forEach(item=>{
+    const lv=G.enhanceLevels[item.id]||0;
+    for(let i=0;i<lv;i++)refund+=enhCost(item,i);
+  });
+  G.gold+=refund;
   ENHANCE_ITEMS.forEach(e=>G.enhanceLevels[e.id]=0);
   G.overallEnhanceLv=0;
+  G.tutorialSeen=prevSeen;
   showCPChange(prevCP,calcCP());updateUI();renderEnhanceTab();
+  showNotif(`🔄 강화 초기화 완료 · 💰 ${fmtNum(refund)} 환급`,'top');
 }
 function isEnhUnlocked(item){
   if(!item.unlockReq)return true;
@@ -4286,6 +4305,46 @@ function genEquip(gi){
   return{slotId:slot.id,slotName:slot.name,emoji:slot.emoji,gradeIdx:gi,itemLv:ilvl,stats,prefixes,score:slot.base*gm*lc+prefixScore};
 }
 let autoGachaInterval=null;
+
+// ── 오토 뽑기 누적 요약 팝업 ──
+let _agSummary=null; // {counts, best, bestGi, hideTimer}
+
+function _agSummaryRender(){
+  // 요약 데이터를 즉시 팝업에 반영
+  if(!_agSummary)return;
+  const s=_agSummary;
+  const el=document.getElementById('gacha-item-popup');
+  if(!el)return;
+  const gradeColors=['var(--common)','var(--uncommon)','var(--rare)','var(--hero)','var(--legend)','var(--myth)','var(--sacred)'];
+  const parts=[];
+  for(let i=6;i>=0;i--){
+    if(s.counts[i]>0)parts.push(`<span style="color:${gradeColors[i]}">${GEMOJI[i]}×${s.counts[i]}</span>`);
+  }
+  const total=s.counts.reduce((a,b)=>a+b,0);
+  const bestItem=s.best;
+  const bestColor=gradeColors[s.bestGi];
+  el.innerHTML=`<div style="border:2px solid ${bestColor};border-radius:2px;padding:5px 8px;background:var(--panel2);min-width:160px">
+    <div style="font-size:9px;color:var(--text3);margin-bottom:3px">⚙️ 자동뽑기 ${total}회</div>
+    <div style="font-size:11px;display:flex;flex-wrap:wrap;gap:4px;margin-bottom:3px">${parts.join('')}</div>
+    ${bestItem?`<div style="font-size:9px;color:${bestColor}">최고: ${GEMOJI[s.bestGi]} ${bestItem.emoji} ${bestItem.slotName}</div>`:''}
+  </div>`;
+  el.style.display='block';
+  el.style.animation='none';void el.offsetWidth;
+  el.style.animation='slideUp .15s ease';
+  // 사라지는 타이머: 마지막 뽑기 후 2.5초
+  clearTimeout(gachaPopupTimer);
+  gachaPopupTimer=setTimeout(()=>{el.style.display='none';_agSummary=null;},2500);
+}
+
+function _agSummaryAdd(item){
+  const gi=item.gradeIdx;
+  if(!_agSummary){
+    _agSummary={counts:new Array(7).fill(0),best:null,bestGi:-1};
+  }
+  _agSummary.counts[gi]++;
+  if(gi>_agSummary.bestGi){_agSummary.bestGi=gi;_agSummary.best=item;}
+  _agSummaryRender(); // 뽑을 때마다 즉시 갱신
+}
 function doGacha(auto=false){
   if(G.tickets<=0){if(!auto)showNotif('🎫 뽑기권 부족!','top');return;}
   // 장비뽑기 레벨업 가능 → 팝업 강제 표시 + 자동뽑기 중단
@@ -4332,10 +4391,11 @@ function doGacha(auto=false){
         pendingItem=item;pendingPrevCP=prevCP;pendingNewCP=newCP;
         showEquipChoicePopup(item,cur,prevCP,newCP);
       }else if(auto&&!G.agAutoEquip&&cur){
-        // agAutoEquip OFF: 자동뽑기여도 교체 안 함 → 파편
-        G.shards+=GSHARD[gi];
+        // agAutoEquip OFF: 비교 팝업 표시, 인터벌은 플래그로 일시 차단
+        pendingAutoGachaPaused=true;
+        pendingItem=item;pendingPrevCP=prevCP;pendingNewCP=newCP;
         if(gi>=5)playSfx('gachaLegend',auto);else playSfx('gacha',auto);
-        showGachaItemPopup(item,false,auto);
+        showEquipChoicePopup(item,cur,prevCP,newCP);
       }else{
         if(cur)G.shards+=GSHARD[cur.gradeIdx];
         G.equipped[item.slotId]=item;
@@ -4346,7 +4406,7 @@ function doGacha(auto=false){
     }else{
       G.shards+=GSHARD[gi];
       if(gi>=5)playSfx('gachaLegend',auto);else playSfx('gacha',auto);
-      if(!auto||!G.agAutoEquip)showGachaItemPopup(item,false,auto);
+      showGachaItemPopup(item,false,auto);
     }
   }
   if(G.gachaLevel>=2){
@@ -4356,7 +4416,7 @@ function doGacha(auto=false){
   hideGachaLvupBanner();
   checkQuestProgress();checkAchievements();checkMilestones();updateUI();updateGachaMini();renderEquipTab();updateNotifDots();
 }
-let pendingItem=null,pendingPrevCP=0,pendingNewCP=0;
+let pendingItem=null,pendingPrevCP=0,pendingNewCP=0,pendingAutoGachaPaused=false;
 function calcCPWithItem(item){
   const old=G.equipped[item.slotId];
   G.equipped[item.slotId]=item;
@@ -4384,14 +4444,15 @@ function showEquipChoicePopup(item,cur,prevCP,newCP){
   // 바텀시트 열기
   document.getElementById('equip-swap-backdrop').classList.add('show');
   document.getElementById('equip-swap-sheet').classList.add('show');
-  // 튜토리얼이 있으면 먼저 표시 (1회만), 팝업은 이미 열린 상태로 뒤에 보임
-  if(!G.tutorialSeen['firstEquipSwap']){
-    G.tutorialSeen['firstEquipSwap']=true;
-    const t=CTX_TUTORIALS['firstEquipSwap'];
-    if(t){
-      _ctxQueue.unshift(t);
-      // 처리 중이 아닐 때만 즉시 실행, 처리 중이면 큐 앞에 대기
-      if(!_ctxProcessing)_processCtxQueue();
+  // 최초 1회: 바텀시트 내 인라인 힌트로 표시 (오버레이로 가리지 않음)
+  const swapHint=document.getElementById('swap-tut-hint');
+  if(swapHint){
+    if(!G.tutorialSeen['firstEquipSwap']){
+      G.tutorialSeen['firstEquipSwap']=true;
+      swapHint.innerHTML='✨ <b>더 좋은 장비 발견!</b> 스탯을 비교해 교체 여부를 결정하세요.<br>교체 시 이전 장비는 파편으로 분해됩니다.';
+      swapHint.style.display='block';
+    } else {
+      swapHint.style.display='none';
     }
   }
 }
@@ -4408,11 +4469,20 @@ function closeEquipSwap(doSwap){
   document.getElementById('equip-swap-backdrop').classList.remove('show');
   document.getElementById('equip-swap-sheet').classList.remove('show');
   pendingItem=null;
+  pendingAutoGachaPaused=false; // 플래그 해제 → 인터벌 자동 재개
   // 바텀시트 닫힘 → 대기 중인 CTX 튜토리얼 즉시 처리
   setTimeout(_processCtxQueue,300);
 }
 let gachaPopupTimer=null;
 function showGachaItemPopup(item,equipped,compact=false){
+  // 오토 뽑기 중: agCount>=2면 요약, agCount=1이면 개별
+  if(compact){
+    if((G.agCount||1)>=2){
+      _agSummaryAdd(item);
+      return;
+    }
+    // agCount=1: 개별 팝업 (짧게)
+  }
   const el=document.getElementById('gacha-item-popup');
   if(!el)return;
   const css=GCSS[item.gradeIdx];
@@ -4446,6 +4516,7 @@ function _agCountLimitLabel(lv){
 // 팝업 열 때 임시 상태를 G에서 복사
 let _agPreview={};
 function openAutoGachaPopup(){
+  // 레벨 미달이면 항상 안내 팝업 (disabled 우회 포함)
   if(G.gachaLevel<2){
     const needed=GACHA_THRESH[1];
     const cur=G.gachaTotalCount;
@@ -4458,11 +4529,20 @@ function openAutoGachaPopup(){
     );
     return;
   }
+  // 오토 실행 중이면 한 번 더 누르면 즉시 중지
+  if(G.autoGacha){
+    G.autoGacha=false;
+    if(autoGachaInterval){clearInterval(autoGachaInterval);autoGachaInterval=null;}
+    const btn=document.getElementById('auto-gacha-btn');
+    if(btn){btn.textContent='⚙️ Auto';btn.classList.remove('on');}
+    showNotif('⏹ 자동 뽑기 중지','top');
+    return;
+  }
   const maxCount=_agMaxCount(G.gachaLevel);
   // 처음 열거나 현재값이 max보다 낮으면 max로 설정
   if(!G.agCount||G.agCount<maxCount)G.agCount=maxCount;
   G.agCount=Math.min(G.agCount,maxCount);
-  _agPreview={autoGacha:G.autoGacha,agCount:G.agCount,agAutoEquip:G.agAutoEquip};
+  _agPreview={autoGacha:G.autoGacha||(!G.autoGacha&&G.gachaEverAuto?true:false),agCount:G.agCount,agAutoEquip:G.agAutoEquip};
   _renderAutoGachaPopup();
   document.getElementById('auto-gacha-popup').style.display='flex';
 }
@@ -4479,11 +4559,16 @@ function applyAutoGachaSettings(){
   G.agAutoEquip=_agPreview.agAutoEquip;
   // 인터벌 처리
   if(G.autoGacha&&!wasOn){
+    G.gachaEverAuto=true;
     if(autoGachaInterval)clearInterval(autoGachaInterval);
     autoGachaInterval=setInterval(()=>{
       if(!G.autoGacha){clearInterval(autoGachaInterval);autoGachaInterval=null;return;}
+      if(pendingAutoGachaPaused)return; // 비교 팝업 대기 중 → 틱 스킵
       const cnt=G.agCount||1;
-      for(let i=0;i<cnt&&G.tickets>0;i++)doGacha(true);
+      if(cnt>=2)_agSummary=null;
+      for(let i=0;i<cnt&&G.tickets>0&&!pendingAutoGachaPaused;i++){
+        doGacha(true);
+      }
     },700);
   }else if(!G.autoGacha&&wasOn){
     if(autoGachaInterval){clearInterval(autoGachaInterval);autoGachaInterval=null;}
@@ -4710,8 +4795,8 @@ function renderSlotEnhancePanel(slotId){
   const gi=eq?eq.gradeIdx:0;
   const gm=[1,1.5,2,2.8,3.8,5.5,8.0][gi];
   const nextC=.04*(lv+1)*(1+.08*(lv+1));
-  const successRate=lv<10?100:lv<30?80:lv<50?60:lv<80?40:20;
-  const rateColor=successRate>=80?'var(--shard)':successRate>=60?'var(--gold)':successRate>=40?'#ff9f43':'#ff4757';
+  const successRate=getSlotSuccessRate(lv);
+  const rateColor=successRate>=80?'var(--shard)':successRate>=50?'var(--gold)':successRate>=25?'#ff9f43':'#ff4757';
   // 슬롯 보너스 (현재/다음)
   const curParts=[];
   const b1=getSlotBonus(slotId,sl.stat);if(b1>0)curParts.push(sl.stat.toUpperCase()+' +'+Math.floor(b1));
@@ -4816,7 +4901,7 @@ function toggleAutoSlotEnh(){
 }
 function startAutoSlotEnh(){
   if(_autoSlotEnhInterval)return;
-  if(totalSlotEnhLv()<SLOT_AUTO_UNLOCK_TOTAL){
+  if(!G.slotAutoEver&&totalSlotEnhLv()<SLOT_AUTO_UNLOCK_TOTAL){
     showNotif(`🔒 슬롯 총 강화 ${SLOT_AUTO_UNLOCK_TOTAL} 달성 시 해금!`,'top');return;
   }
   // 즉시 1회 실행
@@ -4851,7 +4936,7 @@ function _updateAutoSlotBtn(running){
   const btn=document.getElementById('auto-slot-enh-btn');
   const hint=document.getElementById('auto-slot-enh-hint');
   if(!btn)return;
-  const unlocked=totalSlotEnhLv()>=SLOT_AUTO_UNLOCK_TOTAL;
+  const unlocked=G.slotAutoEver||totalSlotEnhLv()>=SLOT_AUTO_UNLOCK_TOTAL;
   if(!unlocked){
     btn.textContent=`🔒 슬롯 자동 강화 (총 강화 ${SLOT_AUTO_UNLOCK_TOTAL} 달성 시 해금)`;
     btn.style.borderColor='var(--border2)';
@@ -4873,6 +4958,10 @@ function _updateAutoSlotBtn(running){
   }
 }
 
+// 슬롯 강화 성공률: lv0=100%, lv1=99%, lv50=53%, lv99=6%, 최소 5%
+function getSlotSuccessRate(lv){
+  return lv===0?100:Math.max(5,Math.round(100-lv*0.95));
+}
 function enhSlot(id){
   const lv=G.slotLevels[id];
   const sl=SLOTS.find(s=>s.id===id);
@@ -4881,12 +4970,14 @@ function enhSlot(id){
   const cost=lv<10?(lv+1)*3:lv<20?30+lv*5:lv<30?100+lv*10:lv<50?300+lv*20:lv<70?1000+lv*50:lv<90?4000+lv*100:12000+lv*200;
   if(G.shards<cost){showNotif('🔩 파편 부족!','top');return;}
   if(lv>=100){showNotif('최대 강화!','top');return;}
-  const successRate=lv<10?100:lv<30?80:lv<50?60:lv<80?40:20;
+  const successRate=getSlotSuccessRate(lv);
   const prevCP=calcCP();G.shards-=cost;
   if(Math.random()*100<successRate){
     G.slotLevels[id]++;
     showCPChange(prevCP,calcCP());
     showSlotEnhResult(true, slotName, G.slotLevels[id]);
+    // 슬롯 자동 강화 해금 체크
+    if(totalSlotEnhLv()>=SLOT_AUTO_UNLOCK_TOTAL){G.slotAutoEver=true;showCtxTutorial('autoSlotEnh');}
   } else {
     showSlotEnhResult(false, slotName, lv);
   }
@@ -4922,14 +5013,16 @@ function equipSkill(id){
   playSfx('click');renderSkillTab();updateSkillBar();
 }
 function resetSkills(){
-  const cost=resetCost('skill');
-  if(G.gold<cost){showNotif('💰 골드 부족! 필요: '+fmtNum(cost),'top');return;}
-  const prevCP=calcCP();if(cost>0)G.gold-=cost;
+  const totalSkillPts=Object.values(G.activeSkillLevels||{}).reduce((a,b)=>a+b,0)+Object.values(G.passiveSkillLevels||{}).reduce((a,b)=>a+b,0);
+  if(totalSkillPts<=0){showNotif('💡 투자된 스킬포인트가 없습니다','top');return;}
+  const prevCP=calcCP();
+  const prevSeen={...G.tutorialSeen};
   G.skillResetCount=(G.skillResetCount||0)+1;
-  G.pts+=0;
-  G.skillPts+=Object.values(G.activeSkillLevels||{}).reduce((a,b)=>a+b,0)+Object.values(G.passiveSkillLevels||{}).reduce((a,b)=>a+b,0);
+  G.skillPts+=totalSkillPts;
   G.activeSkillLevels={};G.passiveSkillLevels={};G.equippedSkills=[];G.skillCooldowns={};
+  G.tutorialSeen=prevSeen;
   showCPChange(prevCP,calcCP());updateUI();renderSkillTab();updateSkillBar();
+  showNotif('🔄 스킬 초기화 완료 (무료)','top');
 }
 function renderSkillTab(){
   const sg=document.getElementById('active-slots-grid');
@@ -5413,7 +5506,7 @@ function updateNotifDots(){
 function updateStageLbl(){
   const d=getMonsterData(G.chapter,G.stage);
   document.getElementById('stage-label-main').textContent=`${G.chapter}-${G.stage}스테이지`;
-  document.getElementById('stage-label-sub').textContent=`${getChapterEmoji(G.chapter)} ${d.segName}`;
+  document.getElementById('stage-label-sub').textContent=`${getChapterEmoji(G.chapter)} ${G.chapter}구역 ${G.stage}스테이지`;
 }
 let stagePopupTab2='info';
 let _popupChapOpen={};
@@ -5438,7 +5531,7 @@ function renderStagePopup(){
     const expPerKill=Math.floor(stats.exp*pm);
     const bossGold=Math.floor(bs.gold*pm);
     const bossExp=Math.floor(bs.exp*pm);
-    let html=`<div style="font-size:9px;color:var(--accent);margin-bottom:3px">${getChapterEmoji(G.chapter)} ${d.segName}</div>`;
+    let html=`<div style="font-size:9px;color:var(--accent);margin-bottom:3px">${getChapterEmoji(G.chapter)} ${G.chapter}구역 ${G.stage}스테이지</div>`;
     html+=`<div class="popup-monster-row"><span>${d.monster.e} ${d.monster.n}</span><span style="color:var(--text3)">HP:${fmtNum(stats.hp)} ATK:${fmtNum(stats.atk)}</span></div>`;
     html+=`<div style="font-size:10px;color:var(--gold);padding:2px 0;border-bottom:1px solid var(--border)">💰 ${fmtNum(goldPerKill)} &nbsp;<span style="display:inline-block;background:#1a4d2a;color:#3fb950;font-size:8px;font-weight:bold;padding:1px 4px;border-radius:3px;border:1px solid #2ea043;vertical-align:middle">EXP</span> ${fmtNum(expPerKill)}</div>`;
     html+=`<div class="popup-monster-row" style="color:var(--hp);margin-top:2px"><span>${d.boss.e} ${d.boss.n} <span style="font-size:9px;opacity:.7">(${bossLabel})</span></span><span style="color:var(--text3)">HP:${fmtNum(bs.hp)} ⏱${bs.bossTimer}s</span></div>`;
@@ -5481,7 +5574,7 @@ function renderStagePopup(){
       const isCur=c===G.chapter;
       const isBest=c===bestChap;
       chapHtml+=`<div class="popup-chap-header${isOpen?' open':''}" onclick="togglePopupChap(${c})" style="${isBest?'border-color:var(--accent)':''}">
-        ${getChapterEmoji(c)} ${c}구역${isCur?' 🔵':''}${isBest?' ⭐':''}
+        ${getChapterEmoji(c)} ${c}챕터${isCur?' 🔵':''}${isBest?' ⭐':''}
         <span style="font-size:9px;color:var(--text3)">${isBest?'최고':'1-'+maxS} ${isOpen?'▲':'▼'}</span>
       </div>`;
       if(isOpen){
@@ -5761,12 +5854,84 @@ function _closeAllOverlays(){
   if(agp)agp.style.display='none';
 }
 function _tutBodyHtml(text){
-  // [red]...[/red] 마커를 빨간 span으로 변환, \n을 <br>로
-  return text
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-    .replace(/\[red\](.*?)\[\/red\]/g,'<span style="color:#ff4757;font-weight:bold">$1</span>')
-    .replace(/\n/g,'<br>');
+  // [red]...[/red] 먼저 추출 후 나머지 이스케이프, \n을 <br>로
+  // 멀티라인 지원: [\s\S] 사용
+  const placeholder=[];
+  let i=0;
+  const extracted=text.replace(/\[red\]([\s\S]*?)\[\/red\]/g,(_,inner)=>{
+    const key=`\x00RED${i++}\x00`;
+    placeholder.push(`<span style="color:#ff4757;font-weight:bold">${inner.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>')}</span>`);
+    return key;
+  });
+  let html=extracted.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+  placeholder.forEach((v,idx)=>{html=html.replace(`\x00RED${idx}\x00`,v);});
+  return html;
 }
+// 튜토리얼 표시 중 임시 전환한 탭 복원 정보
+let _tutPrevTab=null, _tutPrevGrowthTab=null;
+
+// target 요소를 기준으로 해당 탭/서브탭을 임시 활성화
+function _tutActivateTabForTarget(targetId){
+  if(!targetId)return;
+  const bottom=document.getElementById('bottom');
+  // target → 탭 매핑
+  const tabMap={
+    'tab-growth':'growth','tab-skill':'skill','tab-equip':'equip',
+    'tab-coll':'coll','tab-tower':'tower',
+    'enhance-list':'growth','stat-list':'growth','enh-auto-hdr-btn':'growth',
+    'stat-auto-hdr-btn':'growth',
+    'frag-exchange-box':'equip',
+    'coll-bulk-lvup':'coll',
+    'auto-gacha-btn':'equip',
+    'auto-slot-enh-btn':'equip',
+  };
+  const growthSubMap={
+    'enhance-list':'enhance','enh-auto-hdr-btn':'enhance',
+    'stat-list':'stat','stat-auto-hdr-btn':'stat',
+  };
+  const tabName=tabMap[targetId];
+  if(!tabName)return;
+  // 현재 상태 저장
+  _tutPrevTab=_activeTab;
+  _tutPrevGrowthTab=_growthTab;
+  // 탭 열기 (잠금 탭도 표시만 강제)
+  _activeTab=tabName;
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>{if(b.getAttribute('onclick')===`switchTab('${tabName}')`)b.classList.add('active');});
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  const panel=document.getElementById('panel-'+tabName);if(panel)panel.classList.add('active');
+  bottom.classList.add('expanded');
+  // 서브탭 처리
+  if(tabName==='growth'){
+    const sub=growthSubMap[targetId]||_growthTab;
+    switchGrowthTab(sub);
+  } else if(tabName==='equip'){renderEquipTab();}
+  else if(tabName==='skill'){renderSkillTab();}
+  else if(tabName==='coll'){renderCollTab();switchCollTab(G._collTabActive||'monster');}
+  else if(tabName==='tower'){renderTowerTab();}
+}
+
+// 임시 탭 복원
+function _tutRestoreTab(){
+  if(_tutPrevTab===null)return;
+  const bottom=document.getElementById('bottom');
+  if(_tutPrevTab===''){
+    bottom.classList.remove('expanded');
+    _activeTab='';
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  } else {
+    _activeTab=_tutPrevTab;
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b=>{if(b.getAttribute('onclick')===`switchTab('${_tutPrevTab}')`)b.classList.add('active');});
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+    const panel=document.getElementById('panel-'+_tutPrevTab);if(panel)panel.classList.add('active');
+    bottom.classList.add('expanded');
+    if(_tutPrevTab==='growth')switchGrowthTab(_tutPrevGrowthTab||'stat');
+  }
+  _tutPrevTab=null;_tutPrevGrowthTab=null;
+}
+
 function _showCtxBox(t){
   _closeAllOverlays();
   document.getElementById('tut-title').textContent=t.title;
@@ -5776,6 +5941,8 @@ function _showCtxBox(t){
   document.getElementById('tut-progress').textContent='새 콘텐츠 안내';
   document.getElementById('tutorial-overlay').classList.add('show');
   G.tutStep=99;
+  // target 탭이 있으면 임시 전환해서 하이라이트 요소가 보이도록
+  _tutActivateTabForTarget(t.target);
   _applyTutSpotlight(t);
 }
 
@@ -5784,6 +5951,7 @@ function nextTutorial(){
     document.getElementById('tutorial-overlay').classList.remove('show');
     document.getElementById('tut-spotlight').classList.remove('show');
     document.getElementById('tut-arrow').classList.remove('show');
+    _tutRestoreTab(); // 임시 전환했던 탭 복원
     _ctxProcessing=false;
     _processCtxQueue();
     return;
@@ -5983,6 +6151,7 @@ function updateUI(){
   document.getElementById('cp-val').textContent='⚔️ 전투력 '+fmtNum(calcCP());
   document.getElementById('pts-val').textContent=G.pts;
   document.getElementById('skill-pt-val').textContent=G.skillPts;
+  const enhGoldEl=document.getElementById('enh-gold-val');if(enhGoldEl)enhGoldEl.textContent=fmtNum(G.gold);
   const req=expReq(G.level);
   document.getElementById('exp-bar').style.width=Math.min(100,G.exp/req*100)+'%';
   const expLbl=document.getElementById('exp-label');
@@ -6212,15 +6381,11 @@ function showInfoModal(title, msgHtml){
 function confirmAction(type){
   _confirmAction=type;
   const titles={reset:'⚠️ 데이터 초기화',statReset:'🔄 스탯 초기화',enhReset:'🔄 강화 초기화',skillReset:'🔄 스킬 초기화'};
-  const statFree=(G.statResetCount||0)===0;
-  const skillFree=(G.skillResetCount||0)===0;
   const msgs={
     reset:'모든 데이터가 삭제됩니다.\n정말 초기화하시겠습니까?',
-    statReset:statFree?'스탯을 초기화합니다.\n✨ 첫 번째 초기화는 무료입니다!':
-      `스탯을 초기화합니다.\n비용: 💰 ${fmtNum(resetCost('stat'))}`,
-    enhReset:`강화를 초기화합니다.\n비용: 💰 ${fmtNum(resetCost('enhance'))}`,
-    skillReset:skillFree?'스킬을 초기화합니다.\n✨ 첫 번째 초기화는 무료입니다!':
-      `스킬을 초기화합니다.\n비용: 💰 ${fmtNum(resetCost('skill'))}`,
+    statReset:'투자한 스탯 포인트를 전부 환급합니다.\n✨ 무료로 초기화됩니다!',
+    enhReset:'강화를 전부 초기화합니다.\n💰 투자한 골드가 전액 환급됩니다!',
+    skillReset:'투자한 스킬포인트를 전부 환급합니다.\n✨ 무료로 초기화됩니다!',
   };
   document.getElementById('confirm-title').textContent=titles[type]||'확인';
   document.getElementById('confirm-msg').textContent=msgs[type]||'진행하시겠습니까?';
@@ -6407,8 +6572,11 @@ function initGameUI(){
       if(autoGachaInterval)clearInterval(autoGachaInterval);
       autoGachaInterval=setInterval(()=>{
         if(!G.autoGacha){clearInterval(autoGachaInterval);autoGachaInterval=null;return;}
+        if(pendingAutoGachaPaused)return; // 비교 팝업 대기 중 → 틱 스킵
         const cnt=G.agCount||1;
-        for(let i=0;i<cnt&&G.tickets>0;i++)doGacha(true);
+        for(let i=0;i<cnt&&G.tickets>0&&!pendingAutoGachaPaused;i++){
+          doGacha(true);
+        }
       },700);
     }
   }
