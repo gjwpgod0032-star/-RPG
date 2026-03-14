@@ -796,13 +796,13 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 }
 /* ── UPDATE POPUP ── */
 #update-popup{
-  position:absolute;bottom:0;left:0;right:0;
+  position:absolute;inset:0;
   z-index:9999;
-  background:rgba(0,0,0,0.7);
-  backdrop-filter:blur(4px);
+  background:rgba(0,0,0,0.85);
+  backdrop-filter:blur(3px);
   display:flex;align-items:flex-end;justify-content:center;
-  padding:12px 12px 16px;
-  animation:slideUpFade .3s ease;
+  padding:12px 12px 20px;
+  pointer-events:all;
 }
 #update-popup-box{
   background:var(--bg2);
@@ -1554,7 +1554,15 @@ input[type=range]{width:100%;accent-color:var(--accent)}
   </div>
 </div>
 
-<!-- TUTORIAL -->
+<!-- ACHIEVE REWARD POPUP -->
+<div id="achieve-reward-popup" style="display:none;position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,0.7);display:none;align-items:center;justify-content:center;padding:16px">
+  <div style="background:var(--bg2);border:2px solid var(--gold);border-radius:var(--radius);padding:16px;width:100%;max-width:360px;max-height:80vh;display:flex;flex-direction:column;gap:10px;box-shadow:0 0 20px rgba(227,179,65,0.3)">
+    <div style="font-size:13px;color:var(--gold);font-weight:bold;text-align:center">🎁 업적 보상 수령!</div>
+    <div id="achieve-reward-list" style="overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:6px"></div>
+    <div id="achieve-reward-total" style="font-size:11px;color:var(--text2);border-top:1px solid var(--border2);padding-top:8px;line-height:1.8"></div>
+    <button onclick="closeAchieveRewardPopup()" style="width:100%;padding:8px;background:rgba(227,179,65,0.15);border:2px solid var(--gold);border-radius:var(--radius);color:var(--gold);font-family:var(--font);font-weight:bold;font-size:12px;cursor:pointer">확인</button>
+  </div>
+</div>
 <div id="tutorial-overlay">
   <div class="tut-mask-piece" id="tut-mask-top"></div>
   <div class="tut-mask-piece" id="tut-mask-bottom"></div>
@@ -1870,6 +1878,10 @@ input[type=range]{width:100%;accent-color:var(--accent)}
           <div style="font-size:11px;color:var(--text3);text-align:center;padding:8px 0">슬롯을 탭하면<br>강화 메뉴가 열립니다</div>
         </div>
       </div>
+      <div id="auto-slot-enh-row" style="margin-top:6px;margin-bottom:2px">
+        <button id="auto-slot-enh-btn" onclick="toggleAutoSlotEnh()" style="width:100%;padding:6px;background:rgba(63,185,80,0.08);border:2px solid var(--shard);border-radius:var(--radius);color:var(--shard);font-family:var(--font);font-size:11px;font-weight:bold;cursor:pointer">⚡ 슬롯 자동 강화</button>
+        <div style="font-size:9px;color:var(--text3);margin-top:2px;text-align:center">강화 수치 낮은 순 · 파편 소진 시 자동 중단</div>
+      </div>
       <div id="frag-exchange-box" style="margin-top:6px">
         <div class="fex-title">🔩 파편 교환</div>
         <div class="fex-row"><span>파편 100개 → 🎫 뽑기권 1개</span><button class="fex-btn" onclick="fragToTicket()">교환</button></div>
@@ -1897,7 +1909,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
     <!-- COLLECTION -->
     <div class="tab-panel" id="panel-coll">
       <div class="coll-tab-row">
-        <button class="coll-tab active" onclick="switchCollTab('monster')">수집</button>
+        <button class="coll-tab active" onclick="switchCollTab('monster')">몬스터 도감</button>
         <button class="coll-tab" onclick="switchCollTab('achieve')" style="position:relative">
           업적<div class="notif-dot" id="dot-achieve"></div>
         </button>
@@ -1911,7 +1923,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
             <span class="cl-title">📖 수집</span>
             <span id="coll-lv-val" style="font-size:14px;color:var(--gold);font-weight:bold;text-shadow:1px 1px 0 rgba(0,0,0,0.8)">Lv.0</span>
             <span id="coll-progress" style="font-size:10px;color:var(--text2)">0 / 10종</span>
-            <span id="coll-bonus" style="font-size:10px;color:var(--shard);margin-left:auto">+0%</span>
+            <span id="coll-bonus" style="font-size:10px;color:var(--shard);margin-left:auto"><span style="color:var(--text3)">전체 스탯 </span>+0%</span>
           </div>
         </div>
         <button id="coll-bulk-lvup" onclick="doBulkSoulLvUp()" style="display:none;width:100%;margin-bottom:6px;padding:5px;background:rgba(88,166,255,0.12);border:2px solid var(--accent);border-radius:var(--radius);color:var(--accent);font-family:var(--font);font-size:11px;font-weight:bold;cursor:pointer"></button>
@@ -1961,7 +1973,7 @@ const GAME_VERSION = 'v02_27';
 // GitHub Pages 배포 시 아래 URL을 본인 레포로 변경하세요
 // 예: 'https://[계정].github.io/[레포]/version.json'
 const VERSION_CHECK_URL = 'version.json';
-const VERSION_CHECK_INTERVAL = 15 * 60 * 1000; // 15분
+const VERSION_CHECK_INTERVAL = 1 * 60 * 1000; // 1분
 
 let _versionCheckTimer = null;
 let _updatePending = false;
@@ -1986,30 +1998,25 @@ function showUpdatePopup(newVer, note){
   if(existing) existing.remove();
   const pop = document.createElement('div');
   pop.id = 'update-popup';
+  // 클릭 차단 — 팝업 뒤쪽 터치/클릭 무효화
+  pop.addEventListener('touchstart',e=>e.stopPropagation(),{capture:true});
+  pop.addEventListener('pointerdown',e=>e.stopPropagation(),{capture:true});
   pop.innerHTML =
     '<div id="update-popup-box">' +
       '<div style="font-size:13px;color:var(--gold);font-weight:bold;margin-bottom:6px">🆙 새 버전 출시!</div>' +
       '<div style="font-size:11px;color:var(--text2);margin-bottom:4px">현재: <span style="color:var(--text3)">' + GAME_VERSION + '</span> → 최신: <span style="color:var(--shard)">' + newVer + '</span></div>' +
       (note ? '<div style="font-size:10px;color:var(--text3);margin-bottom:8px;line-height:1.5">' + note + '</div>' : '') +
-      '<div style="font-size:10px;color:var(--text3);margin-bottom:10px">세이브는 자동 보존됩니다.</div>' +
-      '<div style="display:flex;gap:6px">' +
-        '<button onclick="doUpdate()" style="flex:1;padding:7px;background:rgba(63,185,80,0.15);border:2px solid var(--shard);border-radius:var(--radius);color:var(--shard);font-family:var(--font);font-weight:bold;font-size:11px;cursor:pointer">⚡ 지금 업데이트</button>' +
-        '<button onclick="dismissUpdate()" style="flex:1;padding:7px;background:var(--bg2);border:2px solid var(--border2);border-radius:var(--radius);color:var(--text3);font-family:var(--font);font-weight:bold;font-size:11px;cursor:pointer">나중에</button>' +
-      '</div>' +
+      '<div style="font-size:10px;color:var(--text3);margin-bottom:10px">세이브는 자동 보존됩니다.<br>업데이트 후 계속 플레이할 수 있습니다.</div>' +
+      '<button onclick="doUpdate()" style="width:100%;padding:9px;background:rgba(63,185,80,0.15);border:2px solid var(--shard);border-radius:var(--radius);color:var(--shard);font-family:var(--font);font-weight:bold;font-size:12px;cursor:pointer">⚡ 업데이트 하기</button>' +
     '</div>';
   document.getElementById('app').appendChild(pop);
 }
 
 function doUpdate(){
-  saveGame(); // 세이브 먼저 백업
+  saveGame();
   location.reload(true);
 }
-function dismissUpdate(){
-  const pop = document.getElementById('update-popup');
-  if(pop) pop.remove();
-  // 30분 후 다시 알림
-  setTimeout(()=>{ _updatePending=false; checkVersion(); }, 30*60*1000);
-}
+function dismissUpdate(){} // 더 이상 사용 안 함
 
 function startVersionCheck(){
   checkVersion(); // 즉시 1회 체크
@@ -3704,51 +3711,83 @@ function resetStats(){
   showCPChange(prevCP,calcCP());updateUI();renderStatTab();
 }
 function getStatRecommend(){
-  const atk=getFinalAtk(), hp=getFinalHp();
-  const crit=getFinalCrit();
+  // 스탯 포인트 1개당 DPS/생존 효율 계산
+  const atk=getFinalAtk(), hp=getFinalHp(), def=getFinalDef();
+  const crit=getFinalCrit(), critDmg=getFinalCritDmg();
   const ms=getMonsterStats(true);
-  // 보스 1타 피해 비율 (생존 지표: 높을수록 생존 취약)
-  const dmgRatio=ms.atk/Math.max(1,hp);
-  // 내 DPS로 보스를 처치하는 데 걸리는 예상 타수 (낮을수록 화력 충분)
-  const hitsNeeded=ms.hp/Math.max(1,atk*(1+crit));
-  // 현재 스탯 포인트 배분 비율
-  const totalPts=Math.max(1,(G.ptAtk||0)+(G.ptHp||0)+(G.ptDef||0)+(G.ptCrit||0)+(G.ptCritDmg||0));
-  const atkRatio=(G.ptAtk||0)/totalPts;
-  const hpRatio=(G.ptHp||0)/totalPts;
-  // 점수 계산
+  const baseDps=atk*(1+crit*critDmg);
+  const dmgRatio=ms.atk/Math.max(1,hp); // 보스 1타 피해 비율
+
+  // 포인트 1개당 증가량 (배율 반영)
+  const atkPctMult=1+(getEnhPct('atk')+getAllPctBonus('atk'))/100;
+  const hpPctMult=1+(getEnhPct('hp')+getAllPctBonus('hp'))/100;
+  const defPctMult=1+(getEnhPct('def')+getAllPctBonus('def'))/100;
+
+  const dAtkPerPt=2*atkPctMult; // ATK +2 per pt
+  const dHpPerPt=8*hpPctMult;
+  const dDefPerPt=1.5*defPctMult;
+
+  // 포인트 1개당 DPS 증가율
+  const dpsByAtk=((atk+dAtkPerPt)*(1+crit*critDmg)-baseDps)/Math.max(1,baseDps);
+  const dpsByCrit=((atk*(1+(crit+0.005)*critDmg))-baseDps)/Math.max(1,baseDps);
+  const dpsByCritDmg=((atk*(1+crit*(critDmg+0.025)))-baseDps)/Math.max(1,baseDps);
+
+  // 포인트 1개당 생존 효율 (받는 피해 감소율)
+  const survByHp=dHpPerPt/Math.max(1,hp)*dmgRatio*200;
+  const survByDef=(getFinalDef()+dDefPerPt-def)/Math.max(1,def+100)*dmgRatio*150;
+
   const scores={
-    // ATK: 보스 처치에 타수가 많이 필요하고, 아직 ATK에 과투자 안 했을 때
-    atk: hitsNeeded>25&&atkRatio<0.7 ? 80 : hitsNeeded>15&&atkRatio<0.6 ? 60 : 30,
-    // HP: 보스 1타에 HP 20% 이상 깎이면 생존 위협
-    hp:  dmgRatio>0.25 ? 90 : dmgRatio>0.15 ? 70 : hpRatio<0.15 ? 50 : 25,
-    // DEF: 보스 피해 비율이 높고 DEF 투자가 거의 없을 때
-    def: dmgRatio>0.2&&(G.ptDef||0)<5 ? 55 : 20,
-    // CRIT: 치명타율이 아직 낮을 때
-    crit: crit<0.2 ? 60 : crit<0.4 ? 40 : 15,
-    // CRITDMG: 치명타율이 어느 정도 확보됐을 때
-    critdmg: crit>=0.3 ? 55 : 10,
+    atk: dpsByAtk*1000,
+    hp: survByHp,
+    def: survByDef,
+    crit: dpsByCrit*1000,
+    critdmg: dpsByCritDmg*1000,
   };
   const sorted=Object.entries(scores).sort((a,b)=>b[1]-a[1]);
   return{first:sorted[0][0], second:sorted[1][0]};
 }
+
 function getEnhRecommend(){
+  // 골드 1당 DPS/생존 효율이 가장 높은 강화 항목
   const atk=getFinalAtk(), hp=getFinalHp();
+  const crit=getFinalCrit(), critDmg=getFinalCritDmg();
   const ms=getMonsterStats(true);
+  const baseDps=atk*(1+crit*critDmg);
   const dmgRatio=ms.atk/Math.max(1,hp);
-  const atkRatio=atk/Math.max(1,ms.hp);
   const scores={};
+
   ENHANCE_ITEMS.forEach(item=>{
     if(!isEnhUnlocked(item))return;
     const lv=G.enhanceLevels[item.id]||0;
+    if(item.maxLv&&lv>=item.maxLv)return;
     const cost=enhCost(item,lv);
-    if(G.gold<cost)return;
-    let s=50;
-    if(['atk','bossdmg','critdmg','crit'].includes(item.id)) s=atkRatio<0.015?80:55;
-    if(['hp','def','regen'].includes(item.id)) s=dmgRatio>0.18?85:45;
-    s+=Math.max(0,20-lv);
-    scores[item.id]=s;
+    if(cost<=0)return;
+
+    let effPerGold=0;
+    const pct=item.pct/100;
+    if(item.id==='atk'){
+      const newAtk=atk*(1+pct);
+      effPerGold=((newAtk*(1+crit*critDmg)-baseDps)/Math.max(1,baseDps))/cost;
+    } else if(item.id==='critdmg'){
+      effPerGold=((atk*(1+crit*(critDmg+pct))-baseDps)/Math.max(1,baseDps))/cost;
+    } else if(item.id==='crit'){
+      effPerGold=((atk*(1+(crit+pct)*critDmg)-baseDps)/Math.max(1,baseDps))/cost;
+    } else if(item.id==='normaldmg'||item.id==='bossdmg'){
+      effPerGold=(pct*0.6)/cost;
+    } else if(item.id==='hp'){
+      const newHp=hp*(1+pct);
+      effPerGold=(dmgRatio*(newHp-hp)/Math.max(1,hp)*0.5)/cost;
+    } else if(item.id==='def'){
+      effPerGold=(dmgRatio*pct*0.3)/cost;
+    } else if(item.id==='lifeSteal'){
+      effPerGold=(dmgRatio*pct*0.2)/cost;
+    } else {
+      effPerGold=pct/cost*0.1;
+    }
+    scores[item.id]=effPerGold*1e8; // 스케일 조정
   });
-  const sorted=Object.entries(scores).sort((a,b)=>b[1]-a[1]);
+
+  const sorted=Object.entries(scores).filter(e=>e[1]>0).sort((a,b)=>b[1]-a[1]);
   return{first:sorted[0]?.[0], second:sorted[1]?.[0]};
 }
 
@@ -4705,6 +4744,62 @@ function _closeEnhPanel(){
 function getSlotEnhCost(lv){
   return lv<10?(lv+1)*3:lv<20?30+lv*5:lv<30?100+lv*10:lv<50?300+lv*20:lv<70?1000+lv*50:lv<90?4000+lv*100:12000+lv*200;
 }
+
+// ── 장비 자동 강화 ──
+let _autoSlotEnhInterval=null;
+function toggleAutoSlotEnh(){
+  if(_autoSlotEnhInterval){
+    stopAutoSlotEnh();
+  }else{
+    startAutoSlotEnh();
+  }
+}
+function startAutoSlotEnh(){
+  if(_autoSlotEnhInterval)return;
+  // 즉시 1회 실행
+  if(!_doAutoSlotEnhStep())return;
+  _autoSlotEnhInterval=setInterval(()=>{
+    if(!_doAutoSlotEnhStep())stopAutoSlotEnh();
+  },400);
+  _updateAutoSlotBtn(true);
+  showNotif('⚡ 슬롯 자동 강화 시작','top');
+}
+function stopAutoSlotEnh(){
+  if(_autoSlotEnhInterval){clearInterval(_autoSlotEnhInterval);_autoSlotEnhInterval=null;}
+  _updateAutoSlotBtn(false);
+}
+function _doAutoSlotEnhStep(){
+  // 강화 수치 낮은 순 정렬, 100이면 건너뜀
+  const candidates=SLOTS.map(sl=>({id:sl.id,lv:G.slotLevels[sl.id]||0}))
+    .filter(s=>s.lv<100)
+    .sort((a,b)=>a.lv-b.lv);
+  for(const c of candidates){
+    const cost=getSlotEnhCost(c.lv);
+    if(G.shards>=cost){
+      enhSlot(c.id);
+      return true;
+    }
+  }
+  // 모든 슬롯에 파편 부족 또는 전부 100레벨
+  showNotif('🔩 파편 부족으로 자동 강화 중단','top');
+  return false;
+}
+function _updateAutoSlotBtn(running){
+  const btn=document.getElementById('auto-slot-enh-btn');
+  if(!btn)return;
+  if(running){
+    btn.textContent='⏹ 자동강화 중단';
+    btn.style.borderColor='var(--hp)';
+    btn.style.color='var(--hp)';
+    btn.style.background='rgba(255,71,87,0.12)';
+  }else{
+    btn.textContent='⚡ 슬롯 자동 강화';
+    btn.style.borderColor='var(--shard)';
+    btn.style.color='var(--shard)';
+    btn.style.background='rgba(63,185,80,0.08)';
+  }
+}
+
 function enhSlot(id){
   const lv=G.slotLevels[id];
   const sl=SLOTS.find(s=>s.id===id);
@@ -4854,7 +4949,7 @@ function renderCollTab(){
   if(!collLvEl)return;
   collLvEl.textContent=`Lv.${lv}`;
   document.getElementById('coll-progress').textContent=`${count}${nextNeed<Infinity?' / '+nextNeed+'종':'종'}`;
-  document.getElementById('coll-bonus').textContent=`전체 +${(bonus+soulBonus).toFixed(1)}%`;
+  document.getElementById('coll-bonus').innerHTML=`<span style="color:var(--text3)">전체 스탯 </span><span style="color:var(--shard)">+${(bonus+soulBonus).toFixed(1)}%</span>`;
   const mc=document.getElementById('coll-monster-content');
   const gradeLabel={mob:'일반',normal:'일반보스',vip:'정예보스',elite:'엘리트보스'};
   const gradeColor={mob:'var(--text2)',normal:'#58a6ff',vip:'#bc8cff',elite:'#ff4757'};
@@ -4983,8 +5078,45 @@ function doBulkSoulLvUp(){
 function claimAllAchieve(){
   const claimable=ACHIEVEMENTS.filter(a=>!G.achieveDone[a.id]&&a.cond(G));
   if(!claimable.length)return;
-  claimable.forEach(a=>claimAchieve(a.id));
-  showNotif(`🎁 업적 보상 ${claimable.length}개 수령!`,'top');
+  // 보상 합산
+  const total={gold:0,tickets:0,shards:0,skillPts:0,permAtkPct:0,permHpPct:0,permAllPct:0};
+  const lines=[];
+  claimable.forEach(a=>{
+    claimAchieve(a.id);
+    const r=a.reward;
+    const parts=[];
+    if(r.gold){total.gold+=r.gold;parts.push(`💰+${fmtNum(r.gold)}`);}
+    if(r.tickets){total.tickets+=r.tickets;parts.push(`🎫+${r.tickets}`);}
+    if(r.shards){total.shards+=r.shards;parts.push(`🔩+${r.shards}`);}
+    if(r.skillPts){total.skillPts+=r.skillPts;parts.push(`✨+${r.skillPts}`);}
+    if(r.permAtkPct){total.permAtkPct+=r.permAtkPct;parts.push(`⚔️+${r.permAtkPct}%`);}
+    if(r.permHpPct){total.permHpPct+=r.permHpPct;parts.push(`❤️+${r.permHpPct}%`);}
+    if(r.permAllPct){total.permAllPct+=r.permAllPct;parts.push(`📈+${r.permAllPct}%`);}
+    lines.push(`<div style="display:flex;align-items:center;gap:6px;padding:4px 6px;background:var(--bg3);border-radius:var(--radius)">
+      <span style="font-size:14px">${a.icon}</span>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:10px;color:var(--text)">${a.name}</div>
+        <div style="font-size:9px;color:var(--gold)">${parts.join(' ')}</div>
+      </div>
+    </div>`);
+  });
+  // 합산 표시
+  const totParts=[];
+  if(total.gold)totParts.push(`💰 ${fmtNum(total.gold)}`);
+  if(total.tickets)totParts.push(`🎫 ${total.tickets}`);
+  if(total.shards)totParts.push(`🔩 ${total.shards}`);
+  if(total.skillPts)totParts.push(`✨ ${total.skillPts}`);
+  if(total.permAtkPct)totParts.push(`⚔️ +${total.permAtkPct}%`);
+  if(total.permHpPct)totParts.push(`❤️ +${total.permHpPct}%`);
+  if(total.permAllPct)totParts.push(`📈 +${total.permAllPct}%`);
+  const pop=document.getElementById('achieve-reward-popup');
+  document.getElementById('achieve-reward-list').innerHTML=lines.join('');
+  document.getElementById('achieve-reward-total').innerHTML=
+    `<span style="color:var(--text3)">합산 보상: </span><span style="color:var(--gold)">${totParts.join('  ')}</span>`;
+  pop.style.display='flex';
+}
+function closeAchieveRewardPopup(){
+  document.getElementById('achieve-reward-popup').style.display='none';
 }
 function claimAchieve(id){
   const a=ACHIEVEMENTS.find(x=>x.id===id);if(!a)return;
