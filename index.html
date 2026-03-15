@@ -2044,7 +2044,7 @@ const SAVE_KEY = 'milkAdv_v6';
 // ══════════════════════════════════════════
 //  VERSION CHECK
 // ══════════════════════════════════════════
-const GAME_VERSION = 'v02_61';
+const GAME_VERSION = 'v02_62';
 // GitHub Pages 배포 시 아래 URL을 본인 레포로 변경하세요
 // 예: 'https://[계정].github.io/[레포]/version.json'
 const VERSION_CHECK_URL = 'version.json';
@@ -6762,12 +6762,23 @@ const hasSave=loadGame();
 // 타이틀 버전 표시
 (()=>{const el=document.getElementById('title-version');if(el)el.textContent=GAME_VERSION;})()
 if(!hasSave){G.gold=1500;G.shards=50;G.tickets=20;}
+// 타이틀 BGM 파일 프리로드 (클릭 전 미리 캐시)
+(()=>{
+  const url=BGM_FILE['title'];
+  if(url)fetch(url).then(r=>r.ok?r.arrayBuffer():null).then(arr=>{
+    if(arr&&window.AudioContext){
+      const tmp=new(window.AudioContext||window.webkitAudioContext)();
+      tmp.decodeAudioData(arr,buf=>{_audioCache[url]=buf;tmp.close();}).catch(()=>{});
+    }
+  }).catch(()=>{});
+})();
 
 document.getElementById('title-screen').addEventListener('click',e=>{
   if(!e.target.closest('#gear-btn')&&!e.target.closest('.modal-overlay'))tapTitle();
 });
 document.getElementById('title-screen').addEventListener('click',()=>{
-  if(!audioCtx){initAudio();playBgm('title');}
+  if(!audioCtx){initAudio();}
+  playBgm('title');
 },{once:true});
 document.addEventListener('pointerdown',e=>{
   if(!e.target.closest('#stage-info-box')&&!e.target.closest('#stage-popup'))
