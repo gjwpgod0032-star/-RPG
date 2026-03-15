@@ -118,13 +118,6 @@ img,canvas{image-rendering:pixelated}
 #title-tap{font-size:13px;color:var(--accent);animation:blinkTap 1s infinite;z-index:1;letter-spacing:2px;
   text-shadow:0 0 8px rgba(88,166,255,0.6)}
 @keyframes blinkTap{0%,100%{opacity:1}50%{opacity:0}}
-#gear-btn{
-  position:absolute;top:8px;right:8px;width:30px;height:30px;
-  background:rgba(0,0,0,0.7);border:2px solid var(--border2);
-  border-radius:var(--radius);display:flex;align-items:center;justify-content:center;
-  font-size:14px;cursor:pointer;z-index:1002;
-  box-shadow:2px 2px 0 rgba(0,0,0,0.5);
-}
 
 /* ── NAME SCREEN ── */
 #name-screen{
@@ -1457,7 +1450,6 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 <!-- TITLE SCREEN -->
 <div id="title-screen">
   <div id="title-star-bg"></div>
-  <div id="gear-btn" onclick="openSettingsModal()" style="z-index:1003">⚙️</div>
   <div id="title-logo">
     <img src="assets/img/title.png" id="title-img" alt="우유의 대모험"
       style="max-width:280px;width:80%;display:block;margin:0 auto 10px;image-rendering:pixelated"
@@ -1467,7 +1459,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
     <div class="t-deco"></div>
     <div class="t-sub">IDLE RPG</div>
   </div>
-  <div id="title-tap">▶ 탭하여 시작</div>
+  <div id="title-tap">TOUCH TO START</div>
   <div style="position:absolute;bottom:12px;right:12px;font-size:9px;color:var(--text3);z-index:1;letter-spacing:1px;opacity:0.6" id="title-version"></div>
 </div>
 
@@ -2044,7 +2036,7 @@ const SAVE_KEY = 'milkAdv_v6';
 // ══════════════════════════════════════════
 //  VERSION CHECK
 // ══════════════════════════════════════════
-const GAME_VERSION = 'v02_64';
+const GAME_VERSION = 'v02_65';
 // GitHub Pages 배포 시 아래 URL을 본인 레포로 변경하세요
 // 예: 'https://[계정].github.io/[레포]/version.json'
 const VERSION_CHECK_URL = 'version.json';
@@ -6778,13 +6770,20 @@ if(!hasSave){G.gold=1500;G.shards=50;G.tickets=20;}
   }).catch(()=>{});
 })();
 
+let _titlePhase=0; // 0=TOUCH TO START, 1=탭하여 게임 시작
 document.getElementById('title-screen').addEventListener('click',e=>{
-  if(!e.target.closest('#gear-btn')&&!e.target.closest('.modal-overlay'))tapTitle();
+  if(e.target.closest('.modal-overlay'))return;
+  if(_titlePhase===0){
+    // 1단계: BGM 시작, 텍스트 전환
+    initAudio();
+    playBgm('title');
+    document.getElementById('title-tap').textContent='▶ 탭하여 게임 시작';
+    _titlePhase=1;
+  } else {
+    // 2단계: 게임 진입
+    tapTitle();
+  }
 });
-document.getElementById('title-screen').addEventListener('click',()=>{
-  if(!audioCtx){initAudio();}
-  playBgm('title');
-},{once:true});
 document.addEventListener('pointerdown',e=>{
   if(!e.target.closest('#stage-info-box')&&!e.target.closest('#stage-popup'))
     document.getElementById('stage-popup').classList.remove('show');
