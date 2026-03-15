@@ -2044,7 +2044,7 @@ const SAVE_KEY = 'milkAdv_v6';
 // ══════════════════════════════════════════
 //  VERSION CHECK
 // ══════════════════════════════════════════
-const GAME_VERSION = 'v02_63';
+const GAME_VERSION = 'v02_64';
 // GitHub Pages 배포 시 아래 URL을 본인 레포로 변경하세요
 // 예: 'https://[계정].github.io/[레포]/version.json'
 const VERSION_CHECK_URL = 'version.json';
@@ -2652,6 +2652,7 @@ let G={
 // ══════════════════════════════════════════
 // ── AUDIO SYSTEM (file-based) ──
 let audioCtx=null,bgmGain=null,sfxGain=null;
+let _titleBgmAllowed=true; // 타이틀 화면에서만 title BGM 허용
 let bgmSource=null,bgmBuffer=null,currentBgmKey=null;
 let lastGachaSfxTime=0;
 const _audioCache={};
@@ -2777,6 +2778,7 @@ function _stopBgmFallback(){
 }
 async function playBgm(key){
   if(!audioCtx||!G.bgmOn)return;
+  if(key==='title'&&!_titleBgmAllowed)return;
   if(currentBgmKey===key&&(bgmSource||_bgmFallbackTimer))return;
   stopBgm();
   const url=BGM_FILE[key]??BGM_FILE[0];
@@ -2796,6 +2798,7 @@ function stopBgm(){
   currentBgmKey=null;
 }
 function startBgm(){
+  _titleBgmAllowed=false;
   stopBgm();
   const si=getSegIdx(G.stage);
   playBgm(si);
@@ -6690,10 +6693,14 @@ function tapTitle(){
   const oldSave=localStorage.getItem(OLD_KEY);
   const newSave=localStorage.getItem(SAVE_KEY);
   if(oldSave&&!newSave){
+    _titleBgmAllowed=false;stopBgm();
     document.getElementById('title-screen').style.display='none';
     openModal('migrate-modal');return;
   }
-  if(newSave){document.getElementById('title-screen').style.display='none';initGameUI();}
+  if(newSave){
+    _titleBgmAllowed=false;stopBgm();
+    document.getElementById('title-screen').style.display='none';initGameUI();
+  }
   else{document.getElementById('title-screen').style.display='none';document.getElementById('name-screen').classList.add('show');}
 }
 function doMigrate(){
