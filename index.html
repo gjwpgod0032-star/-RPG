@@ -453,15 +453,10 @@ input[type=range]{width:100%;accent-color:var(--accent)}
   display:flex;align-items:center;justify-content:space-around;
   padding:4px 8px;position:relative;
 }
-.fighter{
-  display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;
-  background:rgba(0,0,0,0.55);
-  border:1px solid rgba(255,255,255,0.08);
-  border-radius:4px;padding:6px 4px;margin:0 2px;
-  backdrop-filter:blur(3px);
-}
+.fighter{display:flex;flex-direction:column;align-items:center;gap:0;flex:1}
 .fighter-emoji{
-  font-size:46px;line-height:1;filter:drop-shadow(0 0 8px rgba(255,255,255,0.15));
+  font-size:46px;line-height:1;
+  filter:drop-shadow(0 2px 6px rgba(0,0,0,0.9));
   text-shadow:2px 2px 0 rgba(0,0,0,0.5);
 }
 .px-char{image-rendering:pixelated;image-rendering:crisp-edges;display:block;}
@@ -475,11 +470,18 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 .px-death{animation:pxDeath 0.7s ease-out forwards;}
 #player-emoji{width:46px;height:46px;display:flex;align-items:center;justify-content:center;}
 #player-emoji svg{width:46px;height:46px;}
-.fighter-title{font-size:10px;color:var(--gold);text-align:center;display:none;
-  text-shadow:1px 1px 0 rgba(0,0,0,1),0 0 6px rgba(227,179,65,0.5);margin-bottom:2px}
-.hp-bar-wrap{width:100%;max-width:110px}
-.hp-bar-label{display:flex;justify-content:space-between;font-size:10px;color:var(--text);margin-bottom:2px;
-  text-shadow:1px 1px 0 rgba(0,0,0,1)}
+.fighter-title{font-size:9px;color:var(--gold);text-align:center;display:none;
+  background:rgba(13,19,28,0.78);border:1px solid rgba(227,179,65,0.45);
+  border-radius:3px;padding:1px 7px;margin-bottom:4px;
+  text-shadow:1px 1px 0 rgba(0,0,0,0.9)}
+.hp-bar-wrap{
+  width:100%;max-width:120px;
+  background:rgba(13,19,28,0.78);
+  border:1px solid rgba(58,74,92,0.7);
+  border-radius:4px;padding:4px 8px;margin-top:5px;
+}
+.hp-bar-label{display:flex;justify-content:space-between;font-size:9px;color:var(--text2);margin-bottom:3px;
+  text-shadow:1px 1px 0 rgba(0,0,0,0.9)}
 .hp-bar{
   height:7px;background:rgba(255,0,0,0.15);
   border:1px solid rgba(255,71,87,0.3);border-radius:1px;overflow:hidden;
@@ -490,7 +492,8 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 @keyframes attackAnim{0%{transform:scale(1)}40%{transform:scale(1.15) translateX(6px)}100%{transform:scale(1)}}
 .attack-anim{animation:attackAnim .22s ease}
 .fighter-name{font-size:10px;color:var(--text);font-weight:bold;
-  text-shadow:1px 1px 0 rgba(0,0,0,1)}
+  text-align:center;margin-top:3px;
+  text-shadow:1px 1px 0 rgba(0,0,0,0.9)}
 .vs-text{font-size:13px;color:var(--text2);font-weight:bold;
   text-shadow:1px 1px 0 rgba(0,0,0,1),0 0 8px rgba(0,0,0,0.8);flex-shrink:0}
 
@@ -509,9 +512,6 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 #skill-bar{
   display:flex;justify-content:center;gap:5px;
   padding:3px 8px;flex-shrink:0;min-height:32px;
-  background:rgba(0,0,0,0.65);
-  border-top:1px solid rgba(255,255,255,0.06);
-  backdrop-filter:blur(2px);
 }
 .skill-icon-slot{
   width:26px;height:26px;position:relative;
@@ -648,21 +648,20 @@ input[type=range]{width:100%;accent-color:var(--accent)}
   flex-shrink:0;
   display:inline-flex;flex-direction:column;gap:2px;
   max-width:62%;align-self:flex-start;
-  padding:5px 9px;
+  padding:4px 8px;
   z-index:5;
   cursor:default;
-  background:rgba(4,8,16,0.92);
-  border-radius:0 6px 0 0;
-  border-right:2px solid var(--border2);
-  border-top:2px solid var(--border2);
-  backdrop-filter:blur(4px);
+  background:rgba(13,19,28,0.92);
+  border-radius:0 4px 0 0;
+  border-right:1px solid var(--border2);
+  border-top:1px solid var(--border2);
 }
 #quest-panel-inline.quest-done{
   animation:questDonePulse 1.5s ease-in-out infinite;
-  background:rgba(10,30,16,0.92);
-  border-right:2px solid rgba(63,185,80,0.8);
-  border-top:2px solid rgba(63,185,80,0.8);
-  border-bottom:2px solid rgba(63,185,80,0.8);
+  background:rgba(13,19,28,0.92);
+  border-right:2px solid rgba(63,185,80,0.6);
+  border-top:2px solid rgba(63,185,80,0.6);
+  border-bottom:2px solid rgba(63,185,80,0.6);
 }
 
 /* ── GACHA ZONE ── */
@@ -675,10 +674,8 @@ input[type=range]{width:100%;accent-color:var(--accent)}
   position:relative;
 }
 @keyframes questDonePulse{0%,100%{box-shadow:0 0 6px rgba(63,185,80,0.3)}50%{box-shadow:0 0 14px rgba(63,185,80,0.7)}}
-#quest-panel-inline .qp-title{color:var(--accent);font-size:10px;white-space:nowrap;flex-shrink:0;
-  text-shadow:0 0 6px rgba(88,166,255,0.4)}
-#quest-panel-inline .qp-prog{color:var(--text);font-size:10px;white-space:nowrap;flex:1;min-width:0;
-  text-shadow:1px 1px 0 rgba(0,0,0,0.9)}
+#quest-panel-inline .qp-title{color:var(--accent);font-size:10px;white-space:nowrap;flex-shrink:0}
+#quest-panel-inline .qp-prog{color:var(--text3);font-size:10px;white-space:nowrap;flex:1;min-width:0}
 #quest-panel-inline .qp-collect-btn{
   display:none;font-size:9px;padding:1px 5px;
   background:rgba(63,185,80,0.25);border:1px solid var(--shard);
@@ -1729,8 +1726,8 @@ input[type=range]{width:100%;accent-color:var(--accent)}
         <div class="hp-bar-wrap">
           <div class="hp-bar-label"><span>HP</span><span id="player-hp-text">100/100</span></div>
           <div class="hp-bar"><div class="hp-fill player-hp-fill" id="player-hp-fill" style="width:100%"></div></div>
+          <div class="fighter-name" id="player-name-label">멋진 우유</div>
         </div>
-        <div class="fighter-name" id="player-name-label">멋진 우유</div>
       </div>
       <div class="vs-text">VS</div>
       <div class="fighter">
@@ -1739,8 +1736,8 @@ input[type=range]{width:100%;accent-color:var(--accent)}
         <div class="hp-bar-wrap">
           <div class="hp-bar-label"><span>HP</span><span id="monster-hp-text">35/35</span></div>
           <div class="hp-bar"><div class="hp-fill" id="monster-hp-fill" style="width:100%"></div></div>
+          <div class="fighter-name" id="monster-name-label">슬라임</div>
         </div>
-        <div class="fighter-name" id="monster-name-label">슬라임</div>
       </div>
     </div>
 
@@ -2047,7 +2044,7 @@ const SAVE_KEY = 'milkAdv_v6';
 // ══════════════════════════════════════════
 //  VERSION CHECK
 // ══════════════════════════════════════════
-const GAME_VERSION = 'v02_56';
+const GAME_VERSION = 'v02_58';
 // GitHub Pages 배포 시 아래 URL을 본인 레포로 변경하세요
 // 예: 'https://[계정].github.io/[레포]/version.json'
 const VERSION_CHECK_URL = 'version.json';
