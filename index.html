@@ -2044,7 +2044,7 @@ const SAVE_KEY = 'milkAdv_v6';
 // ══════════════════════════════════════════
 //  VERSION CHECK
 // ══════════════════════════════════════════
-const GAME_VERSION = 'v02_62';
+const GAME_VERSION = 'v02_63';
 // GitHub Pages 배포 시 아래 URL을 본인 레포로 변경하세요
 // 예: 'https://[계정].github.io/[레포]/version.json'
 const VERSION_CHECK_URL = 'version.json';
@@ -2107,7 +2107,7 @@ const THEMES=[
   { // 테마 1 - 자연/숲 (10스테이지마다 배경·브금 변화)
     emoji:'🌲', bgClass:'stage-bg-0',
     bgClasses:['stage-bg-0','stage-bg-1','stage-bg-2','stage-bg-3','stage-bg-4','stage-bg-5','stage-bg-6','stage-bg-7','stage-bg-8','stage-bg-9'],
-    bgm:[1,1,2,2,3,3,4,4,5,5],
+    bgm:[0,1,2,3,4,5,6,7,8,9],
     segments:[
       {name:'숲 1구역', monster:{n:'풀잎슬라임',e:'🟢'}, boss:{n:'고목왕',e:'🌳'}, eliteBoss:{n:'숲의 정령왕',e:'🌲'}},
       {name:'숲 2구역', monster:{n:'숲도깨비',e:'🔮'},   boss:{n:'숲의 군주',e:'🦌'}, eliteBoss:{n:'고대 엔트',e:'🌿'}},
@@ -2797,8 +2797,6 @@ function stopBgm(){
 }
 function startBgm(){
   stopBgm();
-  const k=getStageBgm(G.chapter,G.stage);
-  // getStageBgm returns 1~5 (old), remap to 0~9 via segment index
   const si=getSegIdx(G.stage);
   playBgm(si);
 }
