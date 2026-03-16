@@ -886,9 +886,9 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 .s-info{flex:1;min-width:0}
 .s-name{font-size:11px;color:var(--text2)}
 .s-val{font-size:12px;font-weight:bold;text-shadow:1px 1px 0 rgba(0,0,0,0.8)}
-.stat-btns{display:flex;gap:3px;flex-shrink:0}
+.stat-btns{display:flex;gap:2px;flex-shrink:0}
 .stat-plus-btn{
-  padding:4px 7px;font-size:12px;font-weight:bold;
+  padding:3px 5px;font-size:10px;font-weight:bold;
   background:var(--bg3);border:2px solid var(--border2);
   border-radius:var(--radius);color:var(--text2);
   font-family:var(--font);cursor:pointer;
@@ -945,9 +945,9 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 .enh-name{font-size:11px;color:var(--text2)}
 .enh-lv{font-size:12px;font-weight:bold;text-shadow:1px 1px 0 rgba(0,0,0,0.8)}
 .enh-cost{font-size:10px;color:var(--text3)}
-.enh-btns{display:flex;gap:3px;flex-shrink:0}
+.enh-btns{display:flex;gap:2px;flex-shrink:0}
 .enh-btn{
-  padding:4px 6px;font-size:11px;
+  padding:3px 5px;font-size:10px;
   background:var(--bg3);border:2px solid var(--border2);
   border-radius:var(--radius);color:var(--text2);
   font-family:var(--font);font-weight:bold;cursor:pointer;
@@ -2036,7 +2036,7 @@ const SAVE_KEY = 'milkAdv_v6';
 // ══════════════════════════════════════════
 //  VERSION CHECK
 // ══════════════════════════════════════════
-const GAME_VERSION = 'v02_77';
+const GAME_VERSION = 'v02_78';
 // GitHub Pages 배포 시 아래 URL을 본인 레포로 변경하세요
 // 예: 'https://[계정].github.io/[레포]/version.json'
 const VERSION_CHECK_URL = 'version.json';
@@ -4188,9 +4188,9 @@ function renderStatTab(){
   const finaldmgTotal=(getFinalDmgMult()*100).toFixed(2);
   const finaldmgAdd=((getFinalDmgMult()-1)*100).toFixed(2);
   // acc/eva/pen: 수치만 표시 (명중률 등은 스테이지 정보창에서 확인)
-  const accAdd=(G.ptAcc||0)*2+getEqPrefixSum('acc');
-  const evaAdd=(G.ptEva||0)*2+getEqPrefixSum('eva');
-  const penAdd=(G.ptPen||0)*3+getEqPrefixSum('pen');
+  const accAdd=Math.floor((G.ptAcc||0)*2+getEqPrefixSum('acc'));
+  const evaAdd=Math.floor((G.ptEva||0)*2+getEqPrefixSum('eva'));
+  const penAdd=Math.floor((G.ptPen||0)*3+getEqPrefixSum('pen'));
   // 재생: 초당 비율로 표시
   const regenPerSec=(getFinalHpRegen()*100).toFixed(3);
   const vals={
@@ -4267,7 +4267,7 @@ function renderStatTab(){
       dispStr=vals[sd.id];
     }
     const ptLv=ptMap[sd.id]||0;
-    return'\n    <div class="stat-row">\n      <span class="s-icon">'+sd.emoji+'</span>\n      <div class="s-info">\n        <div class="s-name">'+sd.name+badge1+badge2+dpsBadge+'<span style="font-size:9px;color:var(--text3);margin-left:4px">Lv.'+ptLv+'</span></div>\n        <div class="s-val">'+dispStr+'</div>\n        <div style="font-size:9px;color:var(--text3);margin-top:1px">+1 → '+perPt[sd.id]+'</div>\n      </div>\n      <div class="stat-btns">\n        <button class="stat-plus-btn" '+( hp?'':' disabled')+' onclick="addStat(\''+ sd.id +'\',1)">+1</button>\n        <button class="stat-plus-btn" '+(hp?'':' disabled')+' onclick="addStat(\''+ sd.id +'\',10)">+10</button>\n        <button class="stat-plus-btn max-btn" '+(hp?'':' disabled')+' onclick="addStatMax(\''+ sd.id +'\')">최대</button>\n      </div>\n    </div>';
+    return'\n    <div class="stat-row">\n      <span class="s-icon">'+sd.emoji+'</span>\n      <div class="s-info">\n        <div class="s-name">'+sd.name+badge1+badge2+dpsBadge+'<span style="font-size:9px;color:var(--text3);margin-left:4px">Lv.'+ptLv+'</span></div>\n        <div class="s-val">'+dispStr+'</div>\n        <div style="font-size:9px;color:var(--text3);margin-top:1px">+1 → '+perPt[sd.id]+'</div>\n      </div>\n      <div class="stat-btns">\n        <button class="stat-plus-btn" '+( hp?'':' disabled')+' onclick="addStat(\''+ sd.id +'\',1)">+1</button>\n        <button class="stat-plus-btn" '+(hp?'':' disabled')+' onclick="addStat(\''+ sd.id +'\',10)">+10</button>\n        <button class="stat-plus-btn" '+(hp?'':' disabled')+' onclick="addStat(\''+ sd.id +'\',100)">+100</button>\n        <button class="stat-plus-btn max-btn" '+(hp?'':' disabled')+' onclick="addStatMax(\''+ sd.id +'\')">최대</button>\n      </div>\n    </div>';
   }).join('');
   updateAutoDistButtons();
 }
@@ -4419,6 +4419,7 @@ function renderEnhanceTab(){
       ${unlocked?`<div class="enh-btns">
         <button class="enh-btn" onclick="doEnhance('${item.id}',1)" ${canAfford?'':'disabled'}>+1</button>
         <button class="enh-btn" onclick="doEnhance('${item.id}',10)" ${G.gold>=cost*5&&unlocked?'':'disabled'}>+10</button>
+        <button class="enh-btn" onclick="doEnhance('${item.id}',100)" ${G.gold>=cost*50&&unlocked?'':'disabled'}>+100</button>
         <button class="enh-btn max" onclick="doEnhanceMax('${item.id}')">최대</button>
       </div>`:`<div class="enh-btns"><button class="enh-btn" disabled style="opacity:.3">🔒</button></div>`}
     </div>`;
@@ -5025,11 +5026,11 @@ function renderSlotEnhancePanel(slotId){
   const rateColor=successRate>=80?'var(--shard)':successRate>=50?'var(--gold)':successRate>=25?'#ff9f43':'#ff4757';
   // 슬롯 보너스 (현재/다음)
   const curParts=[];
-  const b1=getSlotBonus(slotId,sl.stat);if(b1>0)curParts.push(sl.stat.toUpperCase()+' +'+Math.floor(b1));
-  if(sl.base2){const b2=getSlotBonus(slotId,sl.base2);if(b2>0)curParts.push(sl.base2.toUpperCase()+' +'+Math.floor(b2));}
+  const b1=getSlotBonus(slotId,sl.stat);if(b1>0)curParts.push(getStatLabel(sl.stat)+' +'+Math.floor(b1));
+  if(sl.base2){const b2=getSlotBonus(slotId,sl.base2);if(b2>0)curParts.push(getStatLabel(sl.base2)+' +'+Math.floor(b2));}
   const curDisplay=lv===0?'<span style="color:var(--text3)">+0 (기본)</span>':'<span style="color:var(--shard)">'+curParts.join('  ')+'</span>';
-  const nextParts=[sl.stat.toUpperCase()+' +'+Math.floor(sl.base*gm*nextC)];
-  if(sl.base2)nextParts.push(sl.base2.toUpperCase()+' +'+Math.floor(sl.base2val*gm*nextC));
+  const nextParts=[getStatLabel(sl.stat)+' +'+Math.floor(sl.base*gm*nextC)];
+  if(sl.base2)nextParts.push(getStatLabel(sl.base2)+' +'+Math.floor(sl.base2val*gm*nextC));
   // 장착 장비 기본 스탯
   const eqStatHtml=eq
     ?Object.entries(eq.stats).map(([k,v])=>'<span style="color:var(--text2)">'+getStatLabel(k)+'</span> <span style="color:#e8f0fe">+'+v+'</span>').join('&nbsp;&nbsp;')
@@ -6321,18 +6322,21 @@ function nextTutorial(){
 //  무한의 탑
 // ══════════════════════════════════════════
 function towerEnemyHP(floor){
-  // 1층: 플레이어 HP의 약 2배, 10층까지 무난히 클리어 가능
-  if(floor<=10) return Math.floor(getFinalHp()*2.0*Math.pow(1.12,floor-1));
-  if(floor<=30) return Math.floor(getFinalHp()*2.0*Math.pow(1.12,9)*Math.pow(1.09,floor-10));
-  if(floor<=50) return Math.floor(getFinalHp()*2.0*Math.pow(1.12,9)*Math.pow(1.09,20)*Math.pow(1.06,floor-30));
-  return Math.floor(getFinalHp()*2.0*Math.pow(1.12,9)*Math.pow(1.09,20)*Math.pow(1.06,20)*Math.pow(1.04,floor-50));
+  // 플레이어 전투력 기반으로 의미있는 도전 제공
+  const base=getFinalHp()*1.5+getFinalAtk()*3;
+  if(floor<=10) return Math.floor(base*Math.pow(1.15,floor-1));
+  if(floor<=30) return Math.floor(base*Math.pow(1.15,9)*Math.pow(1.10,floor-10));
+  if(floor<=60) return Math.floor(base*Math.pow(1.15,9)*Math.pow(1.10,20)*Math.pow(1.07,floor-30));
+  return Math.floor(base*Math.pow(1.15,9)*Math.pow(1.10,20)*Math.pow(1.07,30)*Math.pow(1.045,floor-60));
 }
 function towerEnemyATK(floor){
-  // 1층: 플레이어 HP의 2% → 여유로운 생존, 10층: 4% → 적당한 긴장감
-  if(floor<=10) return Math.floor(getFinalHp()*0.02*Math.pow(1.08,floor-1));
-  if(floor<=30) return Math.floor(getFinalHp()*0.02*Math.pow(1.08,9)*Math.pow(1.07,floor-10));
-  if(floor<=50) return Math.floor(getFinalHp()*0.02*Math.pow(1.08,9)*Math.pow(1.07,20)*Math.pow(1.05,floor-30));
-  return Math.floor(getFinalHp()*0.02*Math.pow(1.08,9)*Math.pow(1.07,20)*Math.pow(1.05,20)*Math.pow(1.03,floor-50));
+  // 플레이어 HP 대비 도전적인 수준 (방어력 감소 반영)
+  const def=getFinalDef();const red=Math.min(0.75,def/(def+300));
+  const baseHpDmg=0.025; // HP의 2.5%/초 기준
+  if(floor<=10) return Math.floor(getFinalHp()*baseHpDmg*Math.pow(1.10,floor-1)/(1-red));
+  if(floor<=30) return Math.floor(getFinalHp()*baseHpDmg*Math.pow(1.10,9)*Math.pow(1.08,floor-10)/(1-red));
+  if(floor<=60) return Math.floor(getFinalHp()*baseHpDmg*Math.pow(1.10,9)*Math.pow(1.08,20)*Math.pow(1.055,floor-30)/(1-red));
+  return Math.floor(getFinalHp()*baseHpDmg*Math.pow(1.10,9)*Math.pow(1.08,20)*Math.pow(1.055,30)*Math.pow(1.035,floor-60)/(1-red));
 }
 function towerReward(floor){
   // 골드: 1층부터 현실적인 보상
@@ -6389,17 +6393,41 @@ function startTowerChallenge(){
   addLog(`${f}층 도전 시작!`);
   if(towerTickInterval)clearInterval(towerTickInterval);
   let playerHp=getFinalHp();
+  let towerTick=0;
   towerTickInterval=setInterval(()=>{
     if(!G.towerActive){clearInterval(towerTickInterval);towerTickInterval=null;return;}
-    // 플레이어 공격
-    const atk=getFinalAtk();const cr=getFinalCrit();const cd=getFinalCritDmg();
-    const isCrit=Math.random()<cr;const dmg=Math.floor(atk*(isCrit?cd:1));
-    G.towerEnemyHp=Math.max(0,G.towerEnemyHp-dmg);
-    // 몬스터 공격 (매 2틱)
-    const mAtk=towerEnemyATK(f);
-    const def=getFinalDef();const red=Math.min(0.75,def/(def+300));
-    const mDmg=Math.max(1,Math.floor(mAtk*(1-red)));
-    playerHp=Math.max(0,playerHp-mDmg);
+    towerTick++;
+    // ── 플레이어 공격 (명중·관통·치명타·최종데미지 반영) ──
+    const monEvaT=Math.floor(f*0.3); // 탑 층수 기반 회피
+    const hitRate=Math.max(0.20,getFinalAcc()/(getFinalAcc()+monEvaT));
+    if(Math.random()<hitRate){
+      const atk=getFinalAtk();const cr=getFinalCrit();const cd=getFinalCritDmg();
+      const isCrit=Math.random()<cr;
+      // 탑 적 방어력 (층수 기반)
+      const mDefT=Math.floor(f*3.0);
+      const penR=getPenRate();
+      const mDefAfter=mDefT*(1-penR);
+      const mDefRed=Math.min(0.75,mDefAfter/(mDefAfter+300));
+      let dmg=Math.floor(atk*(isCrit?cd:1)*(1-mDefRed)*getFinalDmgMult());
+      G.towerEnemyHp=Math.max(0,G.towerEnemyHp-dmg);
+      // 흡혈
+      const drain=Math.min(0.10,(getPassiveStat('drain')||{drainPct:0}).drainPct+getLifeStealPct());
+      if(drain>0)playerHp=Math.min(getFinalHp(),playerHp+Math.floor(dmg*drain));
+    }
+    // ── 체력 재생 ──
+    const regenT=getHpRegenPerTick();
+    if(regenT>0)playerHp=Math.min(getFinalHp(),playerHp+Math.floor(getFinalHp()*regenT));
+    // ── 몬스터 공격 (매 2틱, 회피 반영) ──
+    if(towerTick%2===0){
+      const monAccT=Math.floor(100+f*0.7);
+      const evaRate=Math.min(0.75,getFinalEva()/(getFinalEva()+monAccT));
+      if(Math.random()>=evaRate){
+        const mAtk=towerEnemyATK(f);
+        const def=getFinalDef();const red=Math.min(0.75,def/(def+300));
+        const mDmg=Math.max(1,Math.floor(mAtk*(1-red)));
+        playerHp=Math.max(0,playerHp-mDmg);
+      }
+    }
     // HP 바 업데이트
     const pct=G.towerEnemyHp/G.towerEnemyMaxHp*100;
     document.getElementById('tower-enemy-hp-fill').style.width=pct+'%';
