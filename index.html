@@ -2041,7 +2041,7 @@ const SAVE_KEY = 'milkAdv_v6';
 // ══════════════════════════════════════════
 //  VERSION CHECK
 // ══════════════════════════════════════════
-const GAME_VERSION = 'v02_83';
+const GAME_VERSION = 'v02_84';
 // GitHub Pages 배포 시 아래 URL을 본인 레포로 변경하세요
 // 예: 'https://[계정].github.io/[레포]/version.json'
 const VERSION_CHECK_URL = 'version.json';
@@ -4144,20 +4144,30 @@ function autoDistStat(){
     const survByHp=dHpPerPt/Math.max(1,hp)*dmgRatio*200;
     const survByDef=(def+dDefPerPt-def)/Math.max(1,def+100)*dmgRatio*150;
 
-    // 명중·관통·회피·재생: 스테이지 기반 보조 점수
+    // 명중·관통·회피·재생: 실효 DPS/생존 증가율로 계산 (DPS 스탯과 동일 스케일)
     const gs=currGS();
-    const monEva=Math.floor(gs*0.3);
-    const monDef=Math.floor(gs*3.0);
+    const monEva=Math.max(0,Math.floor(gs*0.3));
+    const monDef=Math.max(0,Math.floor(gs*3.0));
     const monAcc=Math.floor(100+gs*0.7);
-    const curHit=getFinalAcc()/(getFinalAcc()+monEva+1);
-    const curEva=getFinalEva()/(getFinalEva()+monAcc);
-    const penR=getPenRate();
-    const defRed=monDef/(monDef+300);
-    // 보조 스탯 점수를 DPS 점수와 같은 스케일로 정규화 (÷1000)
-    const accScore=(curHit<0.80?90:curHit<0.90?65:curHit<0.95?30:10)/1000;
-    const penScore=(defRed>0.4?(penR<0.3?75:penR<0.5?50:penR<0.7?30:10):15)/1000;
-    const evaScore=(curEva<0.15?40:curEva<0.30?25:10)/1000;
-    const regenScore=(dmgRatio>0.2?35:dmgRatio>0.1?20:8)/1000;
+    // 명중: +2acc 1pt → 실효 DPS 증가율 (명중률 상승분 / 현재 명중률)
+    const curAcc=getFinalAcc();
+    const hitBefore=Math.max(0.20,curAcc/(curAcc+monEva+1));
+    const hitAfter=Math.max(0.20,(curAcc+2)/((curAcc+2)+monEva+1));
+    const accScore=(hitBefore>=0.98?0:(hitAfter-hitBefore)/Math.max(0.001,hitBefore))*1000;
+    // 관통: +3pen 1pt → 방어 무시에 따른 실효 DPS 증가율
+    const curPen=getFinalPen();
+    const penBefore=Math.min(0.9,curPen/(curPen+500));
+    const penAfter=Math.min(0.9,(curPen+3)/((curPen+3)+500));
+    const dmgBefore=monDef<=0?1:(1-(monDef*(1-penBefore))/(monDef*(1-penBefore)+300));
+    const dmgAfter=monDef<=0?1:(1-(monDef*(1-penAfter))/(monDef*(1-penAfter)+300));
+    const penScore=(monDef<=0?0:(dmgAfter-dmgBefore)/Math.max(0.001,dmgBefore))*1000;
+    // 회피: +2eva 1pt → 회피율 상승 → 받는 피해 감소율 기반 생존 점수
+    const curEva=getFinalEva();
+    const evaRateBefore=Math.min(0.75,curEva/(curEva+monAcc+1));
+    const evaRateAfter=Math.min(0.75,(curEva+2)/((curEva+2)+monAcc+1));
+    const evaScore=(evaRateBefore>=0.74?0:(evaRateAfter-evaRateBefore))*dmgRatio*500;
+    // 재생: +0.05%/초 → 초당 회복량 / HP 비율 기반 생존 점수
+    const regenScore=dmgRatio*30;
 
     const scores={
       atk:      dpsByAtk*1000,
