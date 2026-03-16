@@ -1478,6 +1478,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
     <div class="modal-tab-row">
       <button class="modal-tab active" onclick="switchSettingsTab('audio')">🔊 오디오</button>
       <button class="modal-tab" onclick="switchSettingsTab('data')">💾 데이터</button>
+      <button class="modal-tab" onclick="switchSettingsTab('rollback')">🔄 복구</button>
       <button class="modal-tab" onclick="switchSettingsTab('dev')">🔧 개발자</button>
     </div>
     <div id="settings-audio">
@@ -1490,6 +1491,10 @@ input[type=range]{width:100%;accent-color:var(--accent)}
       <div class="modal-row"><span>📤 내보내기</span><button class="modal-btn accent" onclick="exportData()">복사</button></div>
       <div class="modal-row"><span>📥 가져오기</span><button class="modal-btn accent" onclick="importData()">붙여넣기</button></div>
       <div class="modal-row"><span>🗑️ 초기화</span><button class="modal-btn danger" onclick="confirmAction('reset')">초기화</button></div>
+    </div>
+    <div id="settings-rollback" style="display:none">
+      <div style="font-size:9px;color:var(--text3);margin-bottom:8px;line-height:1.6">최근 3개의 세이브 기록입니다. 복원하면 현재 세이브는 자동 백업됩니다.</div>
+      <div id="rollback-list"></div>
     </div>
     <div id="settings-dev" style="display:none">
       <div style="font-size:10px;color:var(--text3);margin-bottom:8px;line-height:1.5">재화 무제한 및 모든 콘텐츠가 해금됩니다. 게임 종료 시 자동으로 비활성화됩니다.</div>
@@ -2036,7 +2041,7 @@ const SAVE_KEY = 'milkAdv_v6';
 // ══════════════════════════════════════════
 //  VERSION CHECK
 // ══════════════════════════════════════════
-const GAME_VERSION = 'v02_80';
+const GAME_VERSION = 'v02_82';
 // GitHub Pages 배포 시 아래 URL을 본인 레포로 변경하세요
 // 예: 'https://[계정].github.io/[레포]/version.json'
 const VERSION_CHECK_URL = 'version.json';
@@ -6353,30 +6358,29 @@ function nextTutorial(){
 //  무한의 탑
 // ══════════════════════════════════════════
 function towerEnemyHP(floor){
-  // 층수 고정 수치 (플레이어 스탯 무관)
-  // 1층≈GS40, 10층≈GS64, 50층≈GS163, 100층≈GS250
-  const base=40;
-  if(floor<=30) return Math.floor(base*Math.pow(1.08,floor-1));
-  if(floor<=70) return Math.floor(base*Math.pow(1.08,29)*Math.pow(1.06,floor-30));
-  if(floor<=120)return Math.floor(base*Math.pow(1.08,29)*Math.pow(1.06,39)*Math.pow(1.045,floor-70));
-  return Math.floor(base*Math.pow(1.08,29)*Math.pow(1.06,39)*Math.pow(1.045,49)*Math.pow(1.03,floor-120));
+  // 기준: 1층 = 1-100 엘리트 보스(HP7525)보다 강한 수준
+  // 5층≈13000, 10층≈21000, 30층≈10만, 100층≈450만
+  const base=9000;
+  if(floor<=20) return Math.floor(base*Math.pow(1.10,floor-1));
+  if(floor<=50) return Math.floor(base*Math.pow(1.10,19)*Math.pow(1.07,floor-20));
+  if(floor<=100)return Math.floor(base*Math.pow(1.10,19)*Math.pow(1.07,29)*Math.pow(1.05,floor-50));
+  return Math.floor(base*Math.pow(1.10,19)*Math.pow(1.07,29)*Math.pow(1.05,49)*Math.pow(1.035,floor-100));
 }
 function towerEnemyATK(floor){
-  // 층수 고정 수치
-  const base=5;
-  if(floor<=30) return Math.floor(base*Math.pow(1.07,floor-1));
-  if(floor<=70) return Math.floor(base*Math.pow(1.07,29)*Math.pow(1.055,floor-30));
-  if(floor<=120)return Math.floor(base*Math.pow(1.07,29)*Math.pow(1.055,39)*Math.pow(1.04,floor-70));
-  return Math.floor(base*Math.pow(1.07,29)*Math.pow(1.055,39)*Math.pow(1.04,49)*Math.pow(1.028,floor-120));
+  const base=90;
+  if(floor<=20) return Math.floor(base*Math.pow(1.08,floor-1));
+  if(floor<=50) return Math.floor(base*Math.pow(1.08,19)*Math.pow(1.065,floor-20));
+  if(floor<=100)return Math.floor(base*Math.pow(1.08,19)*Math.pow(1.065,29)*Math.pow(1.05,floor-50));
+  return Math.floor(base*Math.pow(1.08,19)*Math.pow(1.065,29)*Math.pow(1.05,49)*Math.pow(1.035,floor-100));
 }
 function towerReward(floor){
-  // 골드: 1층부터 현실적인 보상
   const r=[];
-  r.push({label:'💰 골드',val:Math.floor(2000*Math.pow(1.18,floor-1))});
-  if(floor%5===0) r.push({label:'🎫 뽑기권',val:Math.ceil(floor/8)});
-  if(floor%10===0)r.push({label:'🔩 파편',val:Math.ceil(floor/4)});
-  if(floor%25===0)r.push({label:'✨ 스킬포인트',val:Math.ceil(floor/25)});
-  if(floor%50===0)r.push({label:'⚡ 스탯포인트',val:Math.ceil(floor/50)*2});
+  // 골드: 1층=5000, 10층=9200, 30층=3.5만, 100층=400만
+  r.push({label:'💰 골드',val:Math.floor(5000*Math.pow(1.07,floor-1))});
+  if(floor%5===0)  r.push({label:'🎫 뽑기권',val:floor<=30?1:floor<=70?2:3});
+  if(floor%10===0) r.push({label:'🔩 파편',val:Math.ceil(floor/8)});
+  if(floor%30===0) r.push({label:'✨ 스킬포인트',val:Math.ceil(floor/30)});
+  if(floor%100===0)r.push({label:'⚡ 스탯포인트',val:Math.ceil(floor/100)});
   return r;
 }
 function switchDungeonTab(id){
@@ -6556,12 +6560,13 @@ function toggleDevMode(){
   showNotif('🔧 개발자 모드 활성화!','top');
 }
 function switchSettingsTab(t){
-  ['audio','data','dev'].forEach(k=>{
+  ['audio','data','rollback','dev'].forEach(k=>{
     document.getElementById('settings-'+k).style.display=k===t?'block':'none';
   });
-  document.querySelectorAll('.modal-tab').forEach((b,i)=>{
-    b.classList.toggle('active',['audio','data','dev'][i]===t);
+  document.querySelectorAll('#settings-modal .modal-tab').forEach((b,i)=>{
+    b.classList.toggle('active',['audio','data','rollback','dev'][i]===t);
   });
+  if(t==='rollback')renderRollbackList();
 }
 
 // ══════════════════════════════════════════
@@ -6877,13 +6882,76 @@ function doConfirm(){
 // ══════════════════════════════════════════
 function saveGame(){
   G.lastSaveTime=Date.now();
-  // 전투 중 임시 상태는 세이브에서 제외 (로드 시 비정상 전투 상태 방지)
   const COMBAT_TEMP=['rageStacks','focusStacks','buffs',
     'monsterCurHp','monsterMaxHp','skillCooldowns','tickCount'];
   const saveObj={};
   for(const k in G){if(!COMBAT_TEMP.includes(k))saveObj[k]=G[k];}
-  try{localStorage.setItem(SAVE_KEY,JSON.stringify(saveObj));
-    document.getElementById('last-save-time').textContent='방금 전';}catch(e){}
+  try{
+    localStorage.setItem(SAVE_KEY,JSON.stringify(saveObj));
+    document.getElementById('last-save-time').textContent='방금 전';
+    // 10분마다 스냅샷 자동 저장
+    const now=Date.now();
+    const lastSnap=parseInt(localStorage.getItem(SAVE_KEY+'_snap_time')||'0');
+    if(now-lastSnap>=10*60*1000){
+      saveSnapshot();
+      localStorage.setItem(SAVE_KEY+'_snap_time',String(now));
+    }
+  }catch(e){}
+}
+const SNAP_COUNT=3;
+function saveSnapshot(label){
+  try{
+    const s=localStorage.getItem(SAVE_KEY);
+    if(!s)return;
+    // 기존 스냅샷 한 칸씩 밀기
+    for(let i=SNAP_COUNT-1;i>0;i--){
+      const prev=localStorage.getItem(SAVE_KEY+'_snap_'+(i-1));
+      const prevMeta=localStorage.getItem(SAVE_KEY+'_snap_meta_'+(i-1));
+      if(prev)localStorage.setItem(SAVE_KEY+'_snap_'+i,prev);
+      else localStorage.removeItem(SAVE_KEY+'_snap_'+i);
+      if(prevMeta)localStorage.setItem(SAVE_KEY+'_snap_meta_'+i,prevMeta);
+      else localStorage.removeItem(SAVE_KEY+'_snap_meta_'+i);
+    }
+    localStorage.setItem(SAVE_KEY+'_snap_0',s);
+    const meta={time:Date.now(),level:G.level,chapter:G.chapter,stage:G.stage,label:label||''};
+    localStorage.setItem(SAVE_KEY+'_snap_meta_0',JSON.stringify(meta));
+  }catch(e){}
+}
+function renderRollbackList(){
+  const el=document.getElementById('rollback-list');
+  if(!el)return;
+  let html='';
+  let found=false;
+  for(let i=0;i<SNAP_COUNT;i++){
+    const snap=localStorage.getItem(SAVE_KEY+'_snap_'+i);
+    const metaStr=localStorage.getItem(SAVE_KEY+'_snap_meta_'+i);
+    if(!snap||!metaStr)continue;
+    found=true;
+    const m=JSON.parse(metaStr);
+    const d=new Date(m.time);
+    const timeStr=d.getMonth()+1+'/'+d.getDate()+' '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
+    html+=`<div style="display:flex;align-items:center;gap:8px;padding:7px 8px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:5px">
+      <div style="flex:1;min-width:0">
+        <div style="font-size:10px;color:var(--text)">${timeStr} · Lv.${m.level} · ${m.chapter}-${m.stage}스테이지</div>
+        ${m.label?`<div style="font-size:9px;color:var(--gold)">${m.label}</div>`:''}
+      </div>
+      <button onclick="rollbackTo(${i})" style="padding:4px 10px;font-size:10px;font-family:var(--font);font-weight:bold;background:rgba(88,166,255,0.12);border:1px solid var(--accent);border-radius:var(--radius);color:var(--accent);cursor:pointer;flex-shrink:0">복원</button>
+    </div>`;
+  }
+  if(!found)html='<div style="font-size:10px;color:var(--text3);text-align:center;padding:16px">저장된 기록이 없습니다.<br>10분마다 자동 저장됩니다.</div>';
+  el.innerHTML=html;
+}
+function rollbackTo(idx){
+  const snap=localStorage.getItem(SAVE_KEY+'_snap_'+idx);
+  if(!snap){showNotif('❌ 복원할 기록이 없습니다','top');return;}
+  // 현재 세이브를 먼저 스냅샷으로 백업
+  saveSnapshot('복원 직전 백업');
+  // 복원
+  try{
+    localStorage.setItem(SAVE_KEY,snap);
+    showNotif('✅ 세이브 복원 완료 — 재시작합니다','top');
+    setTimeout(()=>location.reload(),1200);
+  }catch(e){showNotif('❌ 복원 실패','top');}
 }
 function loadGame(){
   try{
