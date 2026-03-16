@@ -2041,7 +2041,7 @@ const SAVE_KEY = 'milkAdv_v6';
 // ══════════════════════════════════════════
 //  VERSION CHECK
 // ══════════════════════════════════════════
-const GAME_VERSION = 'v02_82';
+const GAME_VERSION = 'v02_83';
 // GitHub Pages 배포 시 아래 URL을 본인 레포로 변경하세요
 // 예: 'https://[계정].github.io/[레포]/version.json'
 const VERSION_CHECK_URL = 'version.json';
@@ -4121,42 +4121,54 @@ function autoDistStat(){
   const prevCP=calcCP();
 
   // 포인트 1개씩 가장 필요한 스탯에 배분 (최대 1000회 반복)
+  // getStatRecommend()와 동일한 점수 산출 로직 사용 → UI 강추와 일치
   for(let i=0;i<1000&&remaining>0;i++){
     const ms=getMonsterStats(true);
-    const hp=getFinalHp(), atk=getFinalAtk(), crit=getFinalCrit();
+    const atk=getFinalAtk(), hp=getFinalHp(), def=getFinalDef();
+    const crit=getFinalCrit(), critDmg=getFinalCritDmg();
     const dmgRatio=ms.atk/Math.max(1,hp);
-    const hitsNeeded=ms.hp/Math.max(1,atk*(1+crit));
-    const totalPts=Math.max(1,totalSpentPts());
-    const atkR=(G.ptAtk||0)/totalPts, hpR=(G.ptHp||0)/totalPts;
 
-    // 점수 산출: 명중·관통·회피·재생 스테이지 기반 추가
+    // 배율 반영 포인트당 증가량
+    const atkPctMult=1+(getEnhPct('atk')+getAllPctBonus('atk'))/100;
+    const hpPctMult=1+(getEnhPct('hp')+getAllPctBonus('hp'))/100;
+    const defPctMult=1+(getEnhPct('def')+getAllPctBonus('def'))/100;
+    const dAtkPerPt=2*atkPctMult;
+    const dHpPerPt=8*hpPctMult;
+    const dDefPerPt=1.5*defPctMult;
+
+    // DPS 기반 점수 (getStatRecommend와 동일)
+    const baseDps=atk*(1+crit*critDmg);
+    const dpsByAtk=((atk+dAtkPerPt)*(1+crit*critDmg)-baseDps)/Math.max(1,baseDps);
+    const dpsByCritDmg=((atk*(1+crit*(critDmg+0.025)))-baseDps)/Math.max(1,baseDps);
+    const dpsByFinalDmg=((atk*(1+crit*critDmg)*(getFinalDmgMult()+0.0005)-baseDps*getFinalDmgMult()))/Math.max(1,baseDps*getFinalDmgMult());
+    const survByHp=dHpPerPt/Math.max(1,hp)*dmgRatio*200;
+    const survByDef=(def+dDefPerPt-def)/Math.max(1,def+100)*dmgRatio*150;
+
+    // 명중·관통·회피·재생: 스테이지 기반 보조 점수
     const gs=currGS();
     const monEva=Math.floor(gs*0.3);
     const monDef=Math.floor(gs*3.0);
     const monAcc=Math.floor(100+gs*0.7);
-    const curHit=getFinalAcc()/(getFinalAcc()+monEva+1);  // 현재 명중률
-    const curEva=getFinalEva()/(getFinalEva()+monAcc);     // 현재 회피율
-    const penR=getPenRate();                               // 현재 관통률
-    // 명중: 90% 미만이면 높은 점수, 초과면 낮음
-    const accScore=curHit<0.80?90:curHit<0.90?65:curHit<0.95?30:10;
-    // 관통: 방어감소율 50% 미만이면 투자가치 높음
+    const curHit=getFinalAcc()/(getFinalAcc()+monEva+1);
+    const curEva=getFinalEva()/(getFinalEva()+monAcc);
+    const penR=getPenRate();
     const defRed=monDef/(monDef+300);
-    const penScore=defRed>0.4?(penR<0.3?75:penR<0.5?50:penR<0.7?30:10):15;
-    // 회피: 30% 미만이면 보조투자 가치
-    const evaScore=curEva<0.15?40:curEva<0.30?25:10;
-    // 재생: HP가 빠르게 깎이는 상황에서 가치
-    const regenScore=dmgRatio>0.2?35:dmgRatio>0.1?20:8;
+    // 보조 스탯 점수를 DPS 점수와 같은 스케일로 정규화 (÷1000)
+    const accScore=(curHit<0.80?90:curHit<0.90?65:curHit<0.95?30:10)/1000;
+    const penScore=(defRed>0.4?(penR<0.3?75:penR<0.5?50:penR<0.7?30:10):15)/1000;
+    const evaScore=(curEva<0.15?40:curEva<0.30?25:10)/1000;
+    const regenScore=(dmgRatio>0.2?35:dmgRatio>0.1?20:8)/1000;
 
     const scores={
-      atk: hitsNeeded>25&&atkR<0.7?80:hitsNeeded>15&&atkR<0.6?60:30,
-      hp:  dmgRatio>0.25?90:dmgRatio>0.15?70:hpR<0.15?50:25,
-      def: dmgRatio>0.2&&(G.ptDef||0)<5?55:20,
-      critdmg: crit>=0.3?55:10,
-      finaldmg: 35,
-      acc: accScore,
-      pen: penScore,
-      eva: evaScore,
-      hpregen: regenScore,
+      atk:      dpsByAtk*1000,
+      hp:       survByHp,
+      def:      survByDef,
+      critdmg:  dpsByCritDmg*1000,
+      finaldmg: dpsByFinalDmg*1000,
+      acc:      accScore,
+      pen:      penScore,
+      eva:      evaScore,
+      hpregen:  regenScore,
     };
     const best=Object.entries(scores).sort((a,b)=>b[1]-a[1])[0][0];
     const typeMap={atk:'ptAtk',hp:'ptHp',def:'ptDef',critdmg:'ptCritDmg',finaldmg:'ptFinalDmg',acc:'ptAcc',pen:'ptPen',eva:'ptEva',hpregen:'ptHpRegen'};
