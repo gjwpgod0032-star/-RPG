@@ -2036,7 +2036,7 @@ const SAVE_KEY = 'milkAdv_v6';
 // ══════════════════════════════════════════
 //  VERSION CHECK
 // ══════════════════════════════════════════
-const GAME_VERSION = 'v02_74';
+const GAME_VERSION = 'v02_75';
 // GitHub Pages 배포 시 아래 URL을 본인 레포로 변경하세요
 // 예: 'https://[계정].github.io/[레포]/version.json'
 const VERSION_CHECK_URL = 'version.json';
@@ -5796,7 +5796,7 @@ function renderStagePopup(){
     // ACC: 명중률 80% (최소 권장)
     const accFor80=monEva>0?Math.ceil(0.8*monEva/(1-0.8)):0;
     // 현재 명중률
-    const curHit=(getFinalAcc()/(getFinalAcc()+monEva)*100).toFixed(0);
+    const curHit=(getFinalAcc()/(getFinalAcc()+monEva)*100).toFixed(2);
     const hitOk=getFinalAcc()>=accFor90;
     // PEN: 방어 감소율 50% 달성 (방어 절반 무력화)
     // defRed(def*(1-p))=0.5 → def*(1-p)=300 → p=1-300/def
@@ -5806,7 +5806,7 @@ function renderStagePopup(){
     const penFor30=monDef>129?Math.ceil(500*(1-129/monDef)/(129/monDef)):0;
     // 현재 관통률·방어감소율
     const curPenRate=getPenRate();
-    const curDefRed=(monDef*(1-curPenRate)/(monDef*(1-curPenRate)+300)*100).toFixed(0);
+    const curDefRed=(monDef*(1-curPenRate)/(monDef*(1-curPenRate)+300)*100).toFixed(2);
     const defOk=parseFloat(curDefRed)<=30;
 
     // 현재 명중률 색상
@@ -5875,8 +5875,8 @@ function renderStagePopup(){
       const curPen=getFinalPen();
       const target=penFor50>0?penFor50:1; // 50% 목표
       const curPct=penFor50>0?(curPen/target*100):100;
-      const effDmgNow=(100-parseFloat(curDefRed));
-      const effDmgBase=(100-parseFloat((monDef/(monDef+300)*100).toFixed(0)));
+      const effDmgNow=(100-parseFloat(curDefRed)).toFixed(2);
+      const effDmgBase=(100-parseFloat((monDef/(monDef+300)*100).toFixed(2))).toFixed(2);
       const shortfall=penFor50>0?Math.max(0,target-curPen):0;
       const statusColor=parseFloat(curDefRed)<=30?'var(--shard)':parseFloat(curDefRed)<=50?'var(--gold)':'var(--hp)';
       html+=statGauge('🗡️','관통 (PEN)',curPen,penFor50>0?penFor50:'-',curPct,100,'','실질피해 '+effDmgNow+'%',statusColor,shortfall);
