@@ -2036,7 +2036,7 @@ const SAVE_KEY = 'milkAdv_v6';
 // ══════════════════════════════════════════
 //  VERSION CHECK
 // ══════════════════════════════════════════
-const GAME_VERSION = 'v02_66';
+const GAME_VERSION = 'v02_67';
 // GitHub Pages 배포 시 아래 URL을 본인 레포로 변경하세요
 // 예: 'https://[계정].github.io/[레포]/version.json'
 const VERSION_CHECK_URL = 'version.json';
@@ -2626,7 +2626,7 @@ let G={
   firstRare:false, firstHero:false, firstLegend:false, firstMyth:false, firstSacred:false,
   titleId:'newcomer',
   towerFloor:1, towerBestFloor:1, towerActive:false, towerEnemyHp:0, towerEnemyMaxHp:0,
-  highestGlobalStage:1,
+  highestGlobalStage:1, stageReachSnapshot:0,
   permAtkPct:0, permHpPct:0, permDefPct:0, permExpPct:0, permGoldPct:0, permBossDmg:0, permAllPct:0,
   offlineCollected:0,
   lastSaveTime:null,
@@ -3563,7 +3563,6 @@ function onMonsterDead(){
           if(newBgm!==oldBgm){stopBgm();startBgm();}
         }
       }
-      G.questProg.stagereach=(G.questProg.stagereach||0)+1;
       G.stageKillCount=0;G.monsterIdx=0;G.isBoss=false;G.bossDefeated=false;
       G.highestGlobalStage=Math.max(G.highestGlobalStage,currGS());
       updateStageLbl();setTimeout(()=>spawnMonster(),450);
@@ -5483,7 +5482,13 @@ function getCurrentQuest(){
   const rw=QUEST_REWARDS[i];
   const round=G.questRound||1;
   const target=q.type==='stagereach'?q.base:q.base*round;
-  const prog=Math.min(G.questProg[q.type]||0,target);
+  let prog;
+  if(q.type==='stagereach'){
+    const snap=G.stageReachSnapshot||0;
+    prog=Math.min(target,Math.max(0,(G.highestGlobalStage||1)-snap));
+  } else {
+    prog=Math.min(G.questProg[q.type]||0,target);
+  }
   const rMult=q.type==='stagereach'?1:round;
   return{...q,target,prog,round,reward:Object.fromEntries(Object.entries(rw).map(([k,v])=>[k,v*rMult]))};
 }
@@ -5503,7 +5508,11 @@ function collectQuest(){
   showNotif('✅ '+rStr.join(' '),'reward');playSfx('collect');
   G.questIdx=((G.questIdx||0)+1)%QUEST_POOL.length;
   if(G.questIdx===0)G.questRound=(G.questRound||1)+1;
-  G.questProg[q.type]=0;
+  if(q.type==='stagereach'){
+    G.stageReachSnapshot=G.highestGlobalStage||1;
+  } else {
+    G.questProg[q.type]=0;
+  }
   document.getElementById('q-dot').classList.remove('show');
   updateUI();renderQuestPanel();updateNotifDots();
 }
@@ -6749,6 +6758,7 @@ function initGameUI(){
     if(G.equipped[s]===undefined)G.equipped[s]=null;
   });
   if(!G.questProg.stagereach)G.questProg.stagereach=0;
+  if(G.stageReachSnapshot===undefined)G.stageReachSnapshot=0;
   // 전투 임시 상태 초기화 (세이브에 포함 안 되므로)
   G.buffs=[];G.rageStacks=0;G.focusStacks=0;
   // Auto gacha button state
