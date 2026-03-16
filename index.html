@@ -2036,7 +2036,7 @@ const SAVE_KEY = 'milkAdv_v6';
 // ══════════════════════════════════════════
 //  VERSION CHECK
 // ══════════════════════════════════════════
-const GAME_VERSION = 'v02_78';
+const GAME_VERSION = 'v02_80';
 // GitHub Pages 배포 시 아래 URL을 본인 레포로 변경하세요
 // 예: 'https://[계정].github.io/[레포]/version.json'
 const VERSION_CHECK_URL = 'version.json';
@@ -3103,7 +3103,7 @@ function updateFarmPenaltyLabel(){
         `<div>골드·경험치·파편·혼 드롭에 적용됩니다.</div>`+
         `<div style="margin-top:4px;color:var(--text3)">`+
         `· 스테이지 격차: ×${stageRatio} 배<br>`+
-        `· 몬스터 압도율: ATK/HP = ${domRatio}×<br>`+
+        `· 몬스터 압도율: 공격/체력 = ${domRatio}×<br>`+
         `· 최고 스테이지로 복귀 시 해제</div>`;
     }
   }
@@ -4124,16 +4124,37 @@ function autoDistStat(){
     const totalPts=Math.max(1,totalSpentPts());
     const atkR=(G.ptAtk||0)/totalPts, hpR=(G.ptHp||0)/totalPts;
 
-    // 점수 산출 (getStatRecommend와 동일 로직)
+    // 점수 산출: 명중·관통·회피·재생 스테이지 기반 추가
+    const gs=currGS();
+    const monEva=Math.floor(gs*0.3);
+    const monDef=Math.floor(gs*3.0);
+    const monAcc=Math.floor(100+gs*0.7);
+    const curHit=getFinalAcc()/(getFinalAcc()+monEva+1);  // 현재 명중률
+    const curEva=getFinalEva()/(getFinalEva()+monAcc);     // 현재 회피율
+    const penR=getPenRate();                               // 현재 관통률
+    // 명중: 90% 미만이면 높은 점수, 초과면 낮음
+    const accScore=curHit<0.80?90:curHit<0.90?65:curHit<0.95?30:10;
+    // 관통: 방어감소율 50% 미만이면 투자가치 높음
+    const defRed=monDef/(monDef+300);
+    const penScore=defRed>0.4?(penR<0.3?75:penR<0.5?50:penR<0.7?30:10):15;
+    // 회피: 30% 미만이면 보조투자 가치
+    const evaScore=curEva<0.15?40:curEva<0.30?25:10;
+    // 재생: HP가 빠르게 깎이는 상황에서 가치
+    const regenScore=dmgRatio>0.2?35:dmgRatio>0.1?20:8;
+
     const scores={
       atk: hitsNeeded>25&&atkR<0.7?80:hitsNeeded>15&&atkR<0.6?60:30,
       hp:  dmgRatio>0.25?90:dmgRatio>0.15?70:hpR<0.15?50:25,
       def: dmgRatio>0.2&&(G.ptDef||0)<5?55:20,
       critdmg: crit>=0.3?55:10,
       finaldmg: 35,
+      acc: accScore,
+      pen: penScore,
+      eva: evaScore,
+      hpregen: regenScore,
     };
     const best=Object.entries(scores).sort((a,b)=>b[1]-a[1])[0][0];
-    const typeMap={atk:'ptAtk',hp:'ptHp',def:'ptDef',critdmg:'ptCritDmg',finaldmg:'ptFinalDmg'};
+    const typeMap={atk:'ptAtk',hp:'ptHp',def:'ptDef',critdmg:'ptCritDmg',finaldmg:'ptFinalDmg',acc:'ptAcc',pen:'ptPen',eva:'ptEva',hpregen:'ptHpRegen'};
     G[typeMap[best]]=(G[typeMap[best]]||0)+1;
     G.pts--;remaining--;distributed++;
   }
@@ -4241,7 +4262,7 @@ function renderStatTab(){
     const isFirst=sd.id===rec.first, isSecond=sd.id===rec.second;
     const badge1=isFirst?'<span class="rec-badge-inline rec1">⭐ 강추</span>':'';
     const badge2=(!isFirst&&isSecond)?'<span class="rec-badge-inline rec2">👍 추천</span>':'';
-    const dpsBadge=(sd.id===dpsId&&!isFirst)?'<span class="rec-badge-inline dps">⚡ DPS</span>':'';
+    const dpsBadge=(sd.id===dpsId&&!isFirst)?'<span class="rec-badge-inline dps">⚡ 효율</span>':'';
     let dispStr;
     if(['atk','hp','def'].includes(sd.id)){
       const add=addVals[sd.id];
@@ -4406,7 +4427,7 @@ function renderEnhanceTab(){
     const dpsEId=getDpsEnhId();
     const enhBadge1=isEFirst?'<span class="rec-badge-inline rec1">⭐ 강추</span>':'';
     const enhBadge2=(!isEFirst&&isESecond)?'<span class="rec-badge-inline rec2">👍 추천</span>':'';
-    const enhDpsBadge=(item.id===dpsEId&&!isEFirst)?'<span class="rec-badge-inline dps">⚡ DPS</span>':'';
+    const enhDpsBadge=(item.id===dpsEId&&!isEFirst)?'<span class="rec-badge-inline dps">⚡ 효율</span>':'';
     return`${separator}<div class="enh-row${!unlocked?' enh-locked':''}" style="${indent}">
       <span class="enh-icon">${item.emoji}</span>
       <div class="enh-info">
@@ -4465,8 +4486,8 @@ const PREFIX_POOL=[
   {id:'accUp',name:'정확한',emoji:'🎯',stat:'acc',val:()=>5+Math.random()*10,fmt:v=>`명중 +${v.toFixed(0)}`,gradeMin:1},
   {id:'evaUp',name:'민첩한',emoji:'💨',stat:'eva',val:()=>5+Math.random()*10,fmt:v=>`회피 +${v.toFixed(0)}`,gradeMin:1},
   {id:'hpRegenUp',name:'재생',emoji:'💚',stat:'hpRegen',val:()=>10+Math.random()*20,fmt:v=>`재생 +${v.toFixed(0)}`,gradeMin:1},
-  {id:'critUp',name:'날카로운',emoji:'💥',stat:'critFlat',val:()=>1+Math.random()*2,fmt:v=>`크리율 +${v.toFixed(1)}%`,gradeMin:2},
-  {id:'critDmgUp',name:'파괴적',emoji:'💥',stat:'critDmgFlat',val:()=>5+Math.random()*10,fmt:v=>`크리피해 +${v.toFixed(0)}%`,gradeMin:2},
+  {id:'critUp',name:'날카로운',emoji:'💥',stat:'critFlat',val:()=>1+Math.random()*2,fmt:v=>`크리율 +${v.toFixed(2)}%`,gradeMin:2},
+  {id:'critDmgUp',name:'파괴적',emoji:'💥',stat:'critDmgFlat',val:()=>5+Math.random()*10,fmt:v=>`크리피해 +${v.toFixed(2)}%`,gradeMin:2},
   {id:'penUp',name:'꿰뚫는',emoji:'🗡️',stat:'pen',val:()=>8+Math.random()*12,fmt:v=>`관통 +${v.toFixed(0)}`,gradeMin:2},
   {id:'bossDmg',name:'사냥꾼',emoji:'👹',stat:'bossDmg',val:()=>5+Math.random()*10,fmt:v=>`보스피해 +${v.toFixed(0)}%`,gradeMin:3},
   {id:'defIgnore',name:'방어무시',emoji:'🗡️',stat:'defIgnore',val:()=>5+Math.random()*10,fmt:v=>`방어무시 +${v.toFixed(0)}%`,gradeMin:3},
@@ -5458,10 +5479,20 @@ function renderCollTab(){
     const done=G.achieveDone[a.id];
     const condMet=!done&&a.cond(G);
     const rStr=Object.entries(a.reward).map(([k,v])=>{
-      if(k==='gold')return`💰+${fmtNum(v)}`;
-      if(k==='shards')return`🔩+${v}`;
-      if(k==='tickets')return`🎫+${v}`;
-      if(k==='skillPts')return`✨+${v}`;
+      if(k==='gold')return`💰 골드 +${fmtNum(v)}`;
+      if(k==='shards')return`🔩 파편 +${v}`;
+      if(k==='tickets')return`🎫 뽑기권 +${v}`;
+      if(k==='skillPts')return`✨ 스킬포인트 +${v}`;
+      if(k==='permAtkPct')return`⚔️ 공격력 영구 +${v}%`;
+      if(k==='permHpPct')return`❤️ 체력 영구 +${v}%`;
+      if(k==='permDefPct')return`🛡️ 방어력 영구 +${v}%`;
+      if(k==='permAllPct')return`📈 전체 영구 +${v}%`;
+      if(k==='permBossDmg')return`👹 보스피해 영구 +${v}%`;
+      if(k==='permExpPct')return`🟢 경험치 영구 +${v}%`;
+      if(k==='permBossDmg')return`👹 보스피해 영구 +${v}%`;
+      if(k==='permExpPct')return`🟢 경험치 영구 +${v}%`;
+      if(k==='permDefPct')return`🛡️ 방어력 영구 +${v}%`;
+      if(k==='permGoldPct')return`💰 골드획득 영구 +${v}%`;
       return`${k}+${v}`;
     }).join(' ');
     return`<div class="achieve-item${done?' done':condMet?' ready':''}">
@@ -5507,13 +5538,13 @@ function claimAllAchieve(){
     claimAchieve(a.id);
     const r=a.reward;
     const parts=[];
-    if(r.gold){total.gold+=r.gold;parts.push(`💰+${fmtNum(r.gold)}`);}
-    if(r.tickets){total.tickets+=r.tickets;parts.push(`🎫+${r.tickets}`);}
-    if(r.shards){total.shards+=r.shards;parts.push(`🔩+${r.shards}`);}
-    if(r.skillPts){total.skillPts+=r.skillPts;parts.push(`✨+${r.skillPts}`);}
-    if(r.permAtkPct){total.permAtkPct+=r.permAtkPct;parts.push(`⚔️+${r.permAtkPct}%`);}
-    if(r.permHpPct){total.permHpPct+=r.permHpPct;parts.push(`❤️+${r.permHpPct}%`);}
-    if(r.permAllPct){total.permAllPct+=r.permAllPct;parts.push(`📈+${r.permAllPct}%`);}
+    if(r.gold){total.gold+=r.gold;parts.push(`💰 골드 +${fmtNum(r.gold)}`);}
+    if(r.tickets){total.tickets+=r.tickets;parts.push(`🎫 뽑기권 +${r.tickets}`);}
+    if(r.shards){total.shards+=r.shards;parts.push(`🔩 파편 +${r.shards}`);}
+    if(r.skillPts){total.skillPts+=r.skillPts;parts.push(`✨ 스킬포인트 +${r.skillPts}`);}
+    if(r.permAtkPct){total.permAtkPct+=r.permAtkPct;parts.push(`⚔️ 공격력 영구 +${r.permAtkPct}%`);}
+    if(r.permHpPct){total.permHpPct+=r.permHpPct;parts.push(`❤️ 체력 영구 +${r.permHpPct}%`);}
+    if(r.permAllPct){total.permAllPct+=r.permAllPct;parts.push(`📈 전체 영구 +${r.permAllPct}%`);}
     lines.push(`<div style="display:flex;align-items:center;gap:6px;padding:4px 6px;background:var(--bg3);border-radius:var(--radius)">
       <span style="font-size:14px">${a.icon}</span>
       <div style="flex:1;min-width:0">
@@ -5524,13 +5555,13 @@ function claimAllAchieve(){
   });
   // 합산 표시
   const totParts=[];
-  if(total.gold)totParts.push(`💰 ${fmtNum(total.gold)}`);
-  if(total.tickets)totParts.push(`🎫 ${total.tickets}`);
-  if(total.shards)totParts.push(`🔩 ${total.shards}`);
-  if(total.skillPts)totParts.push(`✨ ${total.skillPts}`);
-  if(total.permAtkPct)totParts.push(`⚔️ +${total.permAtkPct}%`);
-  if(total.permHpPct)totParts.push(`❤️ +${total.permHpPct}%`);
-  if(total.permAllPct)totParts.push(`📈 +${total.permAllPct}%`);
+  if(total.gold)totParts.push(`💰 골드 ${fmtNum(total.gold)}`);
+  if(total.tickets)totParts.push(`🎫 뽑기권 ${total.tickets}`);
+  if(total.shards)totParts.push(`🔩 파편 ${total.shards}`);
+  if(total.skillPts)totParts.push(`✨ 스킬포인트 ${total.skillPts}`);
+  if(total.permAtkPct)totParts.push(`⚔️ 공격력 영구 +${total.permAtkPct}%`);
+  if(total.permHpPct)totParts.push(`❤️ 체력 영구 +${total.permHpPct}%`);
+  if(total.permAllPct)totParts.push(`📈 전체 영구 +${total.permAllPct}%`);
   const pop=document.getElementById('achieve-reward-popup');
   document.getElementById('achieve-reward-list').innerHTML=lines.join('');
   document.getElementById('achieve-reward-total').innerHTML=
@@ -5826,9 +5857,9 @@ function renderStagePopup(){
 
     let html=`<div style="font-size:9px;color:var(--accent);margin-bottom:3px">${G.chapter}챕터 ${G.stage}스테이지</div>`;
     html+=`<div class="popup-monster-row"><span>${d.monster.e} ${d.monster.n}</span><span style="color:var(--text3)">체력:${fmtNum(stats.hp)} 공격:${fmtNum(stats.atk)}</span></div>`;
-    html+=`<div style="font-size:10px;color:var(--gold);padding:2px 0;border-bottom:1px solid var(--border)">💰 ${fmtNum(goldPerKill)} &nbsp;<span style="display:inline-block;background:#1a4d2a;color:#3fb950;font-size:8px;font-weight:bold;padding:1px 4px;border-radius:3px;border:1px solid #2ea043;vertical-align:middle">EXP</span> ${fmtNum(expPerKill)}</div>`;
+    html+=`<div style="font-size:10px;color:var(--gold);padding:2px 0;border-bottom:1px solid var(--border)">💰 ${fmtNum(goldPerKill)} &nbsp;<span style="display:inline-block;background:#1a4d2a;color:#3fb950;font-size:8px;font-weight:bold;padding:1px 4px;border-radius:3px;border:1px solid #2ea043;vertical-align:middle">경험치</span> ${fmtNum(expPerKill)}</div>`;
     html+=`<div class="popup-monster-row" style="color:var(--hp);margin-top:2px"><span>${d.boss.e} ${d.boss.n} <span style="font-size:9px;opacity:.7">(${bossLabel})</span></span><span style="color:var(--text3)">체력:${fmtNum(bs.hp)} ⏱${bs.bossTimer}s</span></div>`;
-    html+=`<div style="font-size:10px;color:var(--gold);padding:2px 0;border-bottom:1px solid var(--border)">💰 ${fmtNum(bossGold)} &nbsp;<span style="display:inline-block;background:#1a4d2a;color:#3fb950;font-size:8px;font-weight:bold;padding:1px 4px;border-radius:3px;border:1px solid #2ea043;vertical-align:middle">EXP</span> ${fmtNum(bossExp)}</div>`;
+    html+=`<div style="font-size:10px;color:var(--gold);padding:2px 0;border-bottom:1px solid var(--border)">💰 ${fmtNum(bossGold)} &nbsp;<span style="display:inline-block;background:#1a4d2a;color:#3fb950;font-size:8px;font-weight:bold;padding:1px 4px;border-radius:3px;border:1px solid #2ea043;vertical-align:middle">경험치</span> ${fmtNum(bossExp)}</div>`;
     if(penalty.pct>0)html+=`<div style="font-size:9px;color:var(--hp);margin-top:3px">⚠ 파밍 패널티 ${penalty.label} 적용됨</div>`;
 
     // ── 권장 스탯 섹션 ──
@@ -6322,21 +6353,21 @@ function nextTutorial(){
 //  무한의 탑
 // ══════════════════════════════════════════
 function towerEnemyHP(floor){
-  // 플레이어 전투력 기반으로 의미있는 도전 제공
-  const base=getFinalHp()*1.5+getFinalAtk()*3;
-  if(floor<=10) return Math.floor(base*Math.pow(1.15,floor-1));
-  if(floor<=30) return Math.floor(base*Math.pow(1.15,9)*Math.pow(1.10,floor-10));
-  if(floor<=60) return Math.floor(base*Math.pow(1.15,9)*Math.pow(1.10,20)*Math.pow(1.07,floor-30));
-  return Math.floor(base*Math.pow(1.15,9)*Math.pow(1.10,20)*Math.pow(1.07,30)*Math.pow(1.045,floor-60));
+  // 층수 고정 수치 (플레이어 스탯 무관)
+  // 1층≈GS40, 10층≈GS64, 50층≈GS163, 100층≈GS250
+  const base=40;
+  if(floor<=30) return Math.floor(base*Math.pow(1.08,floor-1));
+  if(floor<=70) return Math.floor(base*Math.pow(1.08,29)*Math.pow(1.06,floor-30));
+  if(floor<=120)return Math.floor(base*Math.pow(1.08,29)*Math.pow(1.06,39)*Math.pow(1.045,floor-70));
+  return Math.floor(base*Math.pow(1.08,29)*Math.pow(1.06,39)*Math.pow(1.045,49)*Math.pow(1.03,floor-120));
 }
 function towerEnemyATK(floor){
-  // 플레이어 HP 대비 도전적인 수준 (방어력 감소 반영)
-  const def=getFinalDef();const red=Math.min(0.75,def/(def+300));
-  const baseHpDmg=0.025; // HP의 2.5%/초 기준
-  if(floor<=10) return Math.floor(getFinalHp()*baseHpDmg*Math.pow(1.10,floor-1)/(1-red));
-  if(floor<=30) return Math.floor(getFinalHp()*baseHpDmg*Math.pow(1.10,9)*Math.pow(1.08,floor-10)/(1-red));
-  if(floor<=60) return Math.floor(getFinalHp()*baseHpDmg*Math.pow(1.10,9)*Math.pow(1.08,20)*Math.pow(1.055,floor-30)/(1-red));
-  return Math.floor(getFinalHp()*baseHpDmg*Math.pow(1.10,9)*Math.pow(1.08,20)*Math.pow(1.055,30)*Math.pow(1.035,floor-60)/(1-red));
+  // 층수 고정 수치
+  const base=5;
+  if(floor<=30) return Math.floor(base*Math.pow(1.07,floor-1));
+  if(floor<=70) return Math.floor(base*Math.pow(1.07,29)*Math.pow(1.055,floor-30));
+  if(floor<=120)return Math.floor(base*Math.pow(1.07,29)*Math.pow(1.055,39)*Math.pow(1.04,floor-70));
+  return Math.floor(base*Math.pow(1.07,29)*Math.pow(1.055,39)*Math.pow(1.04,49)*Math.pow(1.028,floor-120));
 }
 function towerReward(floor){
   // 골드: 1층부터 현실적인 보상
@@ -6627,7 +6658,7 @@ function showMonsterDmgPopup(dmg){
 function showMissPopup(){
   const b=document.getElementById('battle');const el=document.createElement('div');
   el.className='heal-popup';
-  el.textContent='MISS';
+  el.textContent='빗나감';
   el.style.color='#9baab8';el.style.fontSize='10px';
   const ry=(Math.random()-0.5)*6;
   _popupAt(b,el,'monster-emoji',-30,ry);
@@ -6636,7 +6667,7 @@ function showMissPopup(){
 function showEvadePopup(){
   const b=document.getElementById('battle');const el=document.createElement('div');
   el.className='heal-popup';
-  el.textContent='EVADE';
+  el.textContent='회피';
   el.style.color='#58a6ff';el.style.fontSize='10px';
   const ry=(Math.random()-0.5)*6;
   _popupAt(b,el,'player-emoji',-30,ry);
@@ -6717,7 +6748,7 @@ function showGainPopup(gold,exp,shards,souls){
     _rewardQueue={gold:0,exp:0,shards:0,souls:0};
     _rewardTimer=null;
     if(q.gold>0)showReward(`💰 +${fmtNum(q.gold)}`);
-    if(q.exp>0)showReward(`🟢 EXP +${fmtNum(q.exp)}`);
+    if(q.exp>0)showReward(`🟢 경험치 +${fmtNum(q.exp)}`);
     if(q.shards>0)showReward(`🔩 +${q.shards}`);
     if(q.souls>0)showReward(`💫 혼 +${q.souls}`);
   },50);
