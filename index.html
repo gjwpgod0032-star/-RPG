@@ -1569,6 +1569,26 @@ input[type=range]{width:100%;accent-color:var(--accent)}
   </div>
 </div>
 
+<!-- TOWER CLEAR POPUP -->
+<div class="modal-overlay" id="tower-clear-modal">
+  <div class="modal-box" style="max-width:300px;text-align:center">
+    <div style="font-size:28px;margin-bottom:4px">🏆</div>
+    <h3 style="color:var(--gold);margin-bottom:8px" id="tower-clear-title">층 클리어!</h3>
+    <div id="tower-clear-rewards" style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:10px;margin-bottom:12px;font-size:11px;line-height:1.8;color:var(--text2)"></div>
+    <button onclick="closeTowerClear()" style="width:100%;padding:9px;background:rgba(227,179,65,0.15);border:2px solid var(--gold);border-radius:var(--radius);color:var(--gold);font-family:var(--font);font-weight:bold;font-size:12px;cursor:pointer">✨ 확인</button>
+  </div>
+</div>
+
+<!-- TOWER FAIL POPUP -->
+<div class="modal-overlay" id="tower-fail-modal">
+  <div class="modal-box" style="max-width:300px;text-align:center">
+    <div style="font-size:28px;margin-bottom:4px">💀</div>
+    <h3 style="color:#ff4757;margin-bottom:8px" id="tower-fail-title">도전 실패</h3>
+    <p id="tower-fail-msg" style="font-size:11px;color:var(--text2);margin-bottom:14px;line-height:1.6"></p>
+    <button onclick="closeTowerFail()" style="width:100%;padding:9px;background:rgba(255,71,87,0.1);border:2px solid #ff4757;border-radius:var(--radius);color:#ff4757;font-family:var(--font);font-weight:bold;font-size:12px;cursor:pointer">🔄 돌아가기</button>
+  </div>
+</div>
+
 <!-- SLOT ENH RESULT POPUP -->
 <div id="slot-enh-result"></div>
 
@@ -2011,21 +2031,44 @@ input[type=range]{width:100%;accent-color:var(--accent)}
       <!-- 무한의 탑 콘텐츠 -->
       <div id="dungeon-content-tower">
         <div style="height:4px"></div>
-        <div id="tower-info-box" style="background:var(--bg2);border:2px solid var(--border2);border-radius:var(--radius);padding:8px;margin-bottom:8px;text-align:center">
-          <div style="font-size:11px;color:var(--text3);margin-bottom:3px">현재 도달 층</div>
-          <div id="tower-floor-val" style="font-size:24px;font-weight:bold;color:var(--gold)">1층</div>
-          <div id="tower-best-val" style="font-size:10px;color:var(--text3);margin-top:2px">최고 기록: 1층</div>
+
+        <!-- 대기 화면 (전투 전) -->
+        <div id="tower-lobby">
+          <div id="tower-info-box" style="background:var(--bg2);border:2px solid var(--border2);border-radius:var(--radius);padding:8px;margin-bottom:8px;text-align:center">
+            <div style="font-size:11px;color:var(--text3);margin-bottom:3px">현재 도달 층</div>
+            <div id="tower-floor-val" style="font-size:24px;font-weight:bold;color:var(--gold)">1층</div>
+            <div id="tower-best-val" style="font-size:10px;color:var(--text3);margin-top:2px">최고 기록: 1층</div>
+          </div>
+          <div id="tower-reward-preview" style="margin-bottom:8px;font-size:10px;color:var(--text2)"></div>
+          <button id="tower-challenge-btn" onclick="startTowerChallenge()" style="width:100%;padding:10px;background:rgba(227,179,65,0.12);border:2px solid var(--gold);border-radius:var(--radius);color:var(--gold);font-family:var(--font);font-size:12px;font-weight:bold;cursor:pointer;box-shadow:2px 2px 0 rgba(0,0,0,0.4)">⚔️ 도전하기</button>
+          <div class="prof-section-title" style="margin-top:10px">🎁 층별 보상</div>
+          <div id="tower-reward-list"></div>
         </div>
-        <div id="tower-enemy-box" style="background:var(--bg2);border:2px solid var(--border);border-radius:var(--radius);padding:8px;margin-bottom:8px;display:none">
-          <div style="font-size:10px;color:var(--text2);margin-bottom:4px" id="tower-enemy-name">적</div>
-          <div class="hp-bar-wrap"><div class="hp-bar-fill" id="tower-enemy-hp-fill" style="width:100%;background:#e05c5c"></div></div>
-          <div style="font-size:9px;color:var(--text3);margin-top:2px;text-align:right" id="tower-enemy-hp-text">—</div>
+
+        <!-- 실시간 전투 화면 -->
+        <div id="tower-battle-screen" style="display:none">
+          <div style="text-align:center;font-size:11px;color:var(--gold);font-weight:bold;margin-bottom:6px" id="tower-battle-title">🗼 1층 전투 중</div>
+          <!-- 적 HP -->
+          <div style="background:var(--bg2);border:2px solid var(--border);border-radius:var(--radius);padding:8px;margin-bottom:6px">
+            <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text2);margin-bottom:4px">
+              <span id="tower-enemy-name2">🗼 수호자</span>
+              <span id="tower-enemy-hp-text2">—</span>
+            </div>
+            <div class="hp-bar-wrap"><div class="hp-bar-fill" id="tower-enemy-hp-fill2" style="width:100%;background:#e05c5c"></div></div>
+          </div>
+          <!-- 플레이어 HP -->
+          <div style="background:var(--bg2);border:2px solid var(--border);border-radius:var(--radius);padding:8px;margin-bottom:6px">
+            <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text2);margin-bottom:4px">
+              <span id="tower-player-name2">⚔️ 우유</span>
+              <span id="tower-player-hp-text2">—</span>
+            </div>
+            <div class="hp-bar-wrap"><div class="hp-bar-fill" id="tower-player-hp-fill2" style="width:100%;background:var(--shard)"></div></div>
+          </div>
+          <!-- 전투 로그 -->
+          <div id="tower-battle-log" style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:6px;font-size:10px;color:var(--text3);height:120px;overflow-y:auto;margin-bottom:6px"></div>
+          <!-- 포기 버튼 -->
+          <button onclick="surrenderTower()" style="width:100%;padding:7px;background:rgba(255,71,87,0.1);border:2px solid #ff4757;border-radius:var(--radius);color:#ff4757;font-family:var(--font);font-size:11px;font-weight:bold;cursor:pointer">🏳️ 포기하기</button>
         </div>
-        <div id="tower-reward-preview" style="margin-bottom:8px;font-size:10px;color:var(--text2)"></div>
-        <button id="tower-challenge-btn" onclick="startTowerChallenge()" style="width:100%;padding:10px;background:rgba(227,179,65,0.12);border:2px solid var(--gold);border-radius:var(--radius);color:var(--gold);font-family:var(--font);font-size:12px;font-weight:bold;cursor:pointer;box-shadow:2px 2px 0 rgba(0,0,0,0.4)">⚔️ 도전하기</button>
-        <div id="tower-log" style="margin-top:8px;font-size:10px;color:var(--text3);max-height:80px;overflow-y:auto"></div>
-        <div class="prof-section-title" style="margin-top:10px">🎁 층별 보상</div>
-        <div id="tower-reward-list"></div>
       </div>
     </div>
   </div>
@@ -2041,7 +2084,7 @@ const SAVE_KEY = 'milkAdv_v6';
 // ══════════════════════════════════════════
 //  VERSION CHECK
 // ══════════════════════════════════════════
-const GAME_VERSION = 'v02_86';
+const GAME_VERSION = 'v02_88';
 // GitHub Pages 배포 시 아래 URL을 본인 레포로 변경하세요
 // 예: 'https://[계정].github.io/[레포]/version.json'
 const VERSION_CHECK_URL = 'version.json';
@@ -3412,8 +3455,19 @@ function gameTick(){
 function fireSkill(sid){
   const sk=ACTIVE_SKILLS.find(s=>s.id===sid);if(!sk)return;
   const lv=G.activeSkillLevels[sid]||1;
+  const ms=getMonsterStats(G.isBoss);
+  // ── 명중 판정 (일반 공격과 동일) ──
+  const skillHitRate=getHitRate(ms.eva||0);
+  if(Math.random()>=skillHitRate){showMissPopup();G.skillCooldowns[sid]=sk.cd*1000;return;}
   const om=G.isBoss?1+(G.enhanceLevels.bossdmg*.03)+(G.permBossDmg||0)/100:1;
   const piercePas=G.isBoss?(getPassiveStat('pierce')||{piercePct:0}).piercePct:0;
+  // ── 방어구 관통 반영 ──
+  const mDefSk=(ms.def||0)*(1-getPenRate());
+  const mDefRedSk=Math.min(0.75,mDefSk/(mDefSk+300));
+  // ── 최종데미지 배율 ──
+  const normEnh=1+(G.enhanceLevels.normaldmg||0)*.015;
+  const bossEnh=G.isBoss?1+getBossDmgBonus()+(G.permBossDmg||0)/100:1;
+  const fmSk=getFinalDmgMult()*normEnh*bossEnh;
   // 5레벨 보너스 계산 (스킬마다 의미가 다름: 배율 추가 or 타수 추가)
   const b5=sk.bonus5?sk.bonus5(lv):0;
   let ed=0;
@@ -3500,7 +3554,7 @@ function fireSkill(sid){
   }
 
   if(ed>0){
-    ed=Math.floor(ed*(1+piercePas));
+    ed=Math.floor(ed*(1-mDefRedSk)*(1+piercePas)*fmSk);
     G.monsterCurHp=Math.max(0,G.monsterCurHp-ed);
     showDmgPopup(ed,false,true);
     playSfx('skill');
@@ -3628,9 +3682,7 @@ function onMonsterDead(){
         const newSeg=getSegIdx(G.stage);
         if(newSeg!==prevSeg){
           updateBattleBg();
-          const newBgm=getStageBgm(G.chapter,G.stage);
-          const oldBgm=getStageBgm(G.chapter,G.stage-1);
-          if(newBgm!==oldBgm){stopBgm();startBgm();}
+          stopBgm();startBgm();
         }
       }
       G.stageKillCount=0;G.monsterIdx=0;G.isBoss=false;G.bossDefeated=false;
@@ -6270,7 +6322,7 @@ function _processCtxQueue(){
 }
 function _closeAllOverlays(){
   // 튜토리얼 표시 전 열려있는 모달/팝업 닫기
-  ['settings-modal','profile-modal','confirm-modal','migrate-modal'].forEach(id=>{
+  ['settings-modal','profile-modal','confirm-modal','migrate-modal','tower-clear-modal','tower-fail-modal'].forEach(id=>{
     const el=document.getElementById(id);
     if(el&&el.classList.contains('show'))el.classList.remove('show');
   });
@@ -6422,6 +6474,14 @@ function switchDungeonTab(id){
   });
 }
 function renderTowerTab(){
+  // 전투 중이면 전투 화면 유지
+  if(G.towerActive){
+    document.getElementById('tower-lobby').style.display='none';
+    document.getElementById('tower-battle-screen').style.display='block';
+    return;
+  }
+  document.getElementById('tower-battle-screen').style.display='none';
+  document.getElementById('tower-lobby').style.display='block';
   const f=G.towerFloor;
   document.getElementById('tower-floor-val').textContent=f+'층';
   document.getElementById('tower-best-val').textContent='최고 기록: '+(G.towerBestFloor||1)+'층';
@@ -6442,64 +6502,108 @@ function renderTowerTab(){
   document.getElementById('tower-challenge-btn').textContent='⚔️ '+f+'층 도전하기';
 }
 let towerTickInterval=null;
+let _towerPlayerHp=0;
+
+function _towerAddLog(msg,color){
+  const log=document.getElementById('tower-battle-log');
+  if(!log)return;
+  const d=document.createElement('div');
+  d.style.cssText=`color:${color||'var(--text3)'};margin-bottom:2px;`;
+  d.textContent=msg;
+  log.insertBefore(d,log.firstChild);
+  while(log.children.length>30)log.lastChild.remove();
+}
+
+function _towerUpdateHpBars(){
+  const ePct=Math.max(0,G.towerEnemyHp/G.towerEnemyMaxHp*100);
+  const pPct=Math.max(0,_towerPlayerHp/getFinalHp()*100);
+  const ef=document.getElementById('tower-enemy-hp-fill2');
+  const pf=document.getElementById('tower-player-hp-fill2');
+  const et=document.getElementById('tower-enemy-hp-text2');
+  const pt=document.getElementById('tower-player-hp-text2');
+  if(ef)ef.style.width=ePct+'%';
+  if(pf){pf.style.width=pPct+'%';pf.style.background=pPct>50?'var(--shard)':pPct>25?'#e3b341':'#ff4757';}
+  if(et)et.textContent=fmtNum(Math.max(0,G.towerEnemyHp))+'/'+fmtNum(G.towerEnemyMaxHp);
+  if(pt)pt.textContent=fmtNum(Math.max(0,_towerPlayerHp))+'/'+fmtNum(getFinalHp());
+}
+
 function startTowerChallenge(){
   if(G.towerActive)return;
   G.towerActive=true;
   const f=G.towerFloor;
   G.towerEnemyMaxHp=towerEnemyHP(f);
   G.towerEnemyHp=G.towerEnemyMaxHp;
-  const enemyBox=document.getElementById('tower-enemy-box');
-  enemyBox.style.display='block';
-  document.getElementById('tower-enemy-name').textContent=`🗼 ${f}층의 수호자`;
-  document.getElementById('tower-challenge-btn').textContent='⚔️ 전투 중...';
-  document.getElementById('tower-challenge-btn').disabled=true;
-  const log=document.getElementById('tower-log');log.innerHTML='';
-  function addLog(msg){log.innerHTML=`<div>${msg}</div>`+log.innerHTML;if(log.children.length>8)log.lastChild.remove();}
-  addLog(`${f}층 도전 시작!`);
+  _towerPlayerHp=getFinalHp();
+
+  // ── 메인 전투 일시정지 ──
+  if(tickInterval){clearInterval(tickInterval);tickInterval=null;}
+  if(bossTimerInterval){clearInterval(bossTimerInterval);bossTimerInterval=null;}
+
+  // ── 화면 전환: 로비 → 전투 ──
+  document.getElementById('tower-lobby').style.display='none';
+  document.getElementById('tower-battle-screen').style.display='block';
+  document.getElementById('tower-battle-title').textContent=`🗼 ${f}층 전투 중`;
+  document.getElementById('tower-enemy-name2').textContent=`🗼 ${f}층의 수호자`;
+  document.getElementById('tower-player-name2').textContent=`⚔️ ${G.name}`;
+  document.getElementById('tower-battle-log').innerHTML='';
+  _towerUpdateHpBars();
+  _towerAddLog(`🗼 ${f}층 도전 시작!`,'var(--gold)');
+
   if(towerTickInterval)clearInterval(towerTickInterval);
-  let playerHp=getFinalHp();
   let towerTick=0;
+  const tickSpd=getTickSpeed();
+
   towerTickInterval=setInterval(()=>{
     if(!G.towerActive){clearInterval(towerTickInterval);towerTickInterval=null;return;}
     towerTick++;
-    // ── 플레이어 공격 (명중·관통·치명타·최종데미지 반영) ──
-    const monEvaT=Math.floor(f*0.3); // 탑 층수 기반 회피
+
+    // ── 플레이어 공격 ──
+    const monEvaT=Math.floor(f*0.3);
     const hitRate=Math.max(0.20,getFinalAcc()/(getFinalAcc()+monEvaT));
     if(Math.random()<hitRate){
       const atk=getFinalAtk();const cr=getFinalCrit();const cd=getFinalCritDmg();
       const isCrit=Math.random()<cr;
-      // 탑 적 방어력 (층수 기반)
       const mDefT=Math.floor(f*3.0);
       const penR=getPenRate();
       const mDefAfter=mDefT*(1-penR);
       const mDefRed=Math.min(0.75,mDefAfter/(mDefAfter+300));
-      let dmg=Math.floor(atk*(isCrit?cd:1)*(1-mDefRed)*getFinalDmgMult());
+      const normEnh=1+(G.enhanceLevels.normaldmg||0)*.015;
+      let dmg=Math.floor(atk*(isCrit?cd:1)*(1-mDefRed)*getFinalDmgMult()*normEnh);
       G.towerEnemyHp=Math.max(0,G.towerEnemyHp-dmg);
       // 흡혈
       const drain=Math.min(0.10,(getPassiveStat('drain')||{drainPct:0}).drainPct+getLifeStealPct());
-      if(drain>0)playerHp=Math.min(getFinalHp(),playerHp+Math.floor(dmg*drain));
+      if(drain>0)_towerPlayerHp=Math.min(getFinalHp(),_towerPlayerHp+Math.floor(dmg*drain));
+      _towerAddLog((isCrit?'💥 치명타 ':'⚔️ ')+fmtNum(dmg)+' 피해',isCrit?'var(--hp2)':'var(--text2)');
+    } else {
+      _towerAddLog('❌ 빗나감','var(--text3)');
     }
+
     // ── 체력 재생 ──
     const regenT=getHpRegenPerTick();
-    if(regenT>0)playerHp=Math.min(getFinalHp(),playerHp+Math.floor(getFinalHp()*regenT));
+    if(regenT>0){
+      const rAmt=Math.floor(getFinalHp()*regenT);
+      if(rAmt>0)_towerPlayerHp=Math.min(getFinalHp(),_towerPlayerHp+rAmt);
+    }
+
     // ── 몬스터 공격 (매 2틱, 회피 반영) ──
     if(towerTick%2===0){
       const monAccT=Math.floor(100+f*0.7);
       const evaRate=Math.min(0.75,getFinalEva()/(getFinalEva()+monAccT));
-      if(Math.random()>=evaRate){
+      if(Math.random()<evaRate){
+        _towerAddLog('🌀 회피!','var(--shard)');
+      } else {
         const mAtk=towerEnemyATK(f);
         const def=getFinalDef();const red=Math.min(0.75,def/(def+300));
         const mDmg=Math.max(1,Math.floor(mAtk*(1-red)));
-        playerHp=Math.max(0,playerHp-mDmg);
+        _towerPlayerHp=Math.max(0,_towerPlayerHp-mDmg);
+        _towerAddLog('🔴 적 공격 -'+fmtNum(mDmg),'#ff6b81');
       }
     }
-    // HP 바 업데이트
-    const pct=G.towerEnemyHp/G.towerEnemyMaxHp*100;
-    document.getElementById('tower-enemy-hp-fill').style.width=pct+'%';
-    document.getElementById('tower-enemy-hp-text').textContent=fmtNum(G.towerEnemyHp)+'/'+fmtNum(G.towerEnemyMaxHp);
-    // 결과 판정
+
+    _towerUpdateHpBars();
+
+    // ── 결과 판정 ──
     if(G.towerEnemyHp<=0){
-      // 클리어!
       clearInterval(towerTickInterval);towerTickInterval=null;G.towerActive=false;
       const rw=towerReward(f);
       rw.forEach(r=>{
@@ -6512,20 +6616,52 @@ function startTowerChallenge(){
       G.towerFloor++;
       if(G.towerFloor>G.towerBestFloor)G.towerBestFloor=G.towerFloor;
       if(G.towerBestFloor===2)showCtxTutorial('firstTowerClear');
-      addLog(`✅ ${f}층 클리어! → ${f+1}층 해금`);
-      showNotif(`🗼 ${f}층 클리어! +${rw.map(r=>r.label+r.val).join(' ')}`,'top');
-      enemyBox.style.display='none';
-      document.getElementById('tower-challenge-btn').disabled=false;
-      updateUI();renderTowerTab();
-    } else if(playerHp<=0){
-      // 패배
+      checkAchievements();updateUI();
+      // 클리어 팝업
+      document.getElementById('tower-clear-title').textContent=`🏆 ${f}층 클리어!`;
+      document.getElementById('tower-clear-rewards').innerHTML=
+        '<div style="color:var(--gold);font-weight:bold;margin-bottom:6px">🎁 획득 보상</div>'+
+        rw.map(r=>`<div>${r.label} <span style="color:var(--shard)">+${r.val}</span></div>`).join('')+
+        `<div style="margin-top:6px;color:var(--text3)">다음 목표: ${f+1}층</div>`;
+      openModal('tower-clear-modal');
+    } else if(_towerPlayerHp<=0){
       clearInterval(towerTickInterval);towerTickInterval=null;G.towerActive=false;
-      addLog(`💀 ${f}층 도전 실패... (다시 도전 가능)`);
-      enemyBox.style.display='none';
-      document.getElementById('tower-challenge-btn').textContent='⚔️ '+f+'층 재도전';
-      document.getElementById('tower-challenge-btn').disabled=false;
+      // 실패 팝업
+      document.getElementById('tower-fail-title').textContent=`💀 ${f}층 도전 실패`;
+      document.getElementById('tower-fail-msg').textContent=
+        `${f}층의 수호자를 쓰러뜨리지 못했습니다.\n장비와 스탯을 강화하고 다시 도전하세요!`;
+      openModal('tower-fail-modal');
     }
-  },300);
+  }, tickSpd);
+}
+
+function surrenderTower(){
+  if(!G.towerActive)return;
+  G.towerActive=false;
+  if(towerTickInterval){clearInterval(towerTickInterval);towerTickInterval=null;}
+  _towerExitBattle();
+  showNotif('🏳️ 던전 포기','top');
+}
+
+function closeTowerClear(){
+  closeModal('tower-clear-modal');
+  _towerExitBattle();
+}
+
+function closeTowerFail(){
+  closeModal('tower-fail-modal');
+  _towerExitBattle();
+}
+
+function _towerExitBattle(){
+  // 화면 복귀: 전투 → 로비
+  document.getElementById('tower-battle-screen').style.display='none';
+  document.getElementById('tower-lobby').style.display='block';
+  renderTowerTab();
+  // ── 메인 전투 재개 ──
+  if(!tickInterval)startCombat();
+  if(G.isBoss&&!bossTimerInterval)startBossTimer();
+  updateUI();
 }
 function showGachaLvupBanner(){}
 function hideGachaLvupBanner(){}
@@ -7019,11 +7155,49 @@ function loadGame(){
   return false;
 }
 function exportData(){
-  navigator.clipboard?.writeText(JSON.stringify(G)).then(()=>showNotif('📤 클립보드에 복사됨!','top')).catch(()=>prompt('데이터:',JSON.stringify(G)));
+  // saveGame과 동일한 방식으로 직렬화 (COMBAT_TEMP 제외)
+  saveGame(); // 최신 상태로 먼저 저장
+  const s=localStorage.getItem(SAVE_KEY);
+  if(!s){showNotif('❌ 저장 데이터 없음','top');return;}
+  // btoa로 인코딩해서 깨짐 방지
+  const encoded=btoa(unescape(encodeURIComponent(s)));
+  if(navigator.clipboard?.writeText){
+    navigator.clipboard.writeText(encoded)
+      .then(()=>showNotif('📤 클립보드에 복사됨!','top'))
+      .catch(()=>{
+        const ta=document.createElement('textarea');
+        ta.value=encoded;ta.style.position='fixed';ta.style.opacity='0';
+        document.body.appendChild(ta);ta.select();
+        document.execCommand('copy');document.body.removeChild(ta);
+        showNotif('📤 클립보드에 복사됨!','top');
+      });
+  } else {
+    prompt('아래 코드를 전체 선택(Ctrl+A)하여 복사하세요:', encoded);
+  }
 }
 function importData(){
-  const d=prompt('데이터를 붙여넣으세요:');if(!d)return;
-  try{Object.assign(G,JSON.parse(d));showNotif('📥 가져오기 완료!','top');location.reload();}catch(e){showNotif('❌ 잘못된 데이터','top');}
+  const d=(prompt('데이터 코드를 붙여넣으세요:')||'').trim();
+  if(!d)return;
+  try{
+    // btoa 인코딩 여부 자동 감지
+    let json;
+    if(d.startsWith('{')){
+      // 구버전 raw JSON 직접 붙여넣기 호환
+      json=d;
+    } else {
+      json=decodeURIComponent(escape(atob(d)));
+    }
+    const parsed=JSON.parse(json);
+    if(!parsed.name&&!parsed.gold&&!parsed.chapter){
+      showNotif('❌ 유효하지 않은 데이터입니다','top');return;
+    }
+    // localStorage에 먼저 저장 후 리로드 → loadGame()이 정상 로드
+    localStorage.setItem(SAVE_KEY,json);
+    showNotif('📥 가져오기 완료! 재시작합니다...','top');
+    setTimeout(()=>location.reload(),800);
+  }catch(e){
+    showNotif('❌ 잘못된 데이터: 코드를 다시 확인하세요','top');
+  }
 }
 function resetData(){
   localStorage.removeItem(SAVE_KEY);localStorage.removeItem(OLD_KEY);location.reload();
