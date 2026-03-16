@@ -2041,7 +2041,7 @@ const SAVE_KEY = 'milkAdv_v6';
 // ══════════════════════════════════════════
 //  VERSION CHECK
 // ══════════════════════════════════════════
-const GAME_VERSION = 'v02_84';
+const GAME_VERSION = 'v02_86';
 // GitHub Pages 배포 시 아래 URL을 본인 레포로 변경하세요
 // 예: 'https://[계정].github.io/[레포]/version.json'
 const VERSION_CHECK_URL = 'version.json';
@@ -4121,12 +4121,18 @@ function autoDistStat(){
   const prevCP=calcCP();
 
   // 포인트 1개씩 가장 필요한 스탯에 배분 (최대 1000회 반복)
-  // getStatRecommend()와 동일한 점수 산출 로직 사용 → UI 강추와 일치
+  // ※ 모든 계산은 '최고 달성 스테이지' 기준 → 파밍 중에도 정확한 우선순위
   for(let i=0;i<1000&&remaining>0;i++){
-    const ms=getMonsterStats(true);
     const atk=getFinalAtk(), hp=getFinalHp(), def=getFinalDef();
     const crit=getFinalCrit(), critDmg=getFinalCritDmg();
-    const dmgRatio=ms.atk/Math.max(1,hp);
+
+    // ── 최고 스테이지 기준 몬스터 스탯 ──
+    const bgs=Math.max(1,G.highestGlobalStage||currGS());
+    const monAtk=Math.floor(5.0*Math.pow(1.016,bgs-1)*2.0); // 보스 atk 기준
+    const monEva=Math.max(0,Math.floor(bgs*0.3));
+    const monDef=Math.max(0,Math.floor(bgs*3.0));
+    const monAcc=Math.floor(100+bgs*0.7);
+    const dmgRatio=monAtk/Math.max(1,hp); // 보스 1타 / 현재 HP
 
     // 배율 반영 포인트당 증가량
     const atkPctMult=1+(getEnhPct('atk')+getAllPctBonus('atk'))/100;
@@ -4136,45 +4142,47 @@ function autoDistStat(){
     const dHpPerPt=8*hpPctMult;
     const dDefPerPt=1.5*defPctMult;
 
-    // DPS 기반 점수 (getStatRecommend와 동일)
+    // 현재 실효DPS = baseDps * finalDmgMult * hitRate * (1 - defReduction)
     const baseDps=atk*(1+crit*critDmg);
-    const dpsByAtk=((atk+dAtkPerPt)*(1+crit*critDmg)-baseDps)/Math.max(1,baseDps);
-    const dpsByCritDmg=((atk*(1+crit*(critDmg+0.025)))-baseDps)/Math.max(1,baseDps);
-    const dpsByFinalDmg=((atk*(1+crit*critDmg)*(getFinalDmgMult()+0.0005)-baseDps*getFinalDmgMult()))/Math.max(1,baseDps*getFinalDmgMult());
-    const survByHp=dHpPerPt/Math.max(1,hp)*dmgRatio*200;
-    const survByDef=(def+dDefPerPt-def)/Math.max(1,def+100)*dmgRatio*150;
-
-    // 명중·관통·회피·재생: 실효 DPS/생존 증가율로 계산 (DPS 스탯과 동일 스케일)
-    const gs=currGS();
-    const monEva=Math.max(0,Math.floor(gs*0.3));
-    const monDef=Math.max(0,Math.floor(gs*3.0));
-    const monAcc=Math.floor(100+gs*0.7);
-    // 명중: +2acc 1pt → 실효 DPS 증가율 (명중률 상승분 / 현재 명중률)
+    const fm=getFinalDmgMult();
     const curAcc=getFinalAcc();
-    const hitBefore=Math.max(0.20,curAcc/(curAcc+monEva+1));
-    const hitAfter=Math.max(0.20,(curAcc+2)/((curAcc+2)+monEva+1));
-    const accScore=(hitBefore>=0.98?0:(hitAfter-hitBefore)/Math.max(0.001,hitBefore))*1000;
-    // 관통: +3pen 1pt → 방어 무시에 따른 실효 DPS 증가율
     const curPen=getFinalPen();
-    const penBefore=Math.min(0.9,curPen/(curPen+500));
-    const penAfter=Math.min(0.9,(curPen+3)/((curPen+3)+500));
-    const dmgBefore=monDef<=0?1:(1-(monDef*(1-penBefore))/(monDef*(1-penBefore)+300));
-    const dmgAfter=monDef<=0?1:(1-(monDef*(1-penAfter))/(monDef*(1-penAfter)+300));
-    const penScore=(monDef<=0?0:(dmgAfter-dmgBefore)/Math.max(0.001,dmgBefore))*1000;
-    // 회피: +2eva 1pt → 회피율 상승 → 받는 피해 감소율 기반 생존 점수
     const curEva=getFinalEva();
-    const evaRateBefore=Math.min(0.75,curEva/(curEva+monAcc+1));
-    const evaRateAfter=Math.min(0.75,(curEva+2)/((curEva+2)+monAcc+1));
-    const evaScore=(evaRateBefore>=0.74?0:(evaRateAfter-evaRateBefore))*dmgRatio*500;
-    // 재생: +0.05%/초 → 초당 회복량 / HP 비율 기반 생존 점수
-    const regenScore=dmgRatio*30;
+    const hitRate=Math.max(0.20,curAcc/(curAcc+monEva+1));
+    const penRate=Math.min(0.9,curPen/(curPen+500));
+    const defRed=monDef<=0?0:monDef*(1-penRate)/(monDef*(1-penRate)+300);
+    const effDps=Math.max(1,baseDps*fm*hitRate*(1-defRed));
+
+    // ── 공격 스탯: effDps 증가율 × 1000 ──
+    const atkScore  =((atk+dAtkPerPt)*(1+crit*critDmg)-baseDps)/Math.max(1,baseDps)*1000;
+    const critdmgScore=(atk*(1+crit*(critDmg+0.025))-baseDps)/Math.max(1,baseDps)*1000;
+    const finaldmgScore=0.0005/Math.max(0.001,fm)*1000; // finalDmgMult 1pt당 0.05% 증가율
+
+    // 명중: hitRate 상승 → effDps 증가율
+    const hitAfter=Math.max(0.20,(curAcc+2)/(curAcc+2+monEva+1));
+    const accScore=hitRate>=0.98?0:(hitAfter-hitRate)/Math.max(0.001,hitRate)*1000;
+
+    // 관통: (1-defRed) 상승 → effDps 증가율
+    const penAfter=Math.min(0.9,(curPen+3)/(curPen+3+500));
+    const defRedAfter=monDef<=0?0:monDef*(1-penAfter)/(monDef*(1-penAfter)+300);
+    const penScore=monDef<=0?0:((1-defRedAfter)-(1-defRed))/Math.max(0.001,1-defRed)*1000;
+
+    // ── 생존 스탯: 죽을 위기(dmgRatio>0.3)에만 DPS 스탯과 경쟁, 안전하면 극소 ──
+    const inDanger=dmgRatio>0.3;
+    const survBase=inDanger?(dmgRatio-0.3)*10:0; // 0.3 초과분만 가중치
+    const hpScore   =inDanger?dHpPerPt/Math.max(1,hp)*1000*(1+survBase):0.001;
+    const defScore  =inDanger?dDefPerPt/Math.max(1,def+100)*1000*(1+survBase)*0.4:0.001;
+    const evaRateB  =Math.min(0.75,curEva/(curEva+monAcc+1));
+    const evaRateA  =Math.min(0.75,(curEva+2)/(curEva+2+monAcc+1));
+    const evaScore  =inDanger&&evaRateB<0.74?(evaRateA-evaRateB)/Math.max(0.001,1-evaRateB)*1000*survBase*0.3:0.001;
+    const regenScore=inDanger?survBase*0.5:0.001; // 재생은 마지막 수단
 
     const scores={
-      atk:      dpsByAtk*1000,
-      hp:       survByHp,
-      def:      survByDef,
-      critdmg:  dpsByCritDmg*1000,
-      finaldmg: dpsByFinalDmg*1000,
+      atk:      atkScore,
+      hp:       hpScore,
+      def:      defScore,
+      critdmg:  critdmgScore,
+      finaldmg: finaldmgScore,
       acc:      accScore,
       pen:      penScore,
       eva:      evaScore,
