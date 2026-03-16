@@ -2036,7 +2036,7 @@ const SAVE_KEY = 'milkAdv_v6';
 // ══════════════════════════════════════════
 //  VERSION CHECK
 // ══════════════════════════════════════════
-const GAME_VERSION = 'v02_67';
+const GAME_VERSION = 'v02_69';
 // GitHub Pages 배포 시 아래 URL을 본인 레포로 변경하세요
 // 예: 'https://[계정].github.io/[레포]/version.json'
 const VERSION_CHECK_URL = 'version.json';
@@ -2199,7 +2199,7 @@ const ENHANCE_ITEMS=[
   {id:'def',name:'방어력',emoji:'🛡️',pct:1,base:80,desc:'받는 피해를 줄여줍니다. 높을수록 생존력이 올라갑니다.'},
   {id:'normaldmg',name:'일반 피해',emoji:'🗡️',pct:1.5,base:100,desc:'일반 공격의 전체 피해량을 증가시킵니다.'},
   {id:'bossdmg',name:'보스 피해',emoji:'👹',pct:1.5,base:120,desc:'보스 몬스터에게 가하는 피해를 추가로 높입니다.'},
-  {id:'lifeSteal',name:'흡혈',emoji:'🩸',pct:0.1,base:600,unit:'%',costMult:2.2,desc:'가한 피해의 일부를 HP로 흡수합니다. (최대 20%)'},
+  {id:'lifeSteal',name:'흡혈',emoji:'🩸',pct:0.01,base:600,unit:'%',costMult:2.2,maxLv:1000,desc:'가한 피해의 일부를 HP로 흡수합니다. (최대 10%)'},
   {id:'crit',name:'치명타 확률',emoji:'🎯',pct:0.1,base:500,unit:'%',
    desc:'치명타 확률을 높입니다. 100% 초과분은 치명타 피해로 전환됩니다.',
    masterDesc:'Lv.1000 달성 시 → 결정타 시스템 해금',maxLv:1000},
@@ -2218,6 +2218,10 @@ const STAT_DEFS=[
   {id:'def',name:'방어력 (DEF)',emoji:'🛡️'},
   {id:'critdmg',name:'치명타 피해 (CRITDMG)',emoji:'💥'},
   {id:'finaldmg',name:'최종 데미지 (%)',emoji:'🌟'},
+  {id:'acc',name:'명중 (ACC)',emoji:'🎯'},
+  {id:'eva',name:'회피 (EVA)',emoji:'💨'},
+  {id:'pen',name:'방어구 관통 (PEN)',emoji:'🗡️'},
+  {id:'hpregen',name:'체력 재생 (REGEN)',emoji:'💚'},
 ];
 
 const ACTIVE_SKILLS=[
@@ -2307,7 +2311,7 @@ const PASSIVE_SKILLS=[
     desc:lv=>`연속 타격마다 치명타 +${(1+lv*.05).toFixed(2)}% 누적 (피격 시 리셋)`,apply:lv=>({focusCritPer:1+lv*.05})},
   {id:'drain',name:'흡혈',emoji:'🩸',unlockLv:60,
     descFull:'피해의 일부를 HP로 회복. 지속전에서 생존력을 보조.',
-    desc:lv=>`가한 피해의 ${(1+lv*.1).toFixed(1)}%를 HP로 회복`,apply:lv=>({drainPct:(1+lv*.1)/100})},
+    desc:lv=>`가한 피해의 ${(0.2+lv*0.1).toFixed(1)}%를 HP로 회복`,apply:lv=>({drainPct:(0.2+lv*0.1)/100})},
   {id:'rage',name:'분노',emoji:'💢',unlockLv:100,
     descFull:'처치마다 분노 스택 누적 → 공격력 대폭 상승. 연속 처치일수록 강해짐.',
     desc:lv=>`처치 시 공격력 +${(2+lv*.1).toFixed(1)}% 누적 (최대 ${10+Math.floor(lv/15)}스택)`,apply:lv=>({ragePerStack:2+lv*.1,rageMax:10+Math.floor(lv/15)})},
@@ -2603,6 +2607,7 @@ function setPxCharAnim(el,anim){
 let G={
   name:'멋진 우유', level:1, exp:0, pts:0,
   ptAtk:0, ptHp:0, ptDef:0, ptCrit:0, ptCritDmg:0, ptFinalDmg:0,
+  ptAcc:0, ptEva:0, ptPen:0, ptHpRegen:0,
   gold:0, shards:0, tickets:0, skillPts:0,
   chapter:1, stage:1, monsterIdx:0, isBoss:false, bossTimer:30,
   bossDefeated:false, stageKillCount:0,
@@ -2862,7 +2867,8 @@ function getExecuteDmgBonus(){
   return((G.enhanceLevels.executeDmg||0)*2+getEqPrefixSum('executeDmg'))/100;
 }
 function getLifeStealPct(){
-  return((G.enhanceLevels.lifeSteal||0)*.3+getEqPrefixSum('lifeSteal'))/100;
+  const raw=((G.enhanceLevels.lifeSteal||0)*0.01+getEqPrefixSum('lifeSteal'))/100;
+  return Math.min(0.10,raw);
 }
 function getBossDmgBonus(){
   return((G.enhanceLevels.bossdmg||0)*1.5+getEqPrefixSum('bossDmg'))/100;
@@ -2928,6 +2934,37 @@ function getFinalCritDmg(){
 function getFinalDmgMult(){
   return 1+(G.ptFinalDmg||0)*0.0005;
 }
+// 명중: 기본 100 + 포인트*2 + 장비 접두사
+function getFinalAcc(){
+  return 100+(G.ptAcc||0)*2+getEqPrefixSum('acc');
+}
+// 회피: 포인트*2 + 장비 접두사
+function getFinalEva(){
+  return (G.ptEva||0)*2+getEqPrefixSum('eva');
+}
+// 방어구 관통: 포인트*3 + 장비 접두사
+function getFinalPen(){
+  return (G.ptPen||0)*3+getEqPrefixSum('pen');
+}
+// 관통률: pen/(pen+500), 최대 90%
+function getPenRate(){
+  const pen=getFinalPen();
+  return Math.min(0.9,pen/(pen+500));
+}
+// 명중률: acc/(acc+monEva), 최소 20%
+function getHitRate(monEva){
+  const acc=getFinalAcc();
+  return Math.max(0.20,acc/(acc+monEva));
+}
+// 회피율: eva/(eva+monAcc), 최대 75%
+function getEvaRate(monAcc){
+  const eva=getFinalEva();
+  return Math.min(0.75,eva/(eva+monAcc));
+}
+// 체력 재생: 포인트당 최대HP의 0.05% / tick, 장비 접두사(flat)
+function getFinalHpRegen(){
+  return (G.ptHpRegen||0)*0.0005+getEqPrefixSum('hpRegen')/10000;
+}
 function getEqPrefixSum(stat){
   let total=0;
   for(const eq of Object.values(G.equipped)){
@@ -2947,7 +2984,14 @@ function getExpBonus(){
 function calcCP(){
   const atk=getFinalAtk(),cr=getFinalCrit(),cd=getFinalCritDmg();
   const dps=atk*(1+cr*(cd-1));
-  return Math.floor(dps+getFinalHp()*.04+getFinalDef()*.4);
+  const drainPct=Math.min(0.10,(getPassiveStat('drain')||{drainPct:0}).drainPct+getLifeStealPct());
+  const drainCP=dps*drainPct*getFinalHp()*0.002;
+  const ms=getMonsterStats(G.isBoss);
+  const hitBonus=(getHitRate(ms.eva||0)-0.5)*dps*0.3;   // 명중률 기여
+  const evaBonus=getEvaRate(ms.acc||100)*getFinalHp()*0.02; // 회피율 기여
+  const penBonus=getPenRate()*dps*0.15;                  // 관통 기여
+  const regenCP=getFinalHpRegen()*getFinalHp()*5;        // 재생 기여
+  return Math.floor(dps+getFinalHp()*.04+getFinalDef()*.4+drainCP+hitBonus+evaBonus+penBonus+regenCP);
 }
 function calcDPS(){
   const atk=getFinalAtk(),cr=getFinalCrit(),cd=getFinalCritDmg();
@@ -2971,21 +3015,27 @@ function currGS(){return globalStage(G.chapter,G.stage);}
 function getMonsterStats(isBoss,bossType){
   const gs=currGS();
   const baseHp=Math.floor(35*Math.pow(1.038,gs-1));
-  const baseAtk=Math.floor(6.0*Math.pow(1.018,gs-1));  // ATK 전반 상향
+  const baseAtk=Math.floor(6.0*Math.pow(1.018,gs-1));
+  const baseEva=Math.floor(gs*0.8);          // 스테이지당 회피 상승
+  const baseAcc=Math.floor(100+gs*1.0);      // 스테이지당 명중 상승
+  const baseDef=Math.floor(gs*0.5);          // 몬스터 방어력 (관통 대상)
   const exp=Math.floor((12+gs*1.5)*getExpBonus());
   const gold=Math.floor((10+gs*1.4)*getGoldBonus());
   if(isBoss){
     const bt=bossType||getBossType(G.stage);
-    // normal:×4.5 (9번째 일반몹의 ~3배), vip:×18, elite:×35
     const hpMult=bt==='elite'?35:bt==='vip'?18:4.5;
     const atkMult=bt==='elite'?3.2:bt==='vip'?3.2:2.0;
     const goldMult=bt==='elite'?200:bt==='vip'?40:20;
     const expMult=bt==='elite'?80:bt==='vip'?15:10;
     const bossTime=bt==='elite'?90:30;
+    const evaMult=bt==='elite'?2.0:bt==='vip'?1.5:1.2;
+    const accMult=bt==='elite'?2.0:bt==='vip'?1.5:1.2;
     return{hp:Math.floor(baseHp*hpMult),atk:Math.floor(baseAtk*atkMult),
+           eva:Math.floor(baseEva*evaMult),acc:Math.floor(baseAcc*accMult),def:baseDef,
            exp:exp*expMult,gold:gold*goldMult,bossTimer:bossTime,bossType:bt};
   }
-  return{hp:Math.floor(baseHp*(1+G.stageKillCount*0.06)),atk:Math.floor(baseAtk*(1+G.stageKillCount*0.04)),exp,gold};
+  return{hp:Math.floor(baseHp*(1+G.stageKillCount*0.06)),atk:Math.floor(baseAtk*(1+G.stageKillCount*0.04)),
+         eva:baseEva,acc:baseAcc,def:baseDef,exp,gold};
 }
 // GS를 직접 주입해 스탯 계산 (패널티 비교용)
 function getBaseHpForGS(gs){return Math.floor(35*Math.pow(1.038,gs-1));}
@@ -3247,94 +3297,107 @@ function startCombat(){
 }
 function gameTick(){
   tickCount++;
-  // 버프/디버프 틱 처리 (DoT 포함)
   const bfx=tickBuffs();
-  if(!bfx)return; // onPlayerDeath 호출됨
-  // Player attacks
-  let dmg=getFinalAtk();
-  // 버프 공격력 배율 적용
-  if(bfx.atkMult!==1)dmg=Math.floor(dmg*bfx.atkMult);
-  // focus 패시브: 치명타 누적 반영
-  const focusCritBonus=(()=>{const fp=getPassiveStat('focus');return fp?Math.min(1,(G.focusStacks||0)*fp.focusCritPer/100):0;})();
-  const cr=Math.min(1,getFinalCrit()+bfx.critBonus+focusCritBonus);const cd=getFinalCritDmg();
-  const isCrit=Math.random()<cr;
-  if(isCrit)dmg=Math.floor(dmg*cd);
-  // Skill bonuses
-  const normEnh=1+(G.enhanceLevels.normaldmg||0)*.015;
-  const bossEnh=G.isBoss?1+getBossDmgBonus()+(G.permBossDmg||0)/100:1;
-  const finalMult=getFinalDmgMult();
-  dmg=Math.floor(dmg*normEnh*bossEnh*finalMult);
-  // focus 스택 누적 (공격 시)
-  G.focusStacks=(G.focusStacks||0)+1;
-  // Execute passive (not on boss)
-  if(!G.isBoss){const ep=getPassiveStat('execute');if(ep&&G.monsterCurHp/G.monsterMaxHp<ep.executePct){G.monsterCurHp=0;}}
-  // 결정타: 적 HP 30% 이하 + executeChance 확률로 발동
-  let execBonus=0;
-  if(G.monsterCurHp/G.monsterMaxHp<0.3){
-    const ec=getExecuteChance();
-    if(ec<=0||Math.random()<ec)execBonus=Math.floor(dmg*getExecuteDmgBonus());
-  }
-  // 추가타: 확률로 1회 추가 공격 (피해 배율은 강화에 따라 증가)
-  const extraHit=Math.random()<getExtraHitChance();
-  // 몬스터 받는 피해 배율 (버프: mDmgTakenMult)
-  const mDmgMult=bfx.mDmgTakenMult||1;
-  G.monsterCurHp=Math.max(0,G.monsterCurHp-Math.floor((dmg+execBonus)*mDmgMult));
-  if(extraHit)G.monsterCurHp=Math.max(0,G.monsterCurHp-Math.floor(dmg*getExtraHitDmgMult()*mDmgMult));
-  // 흡혈: 강화+접두사 합산
-  const totalDrain=(getPassiveStat('drain')||{drainPct:0}).drainPct+getLifeStealPct();
-  if(totalDrain>0){
-    const healAmt=Math.floor((dmg+execBonus)*totalDrain);
-    G.playerCurHp=Math.min(getFinalHp(),G.playerCurHp+healAmt);
-    updatePlayerHpBar();
-    if(healAmt>0)showHealPopup(healAmt);
-  }
-  showDmgPopup(dmg+(execBonus?execBonus:0),isCrit,false);
-  playSfx(isCrit?'crit':'hit');
-  animateEl('player-emoji','attack-anim');
-  // 몬스터 피격 효과
-  const _me=document.getElementById('monster-emoji');
-  if(_me){_me.classList.remove('mon-hit');void _me.offsetWidth;_me.classList.add('mon-hit');setTimeout(()=>_me.classList.remove('mon-hit'),320);}
-  updateMonsterHpBar();
-  // Skill ticks — 쿨타임 감소는 RAF가 담당, 여기서는 발동만
-  if(G.equippedSkills&&G.equippedSkills.length){
-    G.equippedSkills.forEach(sid=>{
-      if((G.skillCooldowns[sid]||0)<=0){
-        fireSkill(sid);
-      }
-    });
-  }
-  // Monster attacks every 2 ticks
-  if(tickCount%2===0){
-    const ms=getMonsterStats(G.isBoss);let mAtk=ms.atk;
-    // 버프: mAtkMult(몬스터 공격력 배율)
-    if(bfx.mAtkMult!==1)mAtk=Math.floor(mAtk*bfx.mAtkMult);
-    const def=getFinalDef();
-    const red=Math.min(0.75,def/(def+300));
-    let actualDmg=Math.max(1,Math.floor(mAtk*(1-red)));
-    // 버프: defMult(받는 피해 배율, >1이면 디버프)
-    if(bfx.defMult!==1)actualDmg=Math.max(1,Math.floor(actualDmg*bfx.defMult));
-    // 방패(shield) 버프: 피해 흡수
-    if(bfx.shieldLeft>0){
-      const absorbed=Math.min(actualDmg,bfx.shieldLeft);
-      actualDmg=Math.max(0,actualDmg-absorbed);
-      // 방패 소진 처리: 해당 buff의 shield 차감
-      let remain=absorbed;
-      for(const b of G.buffs){if(b.shield&&remain>0){const take=Math.min(b.shield,remain);b.shield-=take;remain-=take;if(b.shield<=0)b.ticks=0;}}
-    }
-    // 모션 먼저 → 90ms 후 데미지 적용
-    animateEl('monster-emoji','monster-attack-anim');
-    const _dmg=actualDmg;
-    setTimeout(()=>{
-      G.playerCurHp=Math.max(0,G.playerCurHp-_dmg);
+  if(!bfx)return;
+  const ms=getMonsterStats(G.isBoss);
+
+  // ── 체력 재생 ──
+  const regenRate=getFinalHpRegen();
+  if(regenRate>0&&G.playerCurHp<getFinalHp()){
+    const regenAmt=Math.floor(getFinalHp()*regenRate);
+    if(regenAmt>0){
+      G.playerCurHp=Math.min(getFinalHp(),G.playerCurHp+regenAmt);
       updatePlayerHpBar();
-      if(_dmg>0)showMonsterDmgPopup(_dmg);
-      if(_dmg>0){
-        G.focusStacks=0;
-        const psvg=document.querySelector('#player-emoji svg');
-        if(psvg){psvg.classList.remove('px-idle','px-attack','px-hit','px-death');void psvg.offsetWidth;psvg.classList.add('px-hit');setTimeout(()=>{psvg.classList.remove('px-hit');psvg.classList.add('px-idle');},370);}
+    }
+  }
+
+  // ── 플레이어 공격 ──
+  // 명중 판정
+  const hitRate=getHitRate(ms.eva||0);
+  const isHit=Math.random()<hitRate;
+  if(!isHit){
+    showMissPopup();
+  } else {
+    let dmg=getFinalAtk();
+    if(bfx.atkMult!==1)dmg=Math.floor(dmg*bfx.atkMult);
+    const focusCritBonus=(()=>{const fp=getPassiveStat('focus');return fp?Math.min(1,(G.focusStacks||0)*fp.focusCritPer/100):0;})();
+    const cr=Math.min(1,getFinalCrit()+bfx.critBonus+focusCritBonus);const cd=getFinalCritDmg();
+    const isCrit=Math.random()<cr;
+    if(isCrit)dmg=Math.floor(dmg*cd);
+    // 방어구 관통 반영 (몬스터 방어력 감소)
+    const mDef=(ms.def||0)*(1-getPenRate());
+    const mDefRed=Math.min(0.75,mDef/(mDef+300));
+    dmg=Math.max(1,Math.floor(dmg*(1-mDefRed)));
+    const normEnh=1+(G.enhanceLevels.normaldmg||0)*.015;
+    const bossEnh=G.isBoss?1+getBossDmgBonus()+(G.permBossDmg||0)/100:1;
+    const finalMult=getFinalDmgMult();
+    dmg=Math.floor(dmg*normEnh*bossEnh*finalMult);
+    G.focusStacks=(G.focusStacks||0)+1;
+    if(!G.isBoss){const ep=getPassiveStat('execute');if(ep&&G.monsterCurHp/G.monsterMaxHp<ep.executePct){G.monsterCurHp=0;}}
+    let execBonus=0;
+    if(G.monsterCurHp/G.monsterMaxHp<0.3){
+      const ec=getExecuteChance();
+      if(ec<=0||Math.random()<ec)execBonus=Math.floor(dmg*getExecuteDmgBonus());
+    }
+    const extraHit=Math.random()<getExtraHitChance();
+    const mDmgMult=bfx.mDmgTakenMult||1;
+    G.monsterCurHp=Math.max(0,G.monsterCurHp-Math.floor((dmg+execBonus)*mDmgMult));
+    if(extraHit)G.monsterCurHp=Math.max(0,G.monsterCurHp-Math.floor(dmg*getExtraHitDmgMult()*mDmgMult));
+    // 흡혈
+    const totalDrain=Math.min(0.10,(getPassiveStat('drain')||{drainPct:0}).drainPct+getLifeStealPct());
+    if(totalDrain>0){
+      const healAmt=Math.floor((dmg+execBonus)*totalDrain);
+      G.playerCurHp=Math.min(getFinalHp(),G.playerCurHp+healAmt);
+      updatePlayerHpBar();
+      if(healAmt>0)showHealPopup(healAmt);
+    }
+    showDmgPopup(dmg+(execBonus?execBonus:0),isCrit,false);
+    playSfx(isCrit?'crit':'hit');
+    animateEl('player-emoji','attack-anim');
+    const _me=document.getElementById('monster-emoji');
+    if(_me){_me.classList.remove('mon-hit');void _me.offsetWidth;_me.classList.add('mon-hit');setTimeout(()=>_me.classList.remove('mon-hit'),320);}
+    updateMonsterHpBar();
+    if(G.equippedSkills&&G.equippedSkills.length){
+      G.equippedSkills.forEach(sid=>{
+        if((G.skillCooldowns[sid]||0)<=0){fireSkill(sid);}
+      });
+    }
+  }
+
+  // ── 몬스터 공격 (2틱마다) ──
+  if(tickCount%2===0){
+    let mAtk=ms.atk;
+    if(bfx.mAtkMult!==1)mAtk=Math.floor(mAtk*bfx.mAtkMult);
+    // 회피 판정
+    const evaRate=getEvaRate(ms.acc||100);
+    const isEvaded=Math.random()<evaRate;
+    if(isEvaded){
+      showEvadePopup();
+    } else {
+      const def=getFinalDef();
+      const red=Math.min(0.75,def/(def+300));
+      let actualDmg=Math.max(1,Math.floor(mAtk*(1-red)));
+      if(bfx.defMult!==1)actualDmg=Math.max(1,Math.floor(actualDmg*bfx.defMult));
+      if(bfx.shieldLeft>0){
+        const absorbed=Math.min(actualDmg,bfx.shieldLeft);
+        actualDmg=Math.max(0,actualDmg-absorbed);
+        let remain=absorbed;
+        for(const b of G.buffs){if(b.shield&&remain>0){const take=Math.min(b.shield,remain);b.shield-=take;remain-=take;if(b.shield<=0)b.ticks=0;}}
       }
-      if(G.playerCurHp<=0){onPlayerDeath();}
-    },90);
+      animateEl('monster-emoji','monster-attack-anim');
+      const _dmg=actualDmg;
+      setTimeout(()=>{
+        G.playerCurHp=Math.max(0,G.playerCurHp-_dmg);
+        updatePlayerHpBar();
+        if(_dmg>0)showMonsterDmgPopup(_dmg);
+        if(_dmg>0){
+          G.focusStacks=0;
+          const psvg=document.querySelector('#player-emoji svg');
+          if(psvg){psvg.classList.remove('px-idle','px-attack','px-hit','px-death');void psvg.offsetWidth;psvg.classList.add('px-hit');setTimeout(()=>{psvg.classList.remove('px-hit');psvg.classList.add('px-idle');},370);}
+        }
+        if(G.playerCurHp<=0){onPlayerDeath();}
+      },90);
+    }
   }
   if(G.monsterCurHp<=0)onMonsterDead();
 
@@ -3831,6 +3894,10 @@ function addStat(type,amt=1){
     else if(type==='crit')G.ptCrit++;
     else if(type==='critdmg')G.ptCritDmg++;
     else if(type==='finaldmg')G.ptFinalDmg++;
+    else if(type==='acc')G.ptAcc++;
+    else if(type==='eva')G.ptEva++;
+    else if(type==='pen')G.ptPen++;
+    else if(type==='hpregen')G.ptHpRegen++;
   }
   if(added>0){
     G.questProg.stat+=added;checkQuestProgress();
@@ -3840,14 +3907,15 @@ function addStat(type,amt=1){
 }
 function addStatMax(type){addStat(type,G.pts);}
 function resetStats(){
-  const totalPts=G.ptAtk+G.ptHp+G.ptDef+G.ptCrit+G.ptCritDmg+(G.ptFinalDmg||0);
+  const totalPts=G.ptAtk+G.ptHp+G.ptDef+G.ptCrit+G.ptCritDmg+(G.ptFinalDmg||0)+(G.ptAcc||0)+(G.ptEva||0)+(G.ptPen||0)+(G.ptHpRegen||0);
   if(totalPts<=0){showNotif('💡 투자된 포인트가 없습니다','top');return;}
   const prevCP=calcCP();
-  const prevSeen={...G.tutorialSeen}; // tutorialSeen 백업
+  const prevSeen={...G.tutorialSeen};
   G.statResetCount=(G.statResetCount||0)+1;
   G.pts+=totalPts;
   G.ptAtk=0;G.ptHp=0;G.ptDef=0;G.ptCrit=0;G.ptCritDmg=0;G.ptFinalDmg=0;
-  G.tutorialSeen=prevSeen; // 튜토리얼 열람 상태 복원
+  G.ptAcc=0;G.ptEva=0;G.ptPen=0;G.ptHpRegen=0;
+  G.tutorialSeen=prevSeen;
   G.playerCurHp=Math.min(G.playerCurHp,getFinalHp());
   showCPChange(prevCP,calcCP());updateUI();renderStatTab();
   showNotif('🔄 스탯 초기화 완료 (무료)','top');
@@ -3977,7 +4045,7 @@ const STAT_AUTO_UNLOCK_PTS=100;  // 총 100포인트 투자 시 해금
 const ENH_AUTO_UNLOCK_LV=50;    // 강화 총레벨 50 시 해금
 
 function totalSpentPts(){
-  return (G.ptAtk||0)+(G.ptHp||0)+(G.ptDef||0)+(G.ptCrit||0)+(G.ptCritDmg||0)+(G.ptFinalDmg||0);
+  return (G.ptAtk||0)+(G.ptHp||0)+(G.ptDef||0)+(G.ptCrit||0)+(G.ptCritDmg||0)+(G.ptFinalDmg||0)+(G.ptAcc||0)+(G.ptEva||0)+(G.ptPen||0)+(G.ptHpRegen||0);
 }
 function totalEnhLv(){
   return Object.values(G.enhanceLevels||{}).reduce((a,b)=>a+b,0);
@@ -4103,24 +4171,32 @@ function autoDistEnhance(){
 function renderStatTab(){
   const el=document.getElementById('stat-list');
   if(!el)return;
-  // 레벨만 반영한 순수 기본값 (포인트 제외)
   const baseLvAtk=10+Math.floor(Math.log(G.level+1)*12);
   const baseLvHp=100+Math.floor(Math.log(G.level+1)*80);
   const baseLvDef=5+Math.floor(Math.log(G.level+1)*6);
-  // critdmg: 기본 150%, 추가분 = 포인트+강화+장비+스킬 전부
   const critdmgTotal=(getFinalCritDmg()*100).toFixed(0);
   const critdmgAdd=((getFinalCritDmg()-1.5)*100).toFixed(0);
-  // finaldmg: 기본 100%, 추가분 = 포인트+기타 전부
   const finaldmgTotal=(getFinalDmgMult()*100).toFixed(2);
   const finaldmgAdd=((getFinalDmgMult()-1)*100).toFixed(2);
+  const ms=getMonsterStats(G.isBoss);
+  const hitPct=(getHitRate(ms.eva||0)*100).toFixed(1);
+  const evaPct=(getEvaRate(ms.acc||100)*100).toFixed(1);
+  const penPct=(getPenRate()*100).toFixed(1);
+  const regenPct=(getFinalHpRegen()*100).toFixed(3);
+  const accAdd=(G.ptAcc||0)*2+getEqPrefixSum('acc');
+  const evaAdd=(G.ptEva||0)*2+getEqPrefixSum('eva');
+  const penAdd=(G.ptPen||0)*3+getEqPrefixSum('pen');
   const vals={
     atk:fmtNum(Math.floor(getFinalAtk())),
     hp:fmtNum(Math.floor(getFinalHp())),
     def:fmtNum(Math.floor(getFinalDef())),
     critdmg:critdmgTotal+'%',
     finaldmg:finaldmgTotal+'%',
+    acc:getFinalAcc()+' (명중률 '+hitPct+'%)',
+    eva:getFinalEva()+' (회피율 '+evaPct+'%)',
+    pen:getFinalPen()+' (관통률 '+penPct+'%)',
+    hpregen:regenPct+'% / tick',
   };
-  // 투자 1포인트당 실제 증가량 (배율 적용)
   const pct={
     atk:(1+(getEnhPct('atk')+getAllPctBonus('atk'))/100),
     hp:(1+(getEnhPct('hp')+getAllPctBonus('hp'))/100),
@@ -4132,64 +4208,59 @@ function renderStatTab(){
     def:'+'+(1.5*pct.def).toFixed(1)+' DEF',
     critdmg:'+2.5% CRITDMG',
     finaldmg:'+0.05% 최종데미지',
+    acc:'+2 ACC',
+    eva:'+2 EVA',
+    pen:'+3 PEN',
+    hpregen:'+0.05% REGEN/tick',
   };
-  // 기본값: 레벨 기반 순수 수치 (포인트 제외)
   const baseVals={
-    atk: baseLvAtk,
-    hp: baseLvHp,
-    def: baseLvDef,
-    critdmg: '150',
-    finaldmg: '100.00',
+    atk:baseLvAtk,hp:baseLvHp,def:baseLvDef,
+    critdmg:'150',finaldmg:'100.00',
+    acc:'100',eva:'0',pen:'0',hpregen:'0.000',
   };
-  // 추가값: 총합 - 기본레벨값 (포인트+장비+강화 전부 포함)
   const addVals={
-    atk: Math.floor(getFinalAtk())-baseLvAtk,
-    hp: Math.floor(getFinalHp())-baseLvHp,
-    def: Math.floor(getFinalDef())-baseLvDef,
-    critdmg: critdmgAdd,
-    finaldmg: finaldmgAdd,
+    atk:Math.floor(getFinalAtk())-baseLvAtk,
+    hp:Math.floor(getFinalHp())-baseLvHp,
+    def:Math.floor(getFinalDef())-baseLvDef,
+    critdmg:critdmgAdd,finaldmg:finaldmgAdd,
+    acc:accAdd,eva:evaAdd,pen:penAdd,
+    hpregen:((G.ptHpRegen||0)*0.0005*100).toFixed(3),
   };
   const hp=G.pts>0;
   const rec=getStatRecommend();
   const dpsId=getDpsStatId();
-  const ptMap={atk:G.ptAtk||0,hp:G.ptHp||0,def:G.ptDef||0,critdmg:G.ptCritDmg||0,finaldmg:G.ptFinalDmg||0};
+  const ptMap={atk:G.ptAtk||0,hp:G.ptHp||0,def:G.ptDef||0,critdmg:G.ptCritDmg||0,finaldmg:G.ptFinalDmg||0,acc:G.ptAcc||0,eva:G.ptEva||0,pen:G.ptPen||0,hpregen:G.ptHpRegen||0};
   el.innerHTML=STAT_DEFS.map(sd=>{
     const isFirst=sd.id===rec.first, isSecond=sd.id===rec.second;
     const badge1=isFirst?'<span class="rec-badge-inline rec1">⭐ 강추</span>':'';
     const badge2=(!isFirst&&isSecond)?'<span class="rec-badge-inline rec2">👍 추천</span>':'';
     const dpsBadge=(sd.id===dpsId&&!isFirst)?'<span class="rec-badge-inline dps">⚡ DPS</span>':'';
-    // 모든 항목: (기본 N + 추가 M) 형태로 통일
     let dispStr;
     if(['atk','hp','def'].includes(sd.id)){
       const add=addVals[sd.id];
-      const addPart=add>0?` <span style="font-size:9px;color:var(--shard)">+${fmtNum(add)}</span>`:'';
-      dispStr=`${vals[sd.id]}<span style="font-size:9px;color:var(--text3);margin-left:4px">(기본 ${fmtNum(baseVals[sd.id])}${addPart})</span>`;
+      const addPart=add>0?' <span style="font-size:9px;color:var(--shard)">+'+fmtNum(add)+'</span>':'';
+      dispStr=vals[sd.id]+'<span style="font-size:9px;color:var(--text3);margin-left:4px">(기본 '+fmtNum(baseVals[sd.id])+addPart+')</span>';
     } else if(sd.id==='critdmg'){
       const add=parseFloat(addVals.critdmg);
-      const addPart=add>0?` <span style="font-size:9px;color:var(--shard)">+${add.toFixed(0)}%</span>`:'';
-      dispStr=`${vals[sd.id]}<span style="font-size:9px;color:var(--text3);margin-left:4px">(기본 ${baseVals.critdmg}%${addPart})</span>`;
+      const addPart=add>0?' <span style="font-size:9px;color:var(--shard)">+'+add.toFixed(0)+'%</span>':'';
+      dispStr=vals[sd.id]+'<span style="font-size:9px;color:var(--text3);margin-left:4px">(기본 '+baseVals.critdmg+'%'+addPart+')</span>';
     } else if(sd.id==='finaldmg'){
       const add=parseFloat(addVals.finaldmg);
-      const addPart=add>0?` <span style="font-size:9px;color:var(--shard)">+${add.toFixed(2)}%</span>`:'';
-      dispStr=`${vals[sd.id]}<span style="font-size:9px;color:var(--text3);margin-left:4px">(기본 ${baseVals.finaldmg}%${addPart})</span>`;
+      const addPart=add>0?' <span style="font-size:9px;color:var(--shard)">+'+add.toFixed(2)+'%</span>':'';
+      dispStr=vals[sd.id]+'<span style="font-size:9px;color:var(--text3);margin-left:4px">(기본 '+baseVals.finaldmg+'%'+addPart+')</span>';
+    } else if(['acc','eva','pen'].includes(sd.id)){
+      const add=addVals[sd.id];
+      const addPart=add>0?' <span style="font-size:9px;color:var(--shard)">+'+add+'</span>':'';
+      dispStr=vals[sd.id]+'<span style="font-size:9px;color:var(--text3);margin-left:4px">(기본 '+baseVals[sd.id]+addPart+')</span>';
+    } else if(sd.id==='hpregen'){
+      const add=parseFloat(addVals.hpregen);
+      const addPart=add>0?' <span style="font-size:9px;color:var(--shard)">+'+add.toFixed(3)+'%</span>':'';
+      dispStr=vals[sd.id]+'<span style="font-size:9px;color:var(--text3);margin-left:4px">(기본 '+baseVals.hpregen+'%'+addPart+')</span>';
     } else {
-      dispStr=`${vals[sd.id]}`;
+      dispStr=vals[sd.id];
     }
     const ptLv=ptMap[sd.id]||0;
-    return`
-    <div class="stat-row">
-      <span class="s-icon">${sd.emoji}</span>
-      <div class="s-info">
-        <div class="s-name">${sd.name}${badge1}${badge2}${dpsBadge}<span style="font-size:9px;color:var(--text3);margin-left:4px">Lv.${ptLv}</span></div>
-        <div class="s-val">${dispStr}</div>
-        <div style="font-size:9px;color:var(--text3);margin-top:1px">+1 → ${perPt[sd.id]}</div>
-      </div>
-      <div class="stat-btns">
-        <button class="stat-plus-btn" ${hp?'':'disabled'} onclick="addStat('${sd.id}',1)">+1</button>
-        <button class="stat-plus-btn" ${hp?'':'disabled'} onclick="addStat('${sd.id}',10)">+10</button>
-        <button class="stat-plus-btn max-btn" ${hp?'':'disabled'} onclick="addStatMax('${sd.id}')">최대</button>
-      </div>
-    </div>`;
+    return'\n    <div class="stat-row">\n      <span class="s-icon">'+sd.emoji+'</span>\n      <div class="s-info">\n        <div class="s-name">'+sd.name+badge1+badge2+dpsBadge+'<span style="font-size:9px;color:var(--text3);margin-left:4px">Lv.'+ptLv+'</span></div>\n        <div class="s-val">'+dispStr+'</div>\n        <div style="font-size:9px;color:var(--text3);margin-top:1px">+1 → '+perPt[sd.id]+'</div>\n      </div>\n      <div class="stat-btns">\n        <button class="stat-plus-btn" '+( hp?'':' disabled')+' onclick="addStat(\''+ sd.id +'\',1)">+1</button>\n        <button class="stat-plus-btn" '+(hp?'':' disabled')+' onclick="addStat(\''+ sd.id +'\',10)">+10</button>\n        <button class="stat-plus-btn max-btn" '+(hp?'':' disabled')+' onclick="addStatMax(\''+ sd.id +'\')">최대</button>\n      </div>\n    </div>';
   }).join('');
   updateAutoDistButtons();
 }
@@ -4208,6 +4279,15 @@ function enhCost(item,lv){
     if(n<=100)return Math.floor(base*Math.pow(1.08,n-1)*60);
     if(n<=500)return Math.floor(base*Math.pow(1.04,n-1)*200);
     return Math.floor(base*Math.pow(1.02,n-1)*600);
+  }
+  // 흡혈: 완화된 비용 (마스터 Lv.1000 장기 목표)
+  if(item.id==='lifeSteal'){
+    if(n<=10)return Math.floor(base*Math.pow(1.5,n-1));
+    if(n<=25)return Math.floor(base*Math.pow(1.3,n-1)*1.5);
+    if(n<=50)return Math.floor(base*Math.pow(1.15,n-1)*8);
+    if(n<=100)return Math.floor(base*Math.pow(1.07,n-1)*50);
+    if(n<=500)return Math.floor(base*Math.pow(1.035,n-1)*180);
+    return Math.floor(base*Math.pow(1.018,n-1)*500);
   }
   // 잠금 해제 항목
   if(item.unlockReq){
@@ -4371,13 +4451,17 @@ function rollGrade(){
 }
 // 랜덤 접두사 풀: gradeMin=이 등급 이상 장비에서만 등장
 const PREFIX_POOL=[
-  {id:'lifeSteal',name:'흡혈',emoji:'🩸',stat:'lifeSteal',val:()=>1+Math.random()*2,fmt:v=>`흡혈 ${v.toFixed(1)}%`,gradeMin:0},
+  {id:'lifeSteal',name:'흡혈',emoji:'🩸',stat:'lifeSteal',val:()=>20+Math.random()*60,fmt:v=>`흡혈 ${(v/100).toFixed(2)}%`,gradeMin:0},
   {id:'goldUp',name:'황금',emoji:'💰',stat:'goldBonus',val:()=>5+Math.random()*10,fmt:v=>`골드 +${v.toFixed(0)}%`,gradeMin:0},
   {id:'expUp',name:'학습',emoji:'📚',stat:'expBonus',val:()=>5+Math.random()*10,fmt:v=>`경험치 +${v.toFixed(0)}%`,gradeMin:0},
-  {id:'critUp',name:'날카로운',emoji:'🎯',stat:'critFlat',val:()=>1+Math.random()*2,fmt:v=>`크리율 +${v.toFixed(1)}%`,gradeMin:2},
+  {id:'accUp',name:'정확한',emoji:'🎯',stat:'acc',val:()=>5+Math.random()*10,fmt:v=>`명중 +${v.toFixed(0)}`,gradeMin:1},
+  {id:'evaUp',name:'민첩한',emoji:'💨',stat:'eva',val:()=>5+Math.random()*10,fmt:v=>`회피 +${v.toFixed(0)}`,gradeMin:1},
+  {id:'hpRegenUp',name:'재생',emoji:'💚',stat:'hpRegen',val:()=>10+Math.random()*20,fmt:v=>`재생 +${v.toFixed(0)}`,gradeMin:1},
+  {id:'critUp',name:'날카로운',emoji:'💥',stat:'critFlat',val:()=>1+Math.random()*2,fmt:v=>`크리율 +${v.toFixed(1)}%`,gradeMin:2},
   {id:'critDmgUp',name:'파괴적',emoji:'💥',stat:'critDmgFlat',val:()=>5+Math.random()*10,fmt:v=>`크리피해 +${v.toFixed(0)}%`,gradeMin:2},
+  {id:'penUp',name:'꿰뚫는',emoji:'🗡️',stat:'pen',val:()=>8+Math.random()*12,fmt:v=>`관통 +${v.toFixed(0)}`,gradeMin:2},
   {id:'bossDmg',name:'사냥꾼',emoji:'👹',stat:'bossDmg',val:()=>5+Math.random()*10,fmt:v=>`보스피해 +${v.toFixed(0)}%`,gradeMin:3},
-  {id:'defIgnore',name:'꿰뚫는',emoji:'🗡️',stat:'defIgnore',val:()=>5+Math.random()*10,fmt:v=>`방어무시 +${v.toFixed(0)}%`,gradeMin:3},
+  {id:'defIgnore',name:'방어무시',emoji:'🗡️',stat:'defIgnore',val:()=>5+Math.random()*10,fmt:v=>`방어무시 +${v.toFixed(0)}%`,gradeMin:3},
   {id:'skillCd',name:'신속한',emoji:'⚡',stat:'skillCdReduce',val:()=>3+Math.random()*7,fmt:v=>`스킬쿨 -${v.toFixed(0)}%`,gradeMin:4},
   {id:'extraHit',name:'연격',emoji:'🔄',stat:'extraHitChance',val:()=>3+Math.random()*5,fmt:v=>`추가타 +${v.toFixed(0)}%`,gradeMin:4},
   {id:'execute',name:'결정타',emoji:'⚔️',stat:'executeDmg',val:()=>10+Math.random()*15,fmt:v=>`결정타 +${v.toFixed(0)}%`,gradeMin:5},
@@ -6393,6 +6477,24 @@ function showMonsterDmgPopup(dmg){
   _popupAt(b,el,'player-emoji',46,ry);
   b.appendChild(el);setTimeout(()=>el.remove(),950);
 }
+function showMissPopup(){
+  const b=document.getElementById('battle');const el=document.createElement('div');
+  el.className='heal-popup';
+  el.textContent='MISS';
+  el.style.color='#9baab8';el.style.fontSize='10px';
+  const ry=(Math.random()-0.5)*6;
+  _popupAt(b,el,'monster-emoji',-30,ry);
+  b.appendChild(el);setTimeout(()=>el.remove(),900);
+}
+function showEvadePopup(){
+  const b=document.getElementById('battle');const el=document.createElement('div');
+  el.className='heal-popup';
+  el.textContent='EVADE';
+  el.style.color='#58a6ff';el.style.fontSize='10px';
+  const ry=(Math.random()-0.5)*6;
+  _popupAt(b,el,'player-emoji',-30,ry);
+  b.appendChild(el);setTimeout(()=>el.remove(),900);
+}
 function animateEl(id,cls){
   const el=document.getElementById(id);if(!el)return;
   if(id==='player-emoji'){
@@ -6654,7 +6756,7 @@ function resetCost(type){
   if(type==='stat'&&(G.statResetCount||0)===0)return 0;
   if(type==='skill'&&(G.skillResetCount||0)===0)return 0;
   let pts=0;
-  if(type==='stat')pts=G.ptAtk+G.ptHp+G.ptDef+G.ptCrit+G.ptCritDmg+(G.ptFinalDmg||0);
+  if(type==='stat')pts=G.ptAtk+G.ptHp+G.ptDef+G.ptCrit+G.ptCritDmg+(G.ptFinalDmg||0)+(G.ptAcc||0)+(G.ptEva||0)+(G.ptPen||0)+(G.ptHpRegen||0);
   if(type==='skill')pts=Object.values(G.activeSkillLevels||{}).reduce((a,b)=>a+b,0)+Object.values(G.passiveSkillLevels||{}).reduce((a,b)=>a+b,0);
   if(type==='enhance')pts=Object.values(G.enhanceLevels||{}).reduce((a,b)=>a+b,0);
   return Math.max(100,pts*currGS()*8);
@@ -6759,6 +6861,10 @@ function initGameUI(){
   });
   if(!G.questProg.stagereach)G.questProg.stagereach=0;
   if(G.stageReachSnapshot===undefined)G.stageReachSnapshot=0;
+  if(G.ptAcc===undefined)G.ptAcc=0;
+  if(G.ptEva===undefined)G.ptEva=0;
+  if(G.ptPen===undefined)G.ptPen=0;
+  if(G.ptHpRegen===undefined)G.ptHpRegen=0;
   // 전투 임시 상태 초기화 (세이브에 포함 안 되므로)
   G.buffs=[];G.rageStacks=0;G.focusStacks=0;
   // Auto gacha button state
