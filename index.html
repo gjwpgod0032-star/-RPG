@@ -112,24 +112,11 @@ img,canvas{image-rendering:pixelated}
   transition:opacity 0.8s ease;
 }
 #title-video.loaded{opacity:1;}
-/* 영상 위 어둠 오버레이 — 가독성 확보 */
-#title-overlay{
-  position:absolute;inset:0;z-index:1;
-  background:linear-gradient(
-    180deg,
-    rgba(0,0,0,0.55) 0%,
-    rgba(0,0,0,0.30) 40%,
-    rgba(0,0,0,0.65) 100%
-  );
-}
-/* 하단 비네팅 추가 */
-#title-overlay::after{
-  content:'';position:absolute;inset:0;
-  background:radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.5) 100%);
-}
+/* 딤 오버레이 없음 — 영상 원본 그대로 표시 */
+#title-overlay{display:none;}
 #title-star-bg{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:2;}
 .tstar{position:absolute;background:#fff;border-radius:50%;animation:tStarAnim 2s infinite}
-@keyframes tStarAnim{0%,100%{opacity:.1}50%{opacity:.5}}
+@keyframes tStarAnim{0%,100%{opacity:.1}50%{opacity:.4}}
 #title-logo{text-align:center;z-index:3;animation:titleFloat 3s ease-in-out infinite}
 @keyframes titleFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
 #title-logo .t-icon{font-size:62px;display:block;margin-bottom:10px;
@@ -143,6 +130,19 @@ img,canvas{image-rendering:pixelated}
     4px 4px 0 rgba(0,0,0,0.8),
     0 4px 12px rgba(0,0,0,1);
   letter-spacing:4px
+}
+/* 커스텀 로고 이미지 — 그림자 없음, 원본 그대로 */
+#title-logo-custom{
+  max-width:300px;width:85%;
+  display:block;margin:0 auto 10px;
+  image-rendering:pixelated;
+}
+/* 디폴트 로고 이미지 (title.png) */
+#title-img{
+  max-width:280px;width:80%;
+  display:block;margin:0 auto 10px;
+  image-rendering:pixelated;
+  filter:drop-shadow(0 0 12px rgba(0,0,0,1)) drop-shadow(2px 2px 0 rgba(0,0,0,1));
 }
 #title-logo .t-sub{
   font-size:12px;color:rgba(255,255,255,0.85);letter-spacing:5px;margin-top:6px;
@@ -1545,13 +1545,18 @@ input[type=range]{width:100%;accent-color:var(--accent)}
   <div id="title-overlay"></div>
   <div id="title-star-bg"></div>
   <div id="title-logo">
-    <img src="assets/img/title.png" id="title-img" alt="우유의 대모험"
-      style="max-width:280px;width:80%;display:block;margin:0 auto 10px;image-rendering:pixelated;filter:drop-shadow(0 0 12px rgba(0,0,0,1)) drop-shadow(2px 2px 0 rgba(0,0,0,1))"
-      onerror="this.style.display='none';document.getElementById('title-icon-fallback').style.display='block'">
-    <span class="t-icon" id="title-icon-fallback" style="display:none">⚔️</span>
-    <h1>우유의 대모험</h1>
-    <div class="t-deco"></div>
-    <div class="t-sub">IDLE RPG</div>
+    <!-- 커스텀 로고: assets/img/title_logo.png 업로드 시 자동 표시, 없으면 디폴트 -->
+    <img src="assets/img/title_logo.png" id="title-logo-custom" alt=""
+      onerror="this.style.display='none';document.getElementById('title-default-wrap').style.display='block'">
+    <!-- 디폴트 로고 (title_logo.png 없을 때) -->
+    <div id="title-default-wrap" style="display:none">
+      <img src="assets/img/title.png" id="title-img" alt="우유의 대모험"
+        onerror="this.style.display='none';document.getElementById('title-icon-fallback').style.display='block'">
+      <span class="t-icon" id="title-icon-fallback" style="display:none">⚔️</span>
+      <h1>우유의 대모험</h1>
+      <div class="t-deco"></div>
+      <div class="t-sub">IDLE RPG</div>
+    </div>
   </div>
   <div id="title-tap">TOUCH TO START</div>
   <div style="position:absolute;bottom:12px;right:12px;font-size:9px;color:rgba(255,255,255,0.5);z-index:3;letter-spacing:1px;text-shadow:1px 1px 0 rgba(0,0,0,0.9)" id="title-version"></div>
@@ -1671,7 +1676,10 @@ input[type=range]{width:100%;accent-color:var(--accent)}
     <div style="font-size:28px;margin-bottom:4px">🏆</div>
     <h3 style="color:var(--gold);margin-bottom:8px" id="tower-clear-title">층 클리어!</h3>
     <div id="tower-clear-rewards" style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:10px;margin-bottom:12px;font-size:11px;line-height:1.8;color:var(--text2)"></div>
-    <button onclick="closeTowerClear()" style="width:100%;padding:9px;background:rgba(227,179,65,0.15);border:2px solid var(--gold);border-radius:var(--radius);color:var(--gold);font-family:var(--font);font-weight:bold;font-size:12px;cursor:pointer">✨ 확인</button>
+    <div style="display:flex;gap:8px">
+      <button onclick="closeTowerClear(false)" style="flex:1;padding:9px;background:var(--bg2);border:2px solid var(--border2);border-radius:var(--radius);color:var(--text2);font-family:var(--font);font-weight:bold;font-size:12px;cursor:pointer">🏠 나가기</button>
+      <button onclick="closeTowerClear(true)" style="flex:1;padding:9px;background:rgba(227,179,65,0.15);border:2px solid var(--gold);border-radius:var(--radius);color:var(--gold);font-family:var(--font);font-weight:bold;font-size:12px;cursor:pointer">⚔️ 계속 도전</button>
+    </div>
   </div>
 </div>
 
@@ -2162,7 +2170,7 @@ const SAVE_KEY = 'milkAdv_v6';
 // ══════════════════════════════════════════
 //  VERSION CHECK
 // ══════════════════════════════════════════
-const GAME_VERSION = 'v02_92';
+const GAME_VERSION = 'v02_93';
 // GitHub Pages 배포 시 아래 URL을 본인 레포로 변경하세요
 // 예: 'https://[계정].github.io/[레포]/version.json'
 const VERSION_CHECK_URL = 'version.json';
@@ -6811,9 +6819,17 @@ function surrenderTower(){
   showNotif('🏳️ 던전 포기','top');
 }
 
-function closeTowerClear(){
+function closeTowerClear(continueChallenge){
   closeModal('tower-clear-modal');
-  _towerExitBattle();
+  if(continueChallenge){
+    // 계속 도전: 바로 다음 층 재시작 (배경·BGM 유지)
+    G.towerActive=false;
+    if(towerTickInterval){clearInterval(towerTickInterval);towerTickInterval=null;}
+    if(bossTimerInterval){clearInterval(bossTimerInterval);bossTimerInterval=null;}
+    startTowerChallenge();
+  } else {
+    _towerExitBattle();
+  }
 }
 
 function closeTowerFail(){
