@@ -6979,7 +6979,18 @@ function initGameUI(){
     if(G.equipped[s]===undefined)G.equipped[s]=null;
   });
   if(!G.questProg.stagereach)G.questProg.stagereach=0;
-  if(G.stageReachSnapshot===undefined)G.stageReachSnapshot=0;
+  if(G.stageReachSnapshot===undefined){
+    // 기존 유저 마이그레이션: 현재 퀘스트가 stagereach면 기존 진행도 보존, 아니면 현재 위치로 스냅샷 설정
+    const _qs=QUEST_POOL[(G.questIdx||0)%QUEST_POOL.length];
+    if(_qs&&_qs.type==='stagereach'){
+      // 기존 questProg.stagereach 기반으로 역산
+      const _prev=Math.min(G.questProg.stagereach||0, _qs.base);
+      G.stageReachSnapshot=Math.max(0,(G.highestGlobalStage||1)-_prev);
+    } else {
+      // stagereach 퀘스트가 아닐 때는 현재 위치로 설정 (다음 stagereach 퀘스트부터 0부터 카운트)
+      G.stageReachSnapshot=G.highestGlobalStage||1;
+    }
+  }
   if(G.ptAcc===undefined)G.ptAcc=0;
   if(G.ptEva===undefined)G.ptEva=0;
   if(G.ptPen===undefined)G.ptPen=0;
