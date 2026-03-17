@@ -2170,7 +2170,7 @@ const SAVE_KEY = 'milkAdv_v6';
 // ══════════════════════════════════════════
 //  VERSION CHECK
 // ══════════════════════════════════════════
-const GAME_VERSION = 'v02_93';
+const GAME_VERSION = 'v02_99';
 // GitHub Pages 배포 시 아래 URL을 본인 레포로 변경하세요
 // 예: 'https://[계정].github.io/[레포]/version.json'
 const VERSION_CHECK_URL = 'version.json';
@@ -2296,21 +2296,73 @@ const GRADE_BORDER=['gc-border','gu-border','gr-border','gh-border','gl-border',
 // Lv1~2: 희귀까지만, 이후 2레벨마다 한 등급씩 개방
 // 상위등급 확률은 더욱 낮게 조정
 const GACHA_PROBS=[
-  [70,27,3,0,0,0,0],          // Lv1  - 희귀까지 (3%)
-  [65,30,5,0,0,0,0],          // Lv2  - 희귀까지 (5%)
-  [60,31,8.5,0.5,0,0,0],      // Lv3  - 영웅 개방 (0.5%)
-  [55,32,11,2,0,0,0],         // Lv4  - 영웅 (2%)
-  [50,31,14,4,1,0,0],         // Lv5  - 전설 개방 (1%)
-  [44,30,18,6,1.8,0.2,0],     // Lv6  - 전설 (1.8%)
-  [38,29,22,8,2.5,0.5,0],     // Lv7  - 전설 강화 (2.5%), 신화 아직 없음
-  [31,27,26,12,3.5,0.5,0],    // Lv8  - 전설 강화 (3.5%), 신화 아직 없음
-  [24,24,28,16,5,1.5,0.5],    // Lv9  - 신화 개방 (1.5%), 성물 극소 (0.5%)
-  [16,20,30,20,8,4,2],        // Lv10 - 신화 강화
-  [8,14,30,25,13,7,3],        // Lv11 - 성물 개방 (3%)
-  [3,8,27,30,19,9,4],         // Lv12 max
+  [70, 27, 3, 0, 0, 0, 0],// Lv1  - 희귀까지
+  [65, 30, 5, 0, 0, 0, 0],// Lv2  - 희귀까지
+  [60, 31, 8.5, 0.5, 0, 0, 0],// Lv3  - 영웅 개방
+  [55, 32, 11, 2, 0, 0, 0],// Lv4  - 영웅 개방
+  [50, 31, 14, 4, 1, 0, 0],// Lv5  - 전설
+  [44, 30, 18, 6, 1.8, 0.2, 0],// Lv6  - 전설
+  [38, 29, 22, 8, 2.5, 0.5, 0],// Lv7  - 전설
+  [31, 27, 26, 12, 3.5, 0.5, 0],// Lv8  - 전설
+  [25, 24, 28, 15, 5, 2.5, 0.5],// Lv9  - 전설
+  [18, 21, 28, 18, 7, 4, 4],// Lv10  - 전설
+  [10, 16, 28, 22, 12, 7, 5],// Lv11  - 신화
+  [5, 12, 26, 26, 16, 9, 6],// Lv12  - 신화
+  [3, 8, 22, 28, 20, 11, 8],// Lv13  - 신화
+  [2, 6, 18, 28, 23, 13, 10],// Lv14  - 신화
+  [2.2, 6.7, 20.0, 31.1, 25.5, 14.4, 0.1],// Lv15  - 성물 개방 (0.1%)
+  [2.2, 6.7, 20.0, 31.0, 25.5, 14.4, 0.2],// Lv16
+  [2.3, 6.6, 19.9, 31.0, 25.5, 14.4, 0.3],// Lv17
+  [2.2, 6.6, 19.9, 31.0, 25.5, 14.4, 0.4],// Lv18
+  [2.2, 6.6, 19.9, 31.0, 25.4, 14.4, 0.5],// Lv19
+  [2.2, 6.6, 19.9, 30.9, 25.4, 14.3, 0.7],// Lv20
+  [2.3, 6.6, 19.8, 30.8, 25.3, 14.3, 0.9],// Lv21
+  [2.1, 6.6, 19.8, 30.8, 25.3, 14.3, 1.1],// Lv22
+  [2.2, 6.6, 19.7, 30.7, 25.2, 14.3, 1.3],// Lv23
+  [2.2, 6.6, 19.7, 30.6, 25.2, 14.2, 1.5],// Lv24
+  [2.2, 6.5, 19.6, 30.6, 25.1, 14.2, 1.8],// Lv25
+  [2.2, 6.5, 19.6, 30.5, 25.0, 14.1, 2.1],// Lv26
+  [2.2, 6.5, 19.5, 30.4, 24.9, 14.1, 2.4],// Lv27
+  [2.0, 6.5, 19.5, 30.3, 24.9, 14.1, 2.7],// Lv28
+  [2.1, 6.5, 19.4, 30.2, 24.8, 14.0, 3.0],// Lv29
+  [2.2, 6.4, 19.3, 30.0, 24.7, 13.9, 3.5],// Lv30  - 성물 3.5%
+  [2.1, 6.4, 19.2, 29.9, 24.5, 13.9, 4.0],// Lv31
+  [2.1, 6.4, 19.1, 29.7, 24.4, 13.8, 4.5],// Lv32
+  [2.1, 6.3, 19.0, 29.6, 24.3, 13.7, 5.0],// Lv33
+  [2.2, 6.3, 18.9, 29.4, 24.1, 13.6, 5.5],// Lv34
+  [2.1, 6.3, 18.8, 29.2, 24.0, 13.6, 6.0],// Lv35
+  [2.1, 6.2, 18.7, 29.1, 23.9, 13.5, 6.5],// Lv36
+  [2.1, 6.2, 18.6, 28.9, 23.8, 13.4, 7.0],// Lv37
+  [2.0, 6.2, 18.5, 28.8, 23.6, 13.4, 7.5],// Lv38
+  [2.1, 6.1, 18.4, 28.6, 23.5, 13.3, 8.0],// Lv39
+  [2.0, 6.1, 18.3, 28.5, 23.4, 13.2, 8.5],// Lv40
+  [2.0, 6.1, 18.2, 28.3, 23.3, 13.1, 9.0],// Lv41
+  [2.0, 6.1, 18.2, 28.2, 23.2, 13.1, 9.2],// Lv42
+  [2.0, 6.0, 18.1, 28.2, 23.2, 13.1, 9.4],// Lv43
+  [2.0, 6.0, 18.1, 28.1, 23.1, 13.1, 9.6],// Lv44
+  [2.0, 6.0, 18.1, 28.1, 23.1, 13.0, 9.7],// Lv45
+  [2.0, 6.0, 18.0, 28.1, 23.1, 13.0, 9.8],// Lv46
+  [2.2, 6.0, 18.0, 28.0, 23.0, 13.0, 9.85],// Lv47
+  [2.1, 6.0, 18.0, 28.0, 23.0, 13.0, 9.9],// Lv48
+  [2.0, 6.0, 18.0, 28.0, 23.0, 13.0, 9.95],// Lv49
+  [2.0, 6.0, 18.0, 28.0, 23.0, 13.0, 10.0],// Lv50  max - 성물 10%
 ];
-const GACHA_THRESH=[0,50,150,350,700,1200,2000,3200,5000,8000,12000,18000];
-const GACHA_LV_COST=[0,3000,8000,20000,50000,120000,300000,700000,1500000,3000000,6000000,12000000];
+const GACHA_THRESH=[0, 50, 150, 350, 700, 1200, 2000, 3200, 5000, 8000, 12000, 18000, 28000, 42000, 60000, 85000, 106250, 132812, 166015, 207518, 259397, 324246, 405307, 506633, 633291, 791613, 989516, 1236895, 1546118, 1932647, 2415808, 3019760, 3774700, 4718375, 5897968, 7372460, 9215575, 11519468, 14399335, 17999168, 22498960, 28123700, 35154625, 43943281, 54929101, 68661376, 85826720, 107283400, 134104250, 167630312];
+const GACHA_LV_COST=[0, 3000, 8000, 20000, 50000, 120000, 300000, 700000, 1500000, 3000000, 6000000, 12000000, 25000000, 50000000, 100000000, 200000000, 260000000, 338000000, 439400000, 571220000, 742586000, 965361800, 1254970340, 1631461442, 2120899874, 2757169836, 3584320786, 4659617021, 6057502127, 7874752765, 10237178594, 13308332172, 17300831823, 22491081369, 29238405779, 38009927512, 49412905765, 64236777494, 83507810742, 108560153964, 141128200153, 183466660198, 238506658257, 310058655734, 403076252454, 523999128190, 681198866647, 885558526641, 1151226084633, 1496593910022];
+// 무제한 레벨: Lv16 이후 필요 횟수·비용 공식으로 무한 산출
+function gachaThreshFor(lv){
+  if(lv<GACHA_THRESH.length)return GACHA_THRESH[lv];
+  // Lv50 이후: 마지막 값에서 ×1.25씩 증가
+  return Math.floor(GACHA_THRESH[GACHA_THRESH.length-1]*Math.pow(1.25,lv-GACHA_THRESH.length+1));
+}
+function gachaCostFor(lv){
+  if(lv<GACHA_LV_COST.length)return GACHA_LV_COST[lv];
+  return Math.floor(GACHA_LV_COST[GACHA_LV_COST.length-1]*Math.pow(1.3,lv-GACHA_LV_COST.length+1));
+}
+// 등급 개방: Lv1-2 희귀, Lv3-4 영웅, Lv5-10 전설, Lv11-14 신화, Lv15+ 성물
+function maxGradeFor(lv){
+  return lv<=2?2:lv<=4?3:lv<=10?4:lv<=14?5:6;
+}
 
 const SLOTS=[
   {id:'weapon',  name:'무기',  emoji:'⚔️', stat:'atk',     base:8,  base2:'critdmg', base2val:4},
@@ -2361,75 +2413,75 @@ const STAT_DEFS=[
 const ACTIVE_SKILLS=[
   // ── 초반 ──
   // 강타: 단타. lv10 목표 dmg≈3600 → base200+lv*16, bonus5: +40%
-  {id:'strike',name:'강타',emoji:'⚔️',unlockLv:10,cd:4,
+  {id:'strike',name:'강타',emoji:'⚔️',unlockLv:10,cd:4,maxLv:100,
     descFull:'기본 강타. 빠른 쿨타임의 단타 일격. 초반 주력기.',
     desc:lv=>`공격력의 ${200+lv*16}% / 5레벨마다 +40%`,
     nextDesc:lv=>`공격력의 ${200+(lv+1)*16}%`,
     bonus5:lv=>Math.floor(lv/5)*40},
   // 연속베기: 다단히트. lv10 목표 dps>강타(1100) → 4타 × base80+lv*8%, bonus5: +15% 데미지
-  {id:'combo',name:'연속베기',emoji:'🗡️',unlockLv:20,cd:6,
+  {id:'combo',name:'연속베기',emoji:'🗡️',unlockLv:20,cd:5,maxLv:100,
     descFull:'빠른 연속 베기. 타수 고정 4회, 레벨마다 배율 성장. 5레벨마다 각 타격 데미지 +15%.',
     desc:lv=>`4회 × 공격력의 ${80+lv*8}% / 5레벨마다 각 타 +15%${Math.floor(lv/5)>0?' (현재 +'+Math.floor(lv/5)*15+'%)':''}`,
     nextDesc:lv=>`4회 × 공격력의 ${80+(lv+1)*8}%`,
     bonus5:lv=>Math.floor(lv/5)*15},  // 각 타 데미지 % 추가
   // 횡참: cd5 빠른 중타. lv10 목표 dmg≈6500 → base420+lv*23%, bonus5: +60%
-  {id:'slash',name:'횡참',emoji:'🌙',unlockLv:35,cd:5,
+  {id:'slash',name:'횡참',emoji:'🌙',unlockLv:35,cd:4,maxLv:100,
     descFull:'빠른 쿨타임의 횡베기. 자주 쓸 수 있는 중거리 일격.',
     desc:lv=>`공격력의 ${420+lv*23}% / 5레벨마다 +60%`,
     nextDesc:lv=>`공격력의 ${420+(lv+1)*23}%`,
     bonus5:lv=>Math.floor(lv/5)*60},
   // 찌르기: cd3 초단쿨 2연타. lv10 목표 dmg≈4500 → 2타 × base160+lv*7%, bonus5: +40%
-  {id:'stab',name:'찌르기',emoji:'🔱',unlockLv:55,cd:3,
+  {id:'stab',name:'찌르기',emoji:'🔱',unlockLv:55,cd:3,maxLv:100,
     descFull:'초단 쿨타임 2연타. 갑옷 틈을 파고드는 빠른 찌르기.',
     desc:lv=>`2회 × 공격력의 ${160+lv*7}% / 5레벨마다 +40%`,
     nextDesc:lv=>`2회 × ${160+(lv+1)*7}%`,
     bonus5:lv=>Math.floor(lv/5)*40},
   // ── 중반 ──
   // 관통격: cd7 방어 약화. lv10 목표 dps>찌르기(2066) → base1100+lv*40%, bonus5: +120%
-  {id:'pierce_shot',name:'관통격',emoji:'🏹',unlockLv:80,cd:7,
+  {id:'pierce_shot',name:'관통격',emoji:'🏹',unlockLv:80,cd:4,maxLv:100,
     descFull:'방어구 관통 + 3초 방어 약화. 탱킹 몬스터에 효과적.',
     desc:lv=>`공격력의 ${1100+lv*40}% + 취약(받는 피해 +25%, 3초) / 5레벨마다 +120%`,
     nextDesc:lv=>`공격력의 ${1100+(lv+1)*40}%`,
     bonus5:lv=>Math.floor(lv/5)*120},
   // 선풍참: cd11 HP비례. lv10 목표 기본dps>관통격(2485) → base2000+lv*50%, bonus5: +140%
-  {id:'whirlwind',name:'선풍참',emoji:'🌪️',unlockLv:110,cd:11,
+  {id:'whirlwind',name:'선풍참',emoji:'🌪️',unlockLv:110,cd:5,maxLv:100,
     descFull:'단타이지만 몬스터 현재 HP 비례 추가 피해. 고체력 적에게 강력.',
     desc:lv=>`공격력의 ${2000+lv*50}% + 현재HP의 ${(4+lv*.12).toFixed(1)}% / 5레벨마다 +140%`,
     nextDesc:lv=>`공격력의 ${2000+(lv+1)*50}% + 현재HP ${(4+(lv+1)*.12).toFixed(1)}%`,
     bonus5:lv=>Math.floor(lv/5)*140},
   // 낙하참: cd12 보스특화. lv10 목표 dps>선풍참(2527) → base2200+lv*60%, bonus5: +180%
-  {id:'skyfall',name:'낙하참',emoji:'⬇️',unlockLv:150,cd:12,
+  {id:'skyfall',name:'낙하참',emoji:'⬇️',unlockLv:150,cd:5,maxLv:100,
     descFull:'전신 무게를 실은 낙하 일격. 보스에게 추가 배율 적용.',
     desc:lv=>`공격력의 ${2200+lv*60}% (보스 +50%) / 5레벨마다 +180%`,
     nextDesc:lv=>`공격력의 ${2200+(lv+1)*60}%`,
     bonus5:lv=>Math.floor(lv/5)*180},
   // 폭쇄: cd11 HP비례 강화. lv10 목표 dps>낙하참(2958) → base2400+lv*60%, bonus5: +160%
-  {id:'explosion',name:'폭쇄',emoji:'💥',unlockLv:200,cd:11,
+  {id:'explosion',name:'폭쇄',emoji:'💥',unlockLv:200,cd:4,maxLv:100,
     descFull:'검기 폭발로 현재 HP 비례 충격파. 잔피 보스에게 특히 강력.',
     desc:lv=>`공격력의 ${2400+lv*60}% + 현재HP의 ${(6+lv*.2).toFixed(1)}% / 5레벨마다 +160%`,
     nextDesc:lv=>`공격력의 ${2400+(lv+1)*60}% +현재HP ${(6+(lv+1)*.2).toFixed(1)}%`,
     bonus5:lv=>Math.floor(lv/5)*160},
   // ── 후반 ──
   // 십자참: cd8 2연타 후반. lv10 목표 dmg≈23200 → 2타 × base950+lv*40%, bonus5: +120%
-  {id:'cross_slash',name:'십자참',emoji:'✝️',unlockLv:260,cd:8,
+  {id:'cross_slash',name:'십자참',emoji:'✝️',unlockLv:260,cd:5,maxLv:100,
     descFull:'X자 2타 강타. 레벨당 배율 성장이 우수한 딜링기.',
     desc:lv=>`2회 × 공격력의 ${950+lv*40}% / 5레벨마다 +120%`,
     nextDesc:lv=>`2회 × ${950+(lv+1)*40}%`,
     bonus5:lv=>Math.floor(lv/5)*120},
   // 처단격: cd10 처단기. lv10 목표 dps>십자참(4575) → base3400+lv*80%, bonus5: +300%
-  {id:'execute_slash',name:'처단격',emoji:'🩸',unlockLv:330,cd:10,
+  {id:'execute_slash',name:'처단격',emoji:'🩸',unlockLv:330,cd:5,maxLv:100,
     descFull:'HP 35% 이하 즉시 처단. 초과 시도 강력한 단타 발동.',
     desc:lv=>`HP 35% 이하 즉처치 / 초과 시 공격력의 ${3400+lv*80}% / 5레벨마다 +300%`,
     nextDesc:lv=>`공격력의 ${3400+(lv+1)*80}%`,
     bonus5:lv=>Math.floor(lv/5)*300},
   // 검풍진: cd18 5~7타 체증. lv10 목표 dmg≈68400 → 5타×base800+lv*28%(체증+20%), bonus5: 타수+1
-  {id:'blade_storm',name:'검풍진',emoji:'🌀',unlockLv:420,cd:18,
+  {id:'blade_storm',name:'검풍진',emoji:'🌀',unlockLv:420,cd:6,maxLv:100,
     descFull:'5연속 검기 폭풍. 타격마다 배율 20% 체증으로 후반 타격이 강력.',
     desc:lv=>`${5+Math.floor(lv/5)}회 × 공격력의 ${800+lv*28}%(타수마다 +20%) / 5레벨마다 타수 +1`,
     nextDesc:lv=>`${5+Math.floor((lv+1)/5)}회 × ${800+(lv+1)*28}%`,
     bonus5:lv=>Math.floor(lv/5)},  // 타수 추가
   // 절대검: cd20 궁극. lv10 목표 dps>검풍진(6720) → base10000+lv*200%, bonus5: +800%
-  {id:'chaos',name:'절대검',emoji:'🌑',unlockLv:500,cd:20,
+  {id:'chaos',name:'절대검',emoji:'🌑',unlockLv:500,cd:7,maxLv:100,
     descFull:'모든 검술의 정수를 담은 궁극 단타. 압도적인 단일 화력.',
     desc:lv=>`공격력의 ${10000+lv*200}% / 5레벨마다 +800%`,
     nextDesc:lv=>`공격력의 ${10000+(lv+1)*200}%`,
@@ -2437,36 +2489,47 @@ const ACTIVE_SKILLS=[
 ];
 
 const PASSIVE_SKILLS=[
-  {id:'vitality',name:'강인함',emoji:'🛡️',unlockLv:10,
+  // ── 초반 (생존·공격 균형) ──
+  {id:'vitality',name:'강인함',emoji:'🛡️',unlockLv:10,maxLv:100,
     descFull:'HP를 근본 강화. 초반 생존의 핵심 패시브.',
-    desc:lv=>`최대 HP +${(5+lv*.5).toFixed(1)}%`,apply:lv=>({hpPct:5+lv*.5})},
-  {id:'focus',name:'집중',emoji:'🎯',unlockLv:30,
-    descFull:'연속 타격 시 치명타 확률 누적 상승. 피격 시 초기화.',
-    desc:lv=>`연속 타격마다 치명타 +${(1+lv*.05).toFixed(2)}% 누적 (피격 시 리셋)`,apply:lv=>({focusCritPer:1+lv*.05})},
-  {id:'drain',name:'흡혈',emoji:'🩸',unlockLv:60,
-    descFull:'피해의 일부를 HP로 회복. 지속전에서 생존력을 보조.',
-    desc:lv=>`가한 피해의 ${(0.2+lv*0.1).toFixed(1)}%를 HP로 회복`,apply:lv=>({drainPct:(0.2+lv*0.1)/100})},
-  {id:'rage',name:'분노',emoji:'💢',unlockLv:100,
-    descFull:'처치마다 분노 스택 누적 → 공격력 대폭 상승. 연속 처치일수록 강해짐.',
-    desc:lv=>`처치 시 공격력 +${(2+lv*.1).toFixed(1)}% 누적 (최대 ${10+Math.floor(lv/15)}스택)`,apply:lv=>({ragePerStack:2+lv*.1,rageMax:10+Math.floor(lv/15)})},
-  {id:'keen',name:'날카로움',emoji:'🔪',unlockLv:150,
+    desc:lv=>`최대 HP +${(5+lv*0.5).toFixed(1)}%`,apply:lv=>({hpPct:5+lv*.5})},
+  {id:'assault',name:'돌격',emoji:'⚔️',unlockLv:20,maxLv:100,
+    descFull:'순수 공격력 % 증가. 초반부터 딜 성장에 기여하는 범용 공격 패시브.',
+    desc:lv=>`공격력 +${(3+lv*0.22).toFixed(1)}%`,apply:lv=>({assaultAtkPct:3+lv*0.22})},
+  {id:'drain',name:'흡혈',emoji:'🩸',unlockLv:60,maxLv:100,
+    descFull:'피해의 일부를 HP로 회복. 만렙 기준 최대 10% 흡혈.',
+    desc:lv=>`가한 피해의 ${(lv*0.1).toFixed(1)}%를 HP로 회복 (최대 10%)`,apply:lv=>({drainPct:Math.min(0.10,lv*0.1/100)})},
+  // ── 중반 (공격 특화) ──
+  {id:'rage',name:'분노',emoji:'💢',unlockLv:100,maxLv:100,
+    descFull:'처치마다 분노 스택 누적 → 공격력 상승. 최대 10스택 고정.',
+    desc:lv=>`처치 시 공격력 +${(0.5+lv*.025).toFixed(2)}% 누적 (최대 10스택, 최고 +${(10*(0.5+lv*.025)).toFixed(0)}%)`,
+    apply:lv=>({ragePerStack:0.5+lv*.025,rageMax:10})},
+  {id:'keen',name:'날카로움',emoji:'🔪',unlockLv:150,maxLv:100,
     descFull:'치명타 피해 배율 극대화. 치명타율이 높을수록 가치 상승.',
-    desc:lv=>`치명타 피해 +${(20+lv*.5).toFixed(0)}%`,apply:lv=>({critDmgBonus:20+lv*.5})},
-  {id:'pierce',name:'약점간파',emoji:'👁️',unlockLv:200,
+    desc:lv=>`치명타 피해 +${(20+lv*1.0).toFixed(0)}%`,apply:lv=>({critDmgBonus:20+lv*1.0})},
+  {id:'pierce',name:'약점간파',emoji:'👁️',unlockLv:200,maxLv:100,
     descFull:'보스 방어 무시 추가 피해. 보스 공략 핵심 패시브.',
-    desc:lv=>`보스 방어력 ${(10+lv*.5).toFixed(0)}% 무시`,apply:lv=>({piercePct:(10+lv*.5)/100})},
-  {id:'execute',name:'처형자',emoji:'💀',unlockLv:250,
-    descFull:'일반 몬스터 HP 특정% 이하 즉시 처치. 사냥 속도 대폭 향상.',
-    desc:lv=>`일반 몬스터 HP ${(8+lv*.2).toFixed(0)}% 이하 시 즉시 처치`,apply:lv=>({executePct:(8+lv*.2)/100})},
-  {id:'cycle',name:'마력순환',emoji:'🔮',unlockLv:350,
-    descFull:'스킬 발동 시 전체 쿨타임 단축. 스킬 의존도 높을수록 필수.',
-    desc:lv=>`스킬 발동 시 전체 쿨타임 ${(0.5+lv*.04).toFixed(1)}초 감소`,apply:lv=>({cycleCd:0.5+lv*.04})},
-  {id:'chain',name:'연쇄',emoji:'🔄',unlockLv:400,
-    descFull:'처치 전환 딜레이 단축 + 보스 진입 시 분노 스택 유지.',
-    desc:lv=>`전환 딜레이 ${Math.min(550,(50+lv*5))}ms 감소 + 보스 진입 시 분노 스택 유지`,apply:lv=>({chainDelay:Math.min(0.55,(0.05+lv*.005)),keepRage:true})},
-  {id:'haste',name:'시간왜곡',emoji:'⏱️',unlockLv:500,
-    descFull:'공격 속도 극한 강화. 모든 딜이 속도에 비례하므로 범용성 최상.',
-    desc:lv=>`공격 주기 단축 (현재 ${Math.max(300,680-lv*2)}ms)`,apply:lv=>({tickSpeed:Math.max(300,680-lv*2)})},
+    desc:lv=>`보스 방어력 ${(10+lv*0.5).toFixed(0)}% 무시`,apply:lv=>({piercePct:(10+lv*.5)/100})},
+  {id:'execute',name:'처형자',emoji:'💀',unlockLv:250,maxLv:100,
+    descFull:'일반 몬스터 HP 특정% 이하 즉시 처치. 1렙 1%, 만렙 20%.',
+    desc:lv=>`일반 몬스터 HP ${(lv*0.19+0.81).toFixed(0)}% 이하 시 즉시 처치`,apply:lv=>({executePct:(lv*0.19+0.81)/100})},
+  {id:'bossbane',name:'보스킬러',emoji:'👑',unlockLv:300,maxLv:100,
+    descFull:'보스에게 가하는 피해 직접 증가. 만렙 기준 +200%. 보스 공략의 핵심.',
+    desc:lv=>`보스 피해 +${(2+lv*1.98).toFixed(0)}%`,apply:lv=>({bossBanePct:2+lv*1.98})},
+  // ── 후반 (유틸·극딜) ──
+  {id:'precision',name:'정밀',emoji:'🎯',unlockLv:320,maxLv:100,
+    descFull:'명중 % 증가. 기존 명중에 곱연산 적용. 1렙 1%, 만렙 50%.',
+    desc:lv=>`명중 +${(lv*0.5+0.5).toFixed(1)}% (현재 명중에 곱적용)`,apply:lv=>({precisionPct:lv*0.5+0.5})},
+  {id:'cycle',name:'마력순환',emoji:'🔮',unlockLv:370,maxLv:100,
+    descFull:'스킬 발동 시 전체 쿨타임 % 감소. 쿨이 짧을수록 효율 증가.',
+    desc:lv=>`스킬 발동 시 전체 쿨타임 ${(2+lv*0.18).toFixed(0)}% 감소`,apply:lv=>({cyclePct:2+lv*0.18})},
+  {id:'penetration',name:'철갑파쇄',emoji:'🔩',unlockLv:450,maxLv:100,
+    descFull:'관통 % 증가. 기존 관통에 곱연산 적용. 1렙 1%, 만렙 50%.',
+    desc:lv=>`관통 +${(lv*0.5+0.5).toFixed(1)}% (현재 관통에 곱적용)`,apply:lv=>({penetrationPct:lv*0.5+0.5})},
+  {id:'haste',name:'광폭화',emoji:'⚡',unlockLv:500,maxLv:100,
+    descFull:'공격 속도 증가. 모든 딜이 속도에 비례하므로 범용성 최상.',
+    desc:lv=>`공격 속도 +${Math.min(57,Math.round((700-Math.max(300,680-lv*2))/700*100))}% (주기 ${Math.max(300,680-lv*2)}ms)`,
+    apply:lv=>({tickSpeed:Math.max(300,680-lv*2)})},
 ];
 
 const ACHIEVEMENTS=[
@@ -3007,7 +3070,8 @@ function getLifeStealPct(){
   return Math.min(0.10,raw);
 }
 function getBossDmgBonus(){
-  return((G.enhanceLevels.bossdmg||0)*1.5+getEqPrefixSum('bossDmg'))/100;
+  const bane=(getPassiveStat('bossbane')||{bossBanePct:0}).bossBanePct;
+  return((G.enhanceLevels.bossdmg||0)*1.5+getEqPrefixSum('bossDmg')+bane)/100;
 }
 // Base stats: log scale to prevent explosion
 function getBaseAtk(){return 10+Math.floor(Math.log(G.level+1)*12)+G.ptAtk*2;}
@@ -3020,7 +3084,8 @@ function getFinalAtk(){
   const sl=getSlotBonus('weapon','atk')+getSlotBonus('gloves','atk');
   const totalPct=getEnhPct('atk')+getAllPctBonus('atk');
   const rage=G.rageStacks>0?(getPassiveStat('rage')||{ragePerStack:0}).ragePerStack*(G.rageStacks||0):0;
-  return Math.floor((base+eq+sl)*(1+(totalPct+rage)/100));
+  const assault=(getPassiveStat('assault')||{assaultAtkPct:0}).assaultAtkPct;
+  return Math.floor((base+eq+sl)*(1+(totalPct+rage+assault)/100));
 }
 function getFinalHp(){
   const base=getBaseHp();
@@ -3066,17 +3131,21 @@ function getFinalCritDmg(){
 function getFinalDmgMult(){
   return 1+(G.ptFinalDmg||0)*0.0005+getSlotBonus('ring','finaldmg')*0.001;
 }
-// 명중: 기본 100 + 포인트*2 + 슬롯(목걸이/팔찌) + 접두사
+// 명중: 기본 100 + 포인트*2 + 슬롯(목걸이/팔찌) + 접두사 + 정밀 패시브
 function getFinalAcc(){
-  return Math.floor(100+(G.ptAcc||0)*2+getSlotBonus('necklace','acc')+getSlotBonus('bracelet','acc')+getEqPrefixSum('acc'));
+  const base=Math.floor(100+(G.ptAcc||0)*2+getSlotBonus('necklace','acc')+getSlotBonus('bracelet','acc')+getEqPrefixSum('acc'));
+  const precPct=(getPassiveStat('precision')||{precisionPct:0}).precisionPct;
+  return Math.floor(base*(1+precPct/100));
 }
 // 회피: 포인트*2 + 슬롯(장화/귀걸이) + 접두사
 function getFinalEva(){
   return Math.floor((G.ptEva||0)*2+getSlotBonus('boots','eva')+getSlotBonus('earring','eva')+getEqPrefixSum('eva'));
 }
-// 방어구 관통: 포인트*3 + 슬롯(장갑) + 접두사
+// 방어구 관통: 포인트*3 + 슬롯(장갑) + 접두사, 이후 철갑파쇄 % 곱적용
 function getFinalPen(){
-  return Math.floor((G.ptPen||0)*3+getSlotBonus('gloves','pen')+getEqPrefixSum('pen'));
+  const base=Math.floor((G.ptPen||0)*3+getSlotBonus('gloves','pen')+getEqPrefixSum('pen'));
+  const penPct=(getPassiveStat('penetration')||{penetrationPct:0}).penetrationPct;
+  return Math.floor(base*(1+penPct/100));
 }
 // 관통률: pen/(pen+500), 최대 90%
 function getPenRate(){
@@ -3158,7 +3227,10 @@ function getMonsterStats(isBoss,bossType){
   const baseAcc=Math.floor(100+gs*0.7);                  // 완만화
   const baseDef=Math.floor(gs*3.0);      // 방어 대폭 상향
   const exp=Math.floor((30+gs*4)*getExpBonus());          // 대폭 상향
-  const gold=Math.floor((10+gs*1.4)*getGoldBonus());
+  // 골드: 선형 기반 + 지수 보정 (gs100부터 의미있게 증가)
+  const goldBase=10+gs*1.4;
+  const goldExpBoost=gs>100?Math.pow(1.006,gs-100):1;
+  const gold=Math.floor(goldBase*goldExpBoost*getGoldBonus());
   if(isBoss){
     const bt=bossType||getBossType(G.stage);
     const hpMult=bt==='elite'?35:bt==='vip'?18:4.5;
@@ -3458,7 +3530,7 @@ function gameTick(){
   } else {
     let dmg=getFinalAtk();
     if(bfx.atkMult!==1)dmg=Math.floor(dmg*bfx.atkMult);
-    const focusCritBonus=(()=>{const fp=getPassiveStat('focus');return fp?Math.min(1,(G.focusStacks||0)*fp.focusCritPer/100):0;})();
+    const focusCritBonus=0; // 집중 패시브 삭제됨
     const cr=Math.min(1,getFinalCrit()+bfx.critBonus+focusCritBonus);const cd=getFinalCritDmg();
     const isCrit=Math.random()<cr;
     if(isCrit)dmg=Math.floor(dmg*cd);
@@ -3653,12 +3725,14 @@ function fireSkill(sid){
   }
 
   G.skillCooldowns[sid]=sk.cd*1000;
-  // cycle 패시브: 발동 시 전체 쿨타임 단축
+  // cycle 패시브: 발동 시 전체 쿨타임 % 단축
   const cp2=getPassiveStat('cycle');
   if(cp2){
     G.equippedSkills.forEach(s=>{
-      if(s!==sid&&(G.skillCooldowns[s]||0)>0)
-        G.skillCooldowns[s]=Math.max(0,(G.skillCooldowns[s]||0)-cp2.cycleCd*1000);
+      if(s!==sid&&(G.skillCooldowns[s]||0)>0){
+        const reduction=(G.skillCooldowns[s]||0)*(cp2.cyclePct||0)/100;
+        G.skillCooldowns[s]=Math.max(0,(G.skillCooldowns[s]||0)-reduction);
+      }
     });
   }
   G.skillUseCount=(G.skillUseCount||0)+1;
@@ -3707,7 +3781,9 @@ function onMonsterDead(){
   let gainedShards=0,gainedSouls=0;
   if(G.isBoss){
     G.totalBossKills++;G.questProg.boss++;
-    G.tickets=Math.min(999,G.tickets+1);
+    // 반복 보스 파밍 시 티켓도 감소 (최초 처치는 항상 1장)
+    const bossTicket=isRepeatBoss?(Math.random()<repeatMult?1:0):1;
+    if(bossTicket)G.tickets=Math.min(9999,G.tickets+1);
     const shardBonus=bt==='elite'?50+G.chapter*5:bt==='vip'?20+G.chapter*2:5+G.chapter*2;
     gainedShards=Math.floor(shardBonus*pm);
     const wasNoShard=G.shards===0;
@@ -3726,7 +3802,7 @@ function onMonsterDead(){
         :bt==='vip'
         ?{tickets:15,shards:100,skillPts:1}
         :{tickets:5,shards:30};
-      G.tickets=Math.min(999,G.tickets+(firstReward.tickets||0));
+      G.tickets=Math.min(9999,G.tickets+(firstReward.tickets||0));
       G.shards+=(firstReward.shards||0);
       if(firstReward.skillPts)G.skillPts+=(firstReward.skillPts||0);
       const rLabel=bt==='elite'?'👑 엘리트보스':bt==='vip'?'💎 정예보스':'👹 일반보스';
@@ -3741,7 +3817,7 @@ function onMonsterDead(){
   const rp=getPassiveStat('rage');if(rp)G.rageStacks=Math.min(rp.rageMax,(G.rageStacks||0)+1);
   G.focusStacks=0;
   if(G.killSinceTicket>=5){
-    G.killSinceTicket=0;G.tickets=Math.min(999,G.tickets+1);
+    G.killSinceTicket=0;G.tickets=Math.min(9999,G.tickets+1);
     showNotif('🎫 뽑기권 +1','reward');
   }
   if(G.autoGacha&&G.tickets>0&&!pendingAutoGachaPaused)doGacha(true);
@@ -4650,7 +4726,7 @@ function rollGrade(){
   const probs=GACHA_PROBS[Math.min(G.gachaLevel-1,GACHA_PROBS.length-1)];
   // 등급 잠금: Lv1~2=희귀까지, 이후 2레벨마다 한 등급씩 개방
   // Lv1~2: maxGrade=2(희귀), Lv3~4: maxGrade=3(영웅), Lv5~6: maxGrade=4(전설), Lv7~8: maxGrade=5(신화), Lv9+: maxGrade=6(성물)
-  const maxGrade=G.gachaLevel<=2?2:G.gachaLevel<=4?3:G.gachaLevel<=6?4:G.gachaLevel<=8?5:6;
+  const maxGrade=maxGradeFor(G.gachaLevel);
   const r=Math.random()*100;let cum=0;
   for(let i=0;i<=maxGrade;i++){cum+=probs[i];if(r<cum)return i;}
   return maxGrade;
@@ -4773,7 +4849,7 @@ function _agSummaryAdd(item){
 function doGacha(auto=false){
   if(G.tickets<=0){if(!auto)showNotif('🎫 뽑기권 부족!','top');return;}
   // 장비뽑기 레벨업 가능 → 팝업 강제 표시 + 자동뽑기 중단
-  if(G.gachaLevel<GACHA_PROBS.length&&G.gachaTotalCount>=GACHA_THRESH[G.gachaLevel]){
+  if(G.gachaTotalCount>=gachaThreshFor(G.gachaLevel)){
     showGachaLvupBanner();
     document.getElementById('gacha-lvup-btn').classList.add('available');
     // 자동뽑기 중단
@@ -5025,27 +5101,27 @@ function agToggle(){openAutoGachaPopup();}
 function agAutoEquipToggle(){agAutoEquipTogglePreview();}
 function openGachaLvPopup(){
   const lv=G.gachaLevel;
-  if(lv>=GACHA_PROBS.length){showNotif('최대 레벨입니다','top');return;}
+  // 무제한 레벨업 가능
   document.getElementById('prob-cur-lv').textContent=lv;
   document.getElementById('prob-next-lv').textContent=lv+1;
   const cur=GACHA_PROBS[Math.min(lv-1,GACHA_PROBS.length-1)];
   const nxt=GACHA_PROBS[Math.min(lv,GACHA_PROBS.length-1)];
-  const maxGradeNow=G.gachaLevel<=2?2:G.gachaLevel<=4?3:G.gachaLevel<=6?4:G.gachaLevel<=8?5:6;
-  const maxGradeNext=lv+1<=2?2:lv+1<=4?3:lv+1<=6?4:lv+1<=8?5:6;
+  const maxGradeNow=maxGradeFor(G.gachaLevel);
+  const maxGradeNext=maxGradeFor(lv+1);
   const gradeOpenMsg=maxGradeNext>maxGradeNow?`<div style="font-size:9px;color:var(--gold);margin-top:4px">✨ ${GNAMES[maxGradeNext]} 등급 개방!</div>`:'';
   document.getElementById('prob-rows').innerHTML=GNAMES.map((n,i)=>{
     const locked=i>maxGradeNow;
     return`<div class="prob-compare" style="${locked?'opacity:.3':''}"><span>${GEMOJI[i]} ${n}${locked?' 🔒':''}</span><span class="prob-cur">${cur[i]}%</span><span class="prob-next">${nxt[i]}%</span></div>`;
   }).join('')+gradeOpenMsg;
-  const cost=GACHA_LV_COST[lv];const needed=GACHA_THRESH[lv];
+  const cost=gachaCostFor(lv);const needed=gachaThreshFor(lv);
   const canUp=G.gachaTotalCount>=needed&&G.gold>=cost;
   document.getElementById('lv-up-cost').innerHTML=`필요 뽑기: ${fmtNum(needed)}회 (현재 ${G.gachaTotalCount})<br>비용: 💰 ${fmtNum(cost)}`;
   document.getElementById('gacha-do-lvup-btn').disabled=!canUp;
   document.getElementById('gacha-lv-popup').classList.add('show');
 }
 function doGachaLevelUp(){
-  const lv=G.gachaLevel;if(lv>=GACHA_PROBS.length)return;
-  const cost=GACHA_LV_COST[lv];const needed=GACHA_THRESH[lv];
+  const lv=G.gachaLevel;
+  const cost=gachaCostFor(lv);const needed=gachaThreshFor(lv);
   if(G.gachaTotalCount<needed){showNotif(`뽑기 ${fmtNum(needed)}회 필요`,'top');return;}
   if(G.gold<cost){showNotif('💰 골드 부족!','top');return;}
   G.gold-=cost;G.gachaLevel++;
@@ -5062,8 +5138,8 @@ function doGachaLevelUp(){
 }
 function closeGachaLvPopup(){document.getElementById('gacha-lv-popup').classList.remove('show');}
 function updateGachaMini(){
-  const canLvup=G.gachaLevel<GACHA_PROBS.length&&G.gachaTotalCount>=GACHA_THRESH[G.gachaLevel];
-  const canAffordLvup=canLvup&&G.gold>=GACHA_LV_COST[G.gachaLevel];
+  const canLvup=G.gachaTotalCount>=gachaThreshFor(G.gachaLevel);
+  const canAffordLvup=canLvup&&G.gold>=gachaCostFor(G.gachaLevel);
   const lvupBtn=document.getElementById('gacha-lvup-btn');
   const overlayBtn=document.getElementById('gacha-lvup-overlay-btn');
   const mainBtn=document.getElementById('gacha-main-btn');
@@ -5076,7 +5152,7 @@ function updateGachaMini(){
     overlayBtn.style.opacity=canAffordLvup?'1':'0.55';
     if(canLvup){
       const costLbl=document.getElementById('gacha-lvup-cost-lbl');
-      if(costLbl)costLbl.textContent=canAffordLvup?`💰 ${fmtNum(GACHA_LV_COST[G.gachaLevel])}골드`:'💰 골드 부족';
+      if(costLbl)costLbl.textContent=canAffordLvup?`💰 ${fmtNum(gachaCostFor(G.gachaLevel))}골드`:'💰 골드 부족';
     }
   }
   // 레벨업 조건 충족됐지만 골드 부족 시 메인 버튼 비활성화 + 안내
@@ -5091,13 +5167,13 @@ function updateGachaMini(){
   }
 
   const lv=G.gachaLevel;document.getElementById('glv-val').textContent=lv;
-  const next=lv<GACHA_THRESH.length?GACHA_THRESH[lv]:GACHA_THRESH[GACHA_THRESH.length-1];
+  const next=gachaThreshFor(lv);
   const cur=G.gachaTotalCount;
   document.getElementById('gacha-lv-fill').style.width=Math.min(100,(cur/next)*100)+'%';
   const countEl=document.getElementById('gacha-lv-count');
   if(countEl)countEl.textContent=`${fmtNum(cur)}/${fmtNum(next)}회`;
 }
-function fragToTicket(){if(G.shards<100){showNotif('🔩 파편 100개 필요','top');return;}G.shards-=100;G.tickets=Math.min(999,G.tickets+1);showNotif('🎫 뽑기권 +1','reward');updateUI();}
+function fragToTicket(){if(G.shards<100){showNotif('🔩 파편 100개 필요','top');return;}G.shards-=100;G.tickets=Math.min(9999,G.tickets+1);showNotif('🎫 뽑기권 +1','reward');updateUI();}
 function fragToSkillPt(){if(G.shards<500){showNotif('🔩 파편 500개 필요','top');return;}G.shards-=500;G.skillPts++;showNotif('✨ 스킬포인트 +1','reward');updateUI();}
 
 // ══════════════════════════════════════════
@@ -5424,21 +5500,48 @@ function checkSkillUnlocks(){
 }
 function upgradeSkill(id,type){
   if(G.skillPts<=0){showNotif('✨ 스킬포인트 부족!','top');return;}
+  if(type==='active'){
+    const sk=ACTIVE_SKILLS.find(s=>s.id===id);
+    if(sk&&sk.maxLv&&(G.activeSkillLevels[id]||0)>=sk.maxLv){showNotif('🔒 만렙 달성!','top');return;}
+  }
+  if(type==='passive'){
+    const sk=PASSIVE_SKILLS.find(s=>s.id===id);
+    if(sk&&sk.maxLv&&(G.passiveSkillLevels[id]||0)>=sk.maxLv){showNotif('🔒 만렙 달성!','top');return;}
+  }
   const prevCP=calcCP();G.skillPts--;
   if(type==='active')G.activeSkillLevels[id]=(G.activeSkillLevels[id]||0)+1;
   else G.passiveSkillLevels[id]=(G.passiveSkillLevels[id]||0)+1;
   showCPChange(prevCP,calcCP());updateUI();renderSkillTab();
 }
 function upgradeSkillBulk(id,type,amt){
-  const actual=G.skillPts; // 잔여 포인트 전부
-  if(actual<=0){showNotif('✨ 스킬포인트 부족!','top');return;}
+  if(G.skillPts<=0){showNotif('✨ 스킬포인트 부족!','top');return;}
+  let maxAdd=G.skillPts;
+  if(type==='active'){
+    const sk=ACTIVE_SKILLS.find(s=>s.id===id);
+    if(sk&&sk.maxLv){
+      const cur=G.activeSkillLevels[id]||0;
+      const room=sk.maxLv-cur;
+      if(room<=0){showNotif('🔒 만렙 달성!','top');return;}
+      maxAdd=Math.min(maxAdd,room);
+    }
+  }
+  if(type==='passive'){
+    const sk=PASSIVE_SKILLS.find(s=>s.id===id);
+    if(sk&&sk.maxLv){
+      const cur=G.passiveSkillLevels[id]||0;
+      const room=sk.maxLv-cur;
+      if(room<=0){showNotif('🔒 만렙 달성!','top');return;}
+      maxAdd=Math.min(maxAdd,room);
+    }
+  }
+  if(maxAdd<=0){showNotif('✨ 스킬포인트 부족!','top');return;}
   const prevCP=calcCP();
-  for(let i=0;i<actual;i++){
+  for(let i=0;i<maxAdd;i++){
     G.skillPts--;
     if(type==='active')G.activeSkillLevels[id]=(G.activeSkillLevels[id]||0)+1;
     else G.passiveSkillLevels[id]=(G.passiveSkillLevels[id]||0)+1;
   }
-  showNotif(`✨ +${actual} 전부 강화!`,'reward');
+  showNotif(`✨ +${maxAdd} 강화!`,'reward');
   showCPChange(prevCP,calcCP());updateUI();renderSkillTab();
 }
 function downgradeSkill(id,type){
@@ -5491,16 +5594,16 @@ function renderSkillTab(){
         <span class="skill-emoji">${sk.emoji}</span>
         <div class="skill-info">
           <div class="skill-name">${sk.name} <span class="active-tag">액티브</span></div>
-          <div class="skill-type-lv">Lv.${lv} · 쿨${sk.cd}초</div>
+          <div class="skill-type-lv">Lv.${lv}${sk.maxLv?' / '+sk.maxLv:''} · 쿨${sk.cd}초${lv>=sk.maxLv?' <span style="color:var(--gold);font-size:9px">✨ MAX</span>':''}</div>
           <div class="skill-desc-text">${sk.descFull}</div>
           <div class="skill-eff">${unlocked?sk.desc(Math.max(1,lv)):sk.desc(1)}</div>
-          ${unlocked&&lv>0?`<div class="skill-next-eff">▶ 다음: ${sk.nextDesc(lv)}</div>`:''}
+          ${unlocked&&lv>0&&lv<(sk.maxLv||9999)?`<div class="skill-next-eff">▶ 다음: ${sk.nextDesc(lv)}</div>`:''}
           ${!unlocked?`<div class="skill-unlock-at">🔒 Lv.${sk.unlockLv} 해금</div>`:''}
         </div>
         ${unlocked?`<div class="sk-btns">
-          <button class="skill-up-btn" onclick="upgradeSkill('${sk.id}','active')" ${G.skillPts<=0?'disabled':''}>+</button>
+          <button class="skill-up-btn" onclick="upgradeSkill('${sk.id}','active')" ${(G.skillPts<=0||(sk.maxLv&&lv>=sk.maxLv))?'disabled':''}>+</button>
           <button class="skill-up-btn" onclick="downgradeSkill('${sk.id}','active')" ${lv<=0?'disabled':''} style="border-color:var(--text3);color:var(--text3);background:rgba(139,148,158,0.08)">-</button>
-          <button class="skill-up-bulk" onclick="upgradeSkillBulk('${sk.id}','active',5)" ${G.skillPts<=0?'disabled':''}>일괄강화</button>
+          <button class="skill-up-bulk" onclick="upgradeSkillBulk('${sk.id}','active',5)" ${(G.skillPts<=0||(sk.maxLv&&lv>=sk.maxLv))?'disabled':''}>일괄강화</button>
           <button class="skill-equip-btn${eq?' equipped':''}" onclick="equipSkill('${sk.id}')">${eq?'해제':'장착'}</button>
         </div>`:''}
       </div>
@@ -5509,21 +5612,22 @@ function renderSkillTab(){
   const pl=document.getElementById('passive-skill-list');
   pl.innerHTML=PASSIVE_SKILLS.map(sk=>{
     const unlocked=G.level>=sk.unlockLv;const lv=G.passiveSkillLevels[sk.id]||0;
+    const atMax=sk.maxLv&&lv>=sk.maxLv;
     return`<div class="skill-row${!unlocked?' locked-skill':''}">
       <div class="skill-row-top">
         <span class="skill-emoji">${sk.emoji}</span>
         <div class="skill-info">
           <div class="skill-name">${sk.name} <span class="passive-tag">패시브</span></div>
-          <div class="skill-type-lv">Lv.${lv}</div>
+          <div class="skill-type-lv">Lv.${lv}${sk.maxLv?' / '+sk.maxLv:''}${atMax?' <span style="color:var(--gold);font-size:9px">✨ MAX</span>':''}</div>
           <div class="skill-desc-text">${sk.descFull}</div>
           <div class="skill-eff">${unlocked?sk.desc(Math.max(1,lv)):sk.desc(1)}</div>
-          ${unlocked&&lv>0?`<div class="skill-next-eff">▶ 다음: ${sk.desc(lv+1)}</div>`:''}
+          ${unlocked&&lv>0&&!atMax?`<div class="skill-next-eff">▶ 다음: ${sk.desc(lv+1)}</div>`:''}
           ${!unlocked?`<div class="skill-unlock-at">🔒 Lv.${sk.unlockLv} 해금</div>`:''}
         </div>
         ${unlocked?`<div class="sk-btns">
-          <button class="skill-up-btn" onclick="upgradeSkill('${sk.id}','passive')" ${G.skillPts<=0?'disabled':''}>+</button>
+          <button class="skill-up-btn" onclick="upgradeSkill('${sk.id}','passive')" ${(G.skillPts<=0||atMax)?'disabled':''}>+</button>
           <button class="skill-up-btn" onclick="downgradeSkill('${sk.id}','passive')" ${lv<=0?'disabled':''} style="border-color:var(--text3);color:var(--text3);background:rgba(139,148,158,0.08)">-</button>
-          <button class="skill-up-bulk" onclick="upgradeSkillBulk('${sk.id}','passive',5)" ${G.skillPts<=0?'disabled':''}>일괄강화</button>
+          <button class="skill-up-bulk" onclick="upgradeSkillBulk('${sk.id}','passive',5)" ${(G.skillPts<=0||atMax)?'disabled':''}>일괄강화</button>
         </div>`:''}
       </div>
     </div>`;
@@ -5754,7 +5858,7 @@ function claimAchieve(id){
   if(!a.cond(G))return;
   G.achieveDone[a.id]=true;
   if(a.reward.gold)G.gold+=a.reward.gold;
-  if(a.reward.tickets)G.tickets=Math.min(999,G.tickets+(a.reward.tickets||0));
+  if(a.reward.tickets)G.tickets=Math.min(9999,G.tickets+(a.reward.tickets||0));
   if(a.reward.shards)G.shards+=(a.reward.shards||0);
   if(a.reward.skillPts)G.skillPts+=(a.reward.skillPts||0);
   if(a.reward.permAtkPct)G.permAtkPct=(G.permAtkPct||0)+a.reward.permAtkPct;
@@ -5819,7 +5923,7 @@ function collectQuest(){
   const q=getCurrentQuest();if(q.prog<q.target)return;
   const rStr=[];
   if(q.reward.gold){G.gold+=q.reward.gold;rStr.push(`💰+${fmtNum(q.reward.gold)}`);}
-  if(q.reward.tickets){G.tickets=Math.min(999,G.tickets+q.reward.tickets);rStr.push(`🎫+${q.reward.tickets}`);}
+  if(q.reward.tickets){G.tickets=Math.min(9999,G.tickets+q.reward.tickets);rStr.push(`🎫+${q.reward.tickets}`);}
   if(q.reward.shards){G.shards+=q.reward.shards;rStr.push(`🔩+${q.reward.shards}`);}
   if(q.reward.skillPts){G.skillPts+=q.reward.skillPts;rStr.push(`✨+${q.reward.skillPts}`);}
   showNotif('✅ '+rStr.join(' '),'reward');playSfx('collect');
@@ -5891,7 +5995,7 @@ function checkMilestones(){
     if(met){
       G.milestoneDone[i]=true;
       if(m.reward.gold)G.gold+=m.reward.gold;
-      if(m.reward.tickets)G.tickets=Math.min(999,G.tickets+m.reward.tickets);
+      if(m.reward.tickets)G.tickets=Math.min(9999,G.tickets+m.reward.tickets);
       if(m.reward.shards)G.shards+=m.reward.shards;
       if(m.reward.skillPts)G.skillPts+=(m.reward.skillPts||0);
       showMilestonePopup(m);
@@ -6574,17 +6678,19 @@ function renderTowerTab(){
   const f=G.towerFloor;
   document.getElementById('tower-floor-val').textContent=f+'층';
   document.getElementById('tower-best-val').textContent='최고 기록: '+(G.towerBestFloor||1)+'층';
-  // 보상 미리보기
+  // 보상 미리보기 (골드 단위 표기)
   const rp=towerReward(f);
-  document.getElementById('tower-reward-preview').innerHTML='<b>이번 층 클리어 보상:</b> '+rp.map(r=>r.label+' '+r.val).join(' · ');
-  // 보상 목록 (앞뒤 5층)
+  document.getElementById('tower-reward-preview').innerHTML='<b>이번 층 클리어 보상:</b> '+rp.map(r=>r.label+' '+(r.label.includes('골드')?fmtNum(r.val):r.val)).join(' · ');
+  // 보상 목록: 현재 층부터 앞 10층만 (클리어한 층 숨김)
   const rl=document.getElementById('tower-reward-list');
   let rows='';
-  for(let i=Math.max(1,f-2);i<=f+8;i++){
-    const rw=towerReward(i);const special=i%50===0?'var(--myth)':i%10===0?'var(--gold)':i%5===0?'var(--shard)':'var(--border)';
-    rows+=`<div style="display:flex;align-items:center;gap:6px;padding:4px 6px;border-radius:var(--radius);border:1px solid ${special};margin-bottom:3px;background:var(--bg2);font-size:10px${i===f?';border-width:2px':''}">
-      <span style="color:${special};font-weight:bold;min-width:32px">${i}층</span>
-      <span style="color:var(--text2)">${rw.map(r=>r.label+' +'+r.val).join(' ')}</span>
+  for(let i=f;i<=f+10;i++){
+    const rw=towerReward(i);
+    const special=i%50===0?'var(--myth)':i%10===0?'var(--gold)':i%5===0?'var(--shard)':'var(--border)';
+    const isCur=i===f;
+    rows+=`<div style="display:flex;align-items:center;gap:6px;padding:4px 6px;border-radius:var(--radius);border:${isCur?'2px':'1px'} solid ${special};margin-bottom:3px;background:var(--bg2);font-size:10px">
+      <span style="color:${special};font-weight:bold;min-width:32px">${i}층${isCur?' ◀':''}</span>
+      <span style="color:var(--text2)">${rw.map(r=>r.label+' +'+(r.label.includes('골드')?fmtNum(r.val):r.val)).join(' ')}</span>
     </div>`;
   }
   rl.innerHTML=rows;
@@ -6743,7 +6849,7 @@ function startTowerChallenge(){
       const rw=towerReward(f);
       rw.forEach(r=>{
         if(r.label.includes('골드'))G.gold+=r.val;
-        else if(r.label.includes('뽑기권'))G.tickets=Math.min(999,G.tickets+r.val);
+        else if(r.label.includes('뽑기권'))G.tickets=Math.min(9999,G.tickets+r.val);
         else if(r.label.includes('파편'))G.shards+=r.val;
         else if(r.label.includes('스킬포인트'))G.skillPts+=r.val;
         else if(r.label.includes('스탯포인트'))G.pts=(G.pts||0)+r.val;
@@ -7437,7 +7543,7 @@ function checkOfflineReward(){
 }
 function collectOffline(){
   G.gold+=window._offGold||0;
-  G.tickets=Math.min(999,G.tickets+(window._offTickets||0));
+  G.tickets=Math.min(9999,G.tickets+(window._offTickets||0));
   G.shards+=(window._offShards||0);
   gainExp(window._offExp||0);
   G.offlineCollected=(G.offlineCollected||0)+1;
@@ -7527,6 +7633,34 @@ function initGameUI(){
   G.buffs=[];G.rageStacks=0;G.focusStacks=0;
   // 탑 전투 중 강제종료 복구: 재접속 시 항상 비전투 상태로 초기화
   G.towerActive=false;G.towerEnemyHp=0;G.towerEnemyMaxHp=0;
+  // ── 스킬 만렙(100) 초과분 포인트 환급 (기존 유저 마이그레이션) ──
+  let _refundPts=0;
+  // 삭제된 패시브 스킬(집중·연쇄) 투자 포인트 환급
+  const _deletedPassives=['focus','chain'];
+  _deletedPassives.forEach(id=>{
+    const cur=G.passiveSkillLevels[id]||0;
+    if(cur>0){_refundPts+=cur;delete G.passiveSkillLevels[id];}
+  });
+  ACTIVE_SKILLS.forEach(sk=>{
+    if(!sk.maxLv)return;
+    const cur=G.activeSkillLevels[sk.id]||0;
+    if(cur>sk.maxLv){
+      _refundPts+=cur-sk.maxLv;
+      G.activeSkillLevels[sk.id]=sk.maxLv;
+    }
+  });
+  PASSIVE_SKILLS.forEach(sk=>{
+    if(!sk.maxLv)return;
+    const cur=G.passiveSkillLevels[sk.id]||0;
+    if(cur>sk.maxLv){
+      _refundPts+=cur-sk.maxLv;
+      G.passiveSkillLevels[sk.id]=sk.maxLv;
+    }
+  });
+  if(_refundPts>0){
+    G.skillPts=(G.skillPts||0)+_refundPts;
+    console.log('[마이그레이션] 스킬포인트 '+_refundPts+'pt 환급 (삭제/만렙 초과분)');
+  }
   // Auto gacha button state
   if(G.gachaLevel>=2){
     document.getElementById('auto-gacha-btn').disabled=false;
