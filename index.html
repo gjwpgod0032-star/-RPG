@@ -2086,7 +2086,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
       <div id="frag-exchange-box" style="margin-top:6px">
         <div class="fex-title">🔩 파편 교환</div>
         <div class="fex-row"><span>파편 100개 → 🎫 뽑기권 1개</span><button class="fex-btn" onclick="fragToTicket()">교환</button></div>
-        <div class="fex-row"><span>파편 500개 → ✨ 스킬포인트 1개</span><button class="fex-btn" onclick="fragToSkillPt()">교환</button></div>
+        
       </div>
     </div>
     <!-- SKILL -->
@@ -2098,7 +2098,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
           <button class="reset-icon-btn" onclick="confirmAction('skillReset')" title="스킬 초기화">↺</button>
         </div>
       </div>
-      <div style="font-size:9px;color:var(--text3);margin-bottom:5px">장착 슬롯 (5개)</div>
+      <div style="font-size:9px;color:var(--text3);margin-bottom:5px">장착 슬롯 (7개)</div>
       <div id="active-slots-grid"></div>
       <div class="coll-tab-row" style="margin-top:6px">
         <button class="coll-tab active" id="skill-sub-active" onclick="switchSkillTab('active')">⚡ 액티브</button>
@@ -2170,7 +2170,7 @@ const SAVE_KEY = 'milkAdv_v6';
 // ══════════════════════════════════════════
 //  VERSION CHECK
 // ══════════════════════════════════════════
-const GAME_VERSION = 'v02_99';
+const GAME_VERSION = 'v03_03';
 // GitHub Pages 배포 시 아래 URL을 본인 레포로 변경하세요
 // 예: 'https://[계정].github.io/[레포]/version.json'
 const VERSION_CHECK_URL = 'version.json';
@@ -2230,23 +2230,64 @@ const OLD_KEY = 'milkAdv_v5';
 // 1-1스테이지와 n-1스테이지의 몬스터/맵/브금이 완전히 동일하며,
 // 도감 수집 키도 themeIdx=0 고정으로 챕터 구분 없이 통합됩니다.
 const THEMES=[
-  { // 테마 1 - 자연/숲 (10스테이지마다 배경·브금 변화)
+  {
     emoji:'🌲', bgClass:'stage-bg-0',
     bgClasses:['stage-bg-0','stage-bg-1','stage-bg-2','stage-bg-3','stage-bg-4','stage-bg-5','stage-bg-6','stage-bg-7','stage-bg-8','stage-bg-9'],
     bgm:[0,1,2,3,4,5,6,7,8,9],
     segments:[
-      {name:'숲 1구역', monster:{n:'풀잎슬라임',e:'🟢'}, boss:{n:'고목왕',e:'🌳'}, eliteBoss:{n:'숲의 정령왕',e:'🌲'}},
-      {name:'숲 2구역', monster:{n:'숲도깨비',e:'🔮'},   boss:{n:'숲의 군주',e:'🦌'}, eliteBoss:{n:'고대 엔트',e:'🌿'}},
-      {name:'숲 3구역', monster:{n:'독포자',e:'🍄'},      boss:{n:'독의 지배자',e:'🌑'}, eliteBoss:{n:'독의 군주',e:'☠️'}},
-      {name:'숲 4구역', monster:{n:'크롤러',e:'🕷️'},   boss:{n:'거미 군주',e:'🕸️'},eliteBoss:{n:'독거미 여왕',e:'🕷️'}},
-      {name:'숲 5구역', monster:{n:'드레이크',e:'🐲'},    boss:{n:'숲의 용',e:'🐉'}, eliteBoss:{n:'용의 어미',e:'🐉'}},
-      {name:'숲 6구역', monster:{n:'데드나이트',e:'🧟'},  boss:{n:'망령 기사',e:'🏰'}, eliteBoss:{n:'왕성의 망령',e:'👻'}},
-      {name:'숲 7구역', monster:{n:'미스트',e:'🌫️'},     boss:{n:'늪의 군주',e:'🌊'}, eliteBoss:{n:'늪의 지배자',e:'🐊'}},
-      {name:'숲 8구역', monster:{n:'썬더호크',e:'🦅'},    boss:{n:'폭풍의 군주',e:'⚡'}, eliteBoss:{n:'폭풍의 신',e:'🌪️'}},
-      {name:'숲 9구역', monster:{n:'인페르노',e:'🔥'},    boss:{n:'화염 수호자',e:'🌋'},     eliteBoss:{n:'화산의 화신',e:'🌋'}},
-      {name:'숲 심층부', monster:{n:'왕국 팰러딘',e:'⚔️'},boss:{n:'구역 근위대장',e:'🛡️'},eliteBoss:{n:'숲의 신왕',e:'👑'}},
+      // ── seg0: 여정을 떠나는 들판 ──
+      {name:'황금 들판',
+        monster:  {n:'들판 도적',     e:'🐀', img:'assets/img/monster/s0_mob.png'},
+        boss:     {n:'도적단 두목',   e:'🗡️',img:'assets/img/monster/s0_boss.png'},
+        eliteBoss:{n:'평원의 약탈왕', e:'⚔️', img:'assets/img/monster/s0_vip.png'}},
+      // ── seg1: 숲 입구 ──
+      {name:'숲 입구',
+        monster:  {n:'이끼 슬라임',   e:'🟢', img:'assets/img/monster/s1_mob.png'},
+        boss:     {n:'가시덤불 정령', e:'🌿', img:'assets/img/monster/s1_boss.png'},
+        eliteBoss:{n:'숲 입구의 파수꾼',e:'🌳',img:'assets/img/monster/s1_vip.png'}},
+      // ── seg2: 신비로운 숲 기슭 ──
+      {name:'신비로운 숲 기슭',
+        monster:  {n:'요정 도깨비',   e:'🧚', img:'assets/img/monster/s2_mob.png'},
+        boss:     {n:'숲 기슭의 군주',e:'🦌', img:'assets/img/monster/s2_boss.png'},
+        eliteBoss:{n:'고대 숲의 정령왕',e:'🌙',img:'assets/img/monster/s2_vip.png'}},
+      // ── seg3: 썩어버린 깊은 숲 ──
+      {name:'썩어버린 깊은 숲',
+        monster:  {n:'부패 포자균',   e:'🍄', img:'assets/img/monster/s3_mob.png'},
+        boss:     {n:'부패목의 군주', e:'🪵', img:'assets/img/monster/s3_boss.png'},
+        eliteBoss:{n:'심연 부패의 왕',e:'☠️', img:'assets/img/monster/s3_vip.png'}},
+      // ── seg4: 독안개 늪지대 ──
+      {name:'독안개 늪지대',
+        monster:  {n:'늪 독거미',     e:'🕷️',img:'assets/img/monster/s4_mob.png'},
+        boss:     {n:'독안개 지배자', e:'🐸', img:'assets/img/monster/s4_boss.png'},
+        eliteBoss:{n:'독늪의 여왕',   e:'🌫️',img:'assets/img/monster/s4_vip.png'}},
+      // ── seg5: 황폐한 바위산 ──
+      {name:'황폐한 바위산',
+        monster:  {n:'암석 골렘',     e:'🪨', img:'assets/img/monster/s5_mob.png'},
+        boss:     {n:'바위산 수호자', e:'⛰️', img:'assets/img/monster/s5_boss.png'},
+        eliteBoss:{n:'폭풍의 암산왕', e:'🗻', img:'assets/img/monster/s5_vip.png'}},
+      // ── seg6: 음산한 유령 성당 폐허 ──
+      {name:'유령 성당 폐허',
+        monster:  {n:'방황하는 망령', e:'👻', img:'assets/img/monster/s6_mob.png'},
+        boss:     {n:'폐허의 사령관', e:'💀', img:'assets/img/monster/s6_boss.png'},
+        eliteBoss:{n:'저주받은 대사제',e:'⚰️',img:'assets/img/monster/s6_vip.png'}},
+      // ── seg7: 고대 유적 불모지 ──
+      {name:'고대 유적 불모지',
+        monster:  {n:'유적 파수꾼',   e:'🗿', img:'assets/img/monster/s7_mob.png'},
+        boss:     {n:'유적의 수호신', e:'🏛️',img:'assets/img/monster/s7_boss.png'},
+        eliteBoss:{n:'봉인된 고대 신',e:'🔱', img:'assets/img/monster/s7_vip.png'}},
+      // ── seg8: 오래된 지하 신전 ──
+      {name:'지하 신전',
+        monster:  {n:'신전 광신도',   e:'🕯️',img:'assets/img/monster/s8_mob.png'},
+        boss:     {n:'신전 수호 골렘',e:'🗽', img:'assets/img/monster/s8_boss.png'},
+        eliteBoss:{n:'지하 신전의 신관',e:'🌑',img:'assets/img/monster/s8_vip.png'}},
+      // ── seg9: 세상의 끝 마그마 산맥 ──
+      {name:'마그마 산맥',
+        monster:  {n:'용암 원소',     e:'🔥', img:'assets/img/monster/s9_mob.png'},
+        boss:     {n:'마그마 군주',   e:'🌋', img:'assets/img/monster/s9_boss.png'},
+        eliteBoss:{n:'세계 끝의 화신',e:'💥', img:'assets/img/monster/s9_vip.png'}},
     ],
-    eliteFinal:{n:'자연의 신왕',e:'👑'},
+    // 챕터 100스테이지 엘리트 최종보스
+    eliteFinal:{n:'세계의 지배자', e:'👑', img:'assets/img/monster/elite_final.png'},
   },
 ];
 
@@ -2390,6 +2431,9 @@ const ENHANCE_ITEMS=[
    desc:'치명타 확률을 높입니다. 100% 초과분은 치명타 피해로 전환됩니다.',
    masterDesc:'Lv.1000 달성 시 → 결정타 시스템 해금',maxLv:1000},
   {id:'critdmg',name:'치명타 피해',emoji:'💥',pct:0.5,base:120,desc:'치명타 발생 시 피해 배율을 높입니다.'},
+  {id:'acc',name:'명중',emoji:'🎯',pct:5,base:60,unit:'',costMult:1.2,desc:'명중 수치를 올려 적의 회피를 무력화합니다. 레벨당 +5 증가.'},
+  {id:'eva',name:'회피',emoji:'💨',pct:3,base:70,unit:'',costMult:1.2,desc:'회피 수치를 올려 적 공격을 피합니다. 레벨당 +3 증가.'},
+  {id:'pen',name:'관통',emoji:'🗡️',pct:8,base:55,unit:'',costMult:1.3,desc:'방어구 관통 수치를 올려 실효 피해를 높입니다. 레벨당 +8 증가.'},
   {id:'executeChance',name:'결정타 확률',emoji:'⚡',pct:1,base:300,unit:'%',
    desc:'HP 30% 이하 적에게 결정타가 발동할 확률입니다.',
    unlockReq:{id:'crit',lv:1000},maxLv:100},
@@ -2508,8 +2552,8 @@ const PASSIVE_SKILLS=[
     descFull:'치명타 피해 배율 극대화. 치명타율이 높을수록 가치 상승.',
     desc:lv=>`치명타 피해 +${(20+lv*1.0).toFixed(0)}%`,apply:lv=>({critDmgBonus:20+lv*1.0})},
   {id:'pierce',name:'약점간파',emoji:'👁️',unlockLv:200,maxLv:100,
-    descFull:'보스 방어 무시 추가 피해. 보스 공략 핵심 패시브.',
-    desc:lv=>`보스 방어력 ${(10+lv*0.5).toFixed(0)}% 무시`,apply:lv=>({piercePct:(10+lv*.5)/100})},
+    descFull:'모든 적의 방어력을 % 무시. 보스·일반몹 모두 적용.',
+    desc:lv=>`방어력 ${(5+lv*0.25).toFixed(0)}% 무시 (전체 적용)`,apply:lv=>({piercePct:(5+lv*.25)/100})},
   {id:'execute',name:'처형자',emoji:'💀',unlockLv:250,maxLv:100,
     descFull:'일반 몬스터 HP 특정% 이하 즉시 처치. 1렙 1%, 만렙 20%.',
     desc:lv=>`일반 몬스터 HP ${(lv*0.19+0.81).toFixed(0)}% 이하 시 즉시 처치`,apply:lv=>({executePct:(lv*0.19+0.81)/100})},
@@ -2536,28 +2580,28 @@ const ACHIEVEMENTS=[
   {id:'first_kill',name:'첫 처치',desc:'처음으로 몬스터를 쓰러뜨렸습니다.',cond:g=>g.totalKills>=1,reward:{gold:200},icon:'⚔️'},
   {id:'kill100',name:'전사의 길',desc:'몬스터 100마리를 처치했습니다.',cond:g=>g.totalKills>=100,reward:{shards:20},icon:'💪'},
   {id:'kill500',name:'사냥꾼',desc:'몬스터 500마리를 처치했습니다.',cond:g=>g.totalKills>=500,reward:{gold:5000},icon:'🗡️'},
-  {id:'kill1000',name:'학살자',desc:'몬스터 1,000마리를 처치했습니다.',cond:g=>g.totalKills>=1000,reward:{skillPts:2},icon:'💀'},
+  {id:'kill1000',name:'학살자',desc:'몬스터 1,000마리를 처치했습니다.',cond:g=>g.totalKills>=1000,reward:{shards:50},icon:'💀'},
   {id:'kill5000',name:'대학살',desc:'몬스터 5,000마리를 처치했습니다.',cond:g=>g.totalKills>=5000,reward:{shards:100},icon:'🩸'},
   {id:'kill10000',name:'무쌍의 용사',desc:'몬스터 10,000마리를 처치한 전설적인 용사.',cond:g=>g.totalKills>=10000,reward:{permAtkPct:1},icon:'⚡'},
   {id:'boss10',name:'보스 사냥꾼',desc:'보스를 10회 처치했습니다.',cond:g=>g.totalBossKills>=10,reward:{tickets:5},icon:'👹'},
   {id:'boss50',name:'보스 학살자',desc:'보스를 50회 처치했습니다.',cond:g=>g.totalBossKills>=50,reward:{shards:50},icon:'🔥'},
   {id:'boss100',name:'보스슬레이어',desc:'보스를 100회 처치한 진정한 정벌자.',cond:g=>g.totalBossKills>=100,reward:{permBossDmg:3},icon:'👑'},
   {id:'lv10',name:'성장하는 자',desc:'레벨 10에 도달했습니다.',cond:g=>g.level>=10,reward:{shards:20},icon:'📈'},
-  {id:'lv30',name:'숙련자',desc:'레벨 30에 도달했습니다.',cond:g=>g.level>=30,reward:{skillPts:2},icon:'🌱'},
-  {id:'lv50',name:'베테랑',desc:'레벨 50에 도달한 숙련된 모험가.',cond:g=>g.level>=50,reward:{skillPts:3},icon:'🏅'},
+  {id:'lv30',name:'숙련자',desc:'레벨 30에 도달했습니다.',cond:g=>g.level>=30,reward:{gold:5000},icon:'🌱'},
+  {id:'lv50',name:'베테랑',desc:'레벨 50에 도달한 숙련된 모험가.',cond:g=>g.level>=50,reward:{gold:20000},icon:'🏅'},
   {id:'lv100',name:'전설의 시작',desc:'레벨 100에 도달했습니다. 이제부터가 진짜입니다.',cond:g=>g.level>=100,reward:{permExpPct:5},icon:'🌟'},
   {id:'lv200',name:'초월자',desc:'레벨 200에 도달한 경지를 넘은 자.',cond:g=>g.level>=200,reward:{permAllPct:2},icon:'✨'},
   {id:'first_rare',name:'희귀 수집가',desc:'처음으로 희귀 등급 이상의 장비를 획득했습니다.',cond:g=>g.firstRare,reward:{tickets:5},icon:'🟦'},
   {id:'first_hero',name:'영웅의 소유자',desc:'처음으로 영웅 등급 이상의 장비를 손에 넣었습니다.',cond:g=>g.firstHero,reward:{gold:20000},icon:'🟪'},
   {id:'first_legend',name:'전설의 소유자',desc:'처음으로 전설 등급 장비를 획득했습니다.',cond:g=>g.firstLegend,reward:{gold:100000},icon:'🟧'},
-  {id:'first_myth',name:'신화의 현현',desc:'처음으로 신화 등급 장비를 손에 넣었습니다.',cond:g=>g.firstMyth,reward:{skillPts:5},icon:'🟥'},
+  {id:'first_myth',name:'신화의 현현',desc:'처음으로 신화 등급 장비를 손에 넣었습니다.',cond:g=>g.firstMyth,reward:{gold:100000},icon:'🟥'},
   {id:'first_sacred',name:'성물의 주인',desc:'성물 등급 장비를 획득한 최고의 수집가.',cond:g=>g.firstSacred,reward:{permAllPct:3},icon:'🌟'},
   {id:'gacha50',name:'장비뽑기 입문',desc:'뽑기를 50회 시도했습니다.',cond:g=>g.totalGachaCount>=50,reward:{gold:3000},icon:'🎰'},
   {id:'gacha100',name:'장비뽑기 중독',desc:'뽑기를 100회 시도했습니다. 멈출 수 없군요.',cond:g=>g.totalGachaCount>=100,reward:{gold:8000},icon:'🎲'},
   {id:'gacha500',name:'장비뽑기 광신도',desc:'뽑기를 500회 시도한 진정한 광신도.',cond:g=>g.totalGachaCount>=500,reward:{shards:80},icon:'🎪'},
-  {id:'chap1clear',name:'첫 챕터 정복',desc:'1-100스테이지를 완전히 정복했습니다.',cond:g=>g.chaptersCleared>=1,reward:{skillPts:3},icon:'⚔️'},
-  {id:'chap3clear',name:'3챕터의 용사',desc:'3개 챕터를 클리어했습니다.',cond:g=>g.chaptersCleared>=3,reward:{skillPts:8},icon:'🏆'},
-  {id:'chap5clear',name:'5챕터의 정복자',desc:'5개 챕터를 클리어했습니다.',cond:g=>g.chaptersCleared>=5,reward:{skillPts:15},icon:'👑'},
+  {id:'chap1clear',name:'첫 챕터 정복',desc:'1-100스테이지를 완전히 정복했습니다.',cond:g=>g.chaptersCleared>=1,reward:{tickets:10},icon:'⚔️'},
+  {id:'chap3clear',name:'3챕터의 용사',desc:'3개 챕터를 클리어했습니다.',cond:g=>g.chaptersCleared>=3,reward:{tickets:30},icon:'🏆'},
+  {id:'chap5clear',name:'5챕터의 정복자',desc:'5개 챕터를 클리어했습니다.',cond:g=>g.chaptersCleared>=5,reward:{tickets:80},icon:'👑'},
   {id:'chap7clear',name:'7챕터의 군주',desc:'7개 챕터를 클리어했습니다.',cond:g=>g.chaptersCleared>=7,reward:{permAllPct:2},icon:'💎'},
   {id:'chap10clear',name:'10챕터의 신',desc:'10개 챕터를 클리어한 전설.',cond:g=>g.chaptersCleared>=10,reward:{permAllPct:5},icon:'🌟'},
   {id:'coll30',name:'몬스터 연구가',desc:'도감에 30종의 몬스터를 기록했습니다.',cond:g=>Object.keys(g.monsterColl).length>=30,reward:{shards:30},icon:'📖'},
@@ -2569,8 +2613,8 @@ const ACHIEVEMENTS=[
   {id:'enhance200',name:'강화 집착자',desc:'강화 합산 레벨 200. 장비보다 강화가 먼저.',cond:g=>Object.values(g.enhanceLevels).reduce((a,b)=>a+b,0)>=200,reward:{permAtkPct:2},icon:'🔧'},
   {id:'enhance500',name:'강화의 신',desc:'강화 합산 레벨 500에 도달한 전설의 대장장이.',cond:g=>Object.values(g.enhanceLevels).reduce((a,b)=>a+b,0)>=500,reward:{permAllPct:3},icon:'🔨'},
   {id:'stage50',name:'중급 모험가',desc:'1-50스테이지에 도달했습니다.',cond:g=>g.highestGlobalStage>=50,reward:{tickets:10},icon:'🗺️'},
-  {id:'stage200',name:'고급 모험가',desc:'2-100스테이지에 도달한 강자.',cond:g=>g.highestGlobalStage>=200,reward:{skillPts:5},icon:'🌐'},
-  {id:'stage500',name:'정예 모험가',desc:'5-100스테이지에 도달했습니다.',cond:g=>g.highestGlobalStage>=500,reward:{skillPts:10},icon:'🏔️'},
+  {id:'stage200',name:'고급 모험가',desc:'2-100스테이지에 도달한 강자.',cond:g=>g.highestGlobalStage>=200,reward:{shards:200},icon:'🌐'},
+  {id:'stage500',name:'정예 모험가',desc:'5-100스테이지에 도달했습니다.',cond:g=>g.highestGlobalStage>=500,reward:{shards:500},icon:'🏔️'},
   {id:'stage1000',name:'전설의 모험가',desc:'10-100스테이지. 이 세계의 끝을 본 자.',cond:g=>g.highestGlobalStage>=1000,reward:{permAllPct:3},icon:'⭐'},
   {id:'kill30000',name:'몬스터 재앙',desc:'몬스터 30,000마리를 처치한 재앙 그 자체.',cond:g=>g.totalKills>=30000,reward:{permAtkPct:2},icon:'☠️'},
   {id:'kill100000',name:'세상의 멸망자',desc:'몬스터 100,000마리. 이 세계에 남은 몬스터는 없다.',cond:g=>g.totalKills>=100000,reward:{permAllPct:3},icon:'🌑'},
@@ -2580,10 +2624,10 @@ const ACHIEVEMENTS=[
   {id:'lv500',name:'신의 경지',desc:'레벨 500에 오른 신화적 존재.',cond:g=>g.level>=500,reward:{permAllPct:5},icon:'👑'},
   {id:'gacha1000',name:'장비뽑기의 화신',desc:'뽑기를 1,000회. 확률은 신앙의 영역.',cond:g=>g.totalGachaCount>=1000,reward:{permAllPct:1},icon:'🎯'},
   {id:'gacha3000',name:'장비뽑기 전도사',desc:'뽑기를 3,000회. 당신은 이미 전도사.',cond:g=>g.totalGachaCount>=3000,reward:{permAllPct:2},icon:'🃏'},
-  {id:'skill_max1',name:'첫 스킬 마스터',desc:'스킬 하나를 레벨 10에 올렸습니다.',cond:g=>Object.values(g.activeSkillLevels||{}).some(v=>v>=10)||Object.values(g.passiveSkillLevels||{}).some(v=>v>=10),reward:{skillPts:3},icon:'✨'},
-  {id:'skill_max2',name:'스킬 컬렉터',desc:'스킬 3종 이상을 레벨 5 이상으로 육성했습니다.',cond:g=>[...Object.values(g.activeSkillLevels||{}),...Object.values(g.passiveSkillLevels||{})].filter(v=>v>=5).length>=3,reward:{skillPts:5},icon:'⭐'},
+  {id:'skill_max1',name:'첫 스킬 마스터',desc:'스킬 하나를 레벨 10에 올렸습니다.',cond:g=>Object.values(g.activeSkillLevels||{}).some(v=>v>=10)||Object.values(g.passiveSkillLevels||{}).some(v=>v>=10),reward:{gold:10000},icon:'✨'},
+  {id:'skill_max2',name:'스킬 컬렉터',desc:'스킬 3종 이상을 레벨 5 이상으로 육성했습니다.',cond:g=>[...Object.values(g.activeSkillLevels||{}),...Object.values(g.passiveSkillLevels||{})].filter(v=>v>=5).length>=3,reward:{gold:30000},icon:'⭐'},
   {id:'tower50',name:'탑의 도전자',desc:'무한의 탑 50층을 돌파했습니다.',cond:g=>(g.towerBestFloor||0)>=50,reward:{shards:50},icon:'🗼'},
-  {id:'tower100',name:'탑의 정복자',desc:'무한의 탑 100층 돌파. 꼭대기가 보입니다.',cond:g=>(g.towerBestFloor||0)>=100,reward:{skillPts:5},icon:'🏰'},
+  {id:'tower100',name:'탑의 정복자',desc:'무한의 탑 100층 돌파. 꼭대기가 보입니다.',cond:g=>(g.towerBestFloor||0)>=100,reward:{shards:300},icon:'🏰'},
   {id:'tower200',name:'탑의 군주',desc:'무한의 탑 200층. 이제 탑이 두려워합니다.',cond:g=>(g.towerBestFloor||0)>=200,reward:{permAllPct:2},icon:'👑'},
 ];
 
@@ -2640,17 +2684,17 @@ const QUEST_REWARDS=[
   {gold:300},
   {gold:5000,shards:30,tickets:5},
   {shards:5},
-  {skillPts:1},
+  {shards:30},
   {gold:8000,shards:50,tickets:8},
   {gold:2500},
   {shards:25},
-  {gold:15000,shards:80,skillPts:2},
-  {skillPts:2},
+  {gold:15000,shards:80},
+  {shards:50},
   {gold:1500},
-  {gold:30000,shards:150,skillPts:3,tickets:15},
+  {gold:30000,shards:150,tickets:15},
   {shards:20},
-  {skillPts:2},
-  {gold:80000,shards:300,skillPts:5,tickets:30},
+  {shards:80},
+  {gold:80000,shards:300,tickets:30},
 ];
 
 const MILESTONES=[
@@ -2661,10 +2705,10 @@ const MILESTONES=[
   {type:'stage',val:50,reward:{tickets:25,shards:50},hint:''},
   {type:'level',val:10,reward:{shards:15},hint:''},
   {type:'level',val:20,reward:{shards:30},hint:''},
-  {type:'level',val:50,reward:{skillPts:3},hint:''},
+  {type:'level',val:50,reward:{gold:50000},hint:''},
   {type:'gacha',val:50,reward:{gold:3000},hint:'장비뽑기 레벨업 가능!'},
   {type:'gacha',val:100,reward:{gold:6000},hint:''},
-  {type:'gacha',val:500,reward:{gold:30000,skillPts:2},hint:''},
+  {type:'gacha',val:500,reward:{gold:30000,shards:50},hint:''},
 ];
 
 const COLL_LEVELS=[
@@ -2735,17 +2779,17 @@ const CTX_TUTORIALS={
   firstLevelUp:{title:'📊 스탯 포인트 획득!',body:'레벨업! 스탯 포인트 3개가 생겼습니다. 지금 바로 성장 탭 → 스탯에서 공격력·체력·방어력에 투자하세요.',highlight:'👆 하단 성장 탭 → 스탯 → +버튼으로 배분',target:'tab-growth',arrowDir:'down'},
   firstGold:{title:'⚡ 강화 해금!',body:'골드가 쌓이기 시작했습니다! 성장 탭 → 강화에서 골드를 소모해 능력치를 영구 강화할 수 있습니다.',highlight:'👆 하단 성장 탭 → 강화 탭에서 확인하세요',target:'tab-growth',arrowDir:'down'},
   firstEquip:{title:'⚔️ 장비 획득!',body:'장비를 얻었습니다! 장비 탭에서 장착 현황을 확인하고, 슬롯을 탭하면 파편(🔩)으로 슬롯 강화를 할 수 있습니다.',highlight:'👆 하단 장비 탭 → 슬롯 탭하면 강화 메뉴',target:'tab-equip',arrowDir:'down'},
-  firstShard:{title:'🔩 파편 활용!',body:'파편(🔩)은 보스 처치 시 드롭됩니다. 장비 슬롯 강화에 쓰거나, 장비 탭 하단 파편 교환소에서 뽑기권(100개)·스킬포인트(500개)로 교환할 수 있습니다.',highlight:'👆 장비 탭 → 슬롯 강화 또는 하단 파편 교환',target:'frag-exchange-box',arrowDir:'up'},
-  firstSkillPt:{title:'✨ 스킬포인트 획득!',body:'스킬포인트는 레벨업, 엘리트 보스 처치, 업적·퀘스트 보상, 파편 교환으로 얻습니다. 스킬 탭(1-30스테이지 해금)에서 액티브·패시브 스킬에 투자하세요.',highlight:'👆 스킬 탭 해금 전까지 포인트를 모아두세요',target:'currency-row',arrowDir:'down'},
+  firstShard:{title:'🔩 파편 활용!',body:'파편(🔩)은 보스 처치 시 드롭됩니다. 장비 슬롯 강화에 쓰거나, 장비 탭 하단 파편 교환소에서 뽑기권(100개)으로 교환할 수 있습니다.',highlight:'👆 장비 탭 → 슬롯 강화 또는 하단 파편 교환',target:'frag-exchange-box',arrowDir:'up'},
+  firstSkillPt:{title:'✨ 스킬포인트 획득!',body:'스킬포인트는 레벨업마다 5포인트씩 획득합니다. 스킬 탭(1-30스테이지 해금)에서 액티브·패시브 스킬에 투자하세요.',highlight:'👆 스킬 탭 해금 전까지 포인트를 모아두세요',target:'currency-row',arrowDir:'down'},
   firstBossFail:{title:'💀 전투 패배 — 강해지는 방법',body:'보스가 너무 강하면 이렇게 해보세요:\n① 성장 탭 → 스탯에 레벨업 포인트 투자\n② 성장 탭 → 강화로 공격력·체력 영구 강화\n③ 이전 스테이지에서 파밍 후 최고 스테이지 버튼으로 복귀\n④ 장비 탭 → 슬롯 강화로 전투력 상승',highlight:'👆 위 버튼으로 강화 후 ⚔️ 보스 재도전!',target:'tab-growth',arrowDir:'down'},
   firstDeath:{title:'💀 전투 패배!',body:'막히는 스테이지가 생기면 이전 스테이지로 돌아가 파밍하세요. 상단 스테이지 표시를 탭하면 이동 탭이 열립니다.',highlight:'👆 상단 스테이지 표시 탭 → 📍 이동 탭 선택',target:'stage-info-box',arrowDir:'down'},
   autoGacha:{title:'⚙️ 자동 뽑기 해금!',body:'장비뽑기 Lv.2 달성! Auto 버튼을 눌러 뽑기권이 생길 때마다 자동으로 뽑기가 진행되도록 설정할 수 있습니다.',highlight:'👇 Auto 버튼 → 설정 후 적용',target:'auto-gacha-btn',arrowDir:'up'},
   firstBoss:{title:'👹 보스 자동 진입!',body:'일반 몬스터 5마리를 처치하면 보스전이 자동으로 시작됩니다! 제한 시간 안에 처치하면 뽑기권·파편 등 큰 보상을 얻습니다.',highlight:'👇 상단 카운터 5/5 달성 시 자동으로 보스 등장',target:'monster-count',arrowDir:'up'},
   firstEquipSwap:{title:'✨ 더 좋은 장비 발견!',body:'현재 장비보다 전투력이 높은 장비를 뽑았습니다! 스탯을 비교해 교체 여부를 결정하세요.',highlight:'교체 시 이전 장비는 파편으로 분해됩니다'},
-  skillTab:{title:'✨ 스킬 탭 해금!',body:'1-30스테이지 돌파! 스킬 탭이 열렸습니다. 액티브 스킬(전투 중 자동 발동)과 패시브 스킬(항상 적용)을 스킬포인트로 습득·레벨업하세요. 장착 슬롯은 최대 5개입니다.',highlight:'👆 하단 스킬 탭 → ⚡ 액티브 / 🌀 패시브 탭',target:'tab-skill',arrowDir:'down'},
+  skillTab:{title:'✨ 스킬 탭 해금!',body:'1-30스테이지 돌파! 스킬 탭이 열렸습니다. 액티브 스킬(전투 중 자동 발동)과 패시브 스킬(항상 적용)을 스킬포인트로 습득·레벨업하세요. 장착 슬롯은 최대 7개입니다.',highlight:'👆 하단 스킬 탭 → ⚡ 액티브 / 🌀 패시브 탭',target:'tab-skill',arrowDir:'down'},
   collTab:{title:'📖 도감 탭 해금!',body:'1-50스테이지 돌파! 처치한 몬스터가 도감에 자동 등록됩니다. 수집 종수가 늘수록 스탯 보너스가 증가하고, 혼(Soul)을 모아 레벨업하면 추가 보너스를 얻습니다. 업적 탭에서 업적 보상도 수령하세요.',highlight:'👆 하단 도감 탭 → 몬스터 / 업적 서브탭',target:'tab-coll',arrowDir:'down'},
   firstSoulUp:{title:'👻 혼(Soul) 레벨업!',body:'도감에 등록된 몬스터의 혼이 충분히 모였습니다! 혼을 레벨업(★ 1→5)할수록 전체 스탯 보너스가 영구 증가합니다. 일괄 레벨업 버튼으로 한 번에 처리하세요.',highlight:'👆 도감 탭 → 몬스터 항목 ↑ 버튼 또는 일괄 레벨업',target:'coll-bulk-lvup',arrowDir:'up'},
-  towerTab:{title:'🏰 던전 탭 해금!',body:'2-1스테이지 진입! 던전 탭이 열렸습니다. 무한의 탑에서 층마다 강력한 적과 싸우며 끝없이 도전하세요. 5층마다 뽑기권, 10층마다 파편, 50층마다 스킬포인트를 받습니다.',highlight:'👆 하단 던전 탭 → 무한의 탑 도전하기',target:'tab-tower',arrowDir:'down'},
+  towerTab:{title:'🏰 던전 탭 해금!',body:'2-1스테이지 진입! 던전 탭이 열렸습니다. 무한의 탑에서 층마다 강력한 적과 싸우며 끝없이 도전하세요. 5층마다 뽑기권, 10층마다 파편을 받습니다.',highlight:'👆 하단 던전 탭 → 무한의 탑 도전하기',target:'tab-tower',arrowDir:'down'},
   firstVipBoss:{title:'💎 정예 보스 등장!',body:'10스테이지마다 등장하는 정예 보스(💎)입니다! 일반 보스보다 훨씬 강력하며 제한 시간도 30초로 동일합니다.\n\n일반 보스 HP의 약 4배 수준이므로 충분한 강화 없이는 처치가 어렵습니다. 처치 시 파편·골드를 대량 획득합니다.',highlight:'💎 보라색 이름 = 정예 보스 — 단단히 준비하세요!',target:'monster-count',arrowDir:'up'},
   firstEliteBoss:{title:'👑 엘리트 보스 등장!',body:'100스테이지마다 등장하는 최강의 엘리트 보스(👑)입니다! 정예 보스보다 강하며 제한 시간은 90초입니다.\n\n처치 시 스킬포인트와 대량의 골드·경험치를 획득합니다. 모든 강화를 끌어올린 뒤 도전하세요.',highlight:'👑 빨간색 이름 = 엘리트 보스 — 최고의 도전!',target:'monster-count',arrowDir:'up'},
   autoDistStat:{title:'⚡ 스탯 자동배분 해금!',body:'총 100포인트 투자로 자동배분 기능이 해금되었습니다!\n현재 생존력·화력 상황을 분석해 가장 필요한 스탯에 포인트를 자동으로 배분합니다.\n\n[red]🚨 주의: 이 기능은 알고리즘 추천 기반입니다.\n실제 최적 배분과 다를 수 있으니 반드시 결과를 확인하고 필요 시 수동으로 조정하세요.[/red]',highlight:'',target:null,arrowDir:'down'},
@@ -2813,7 +2857,7 @@ let G={
   questProg:{kills:0,gacha:0,boss:0,enhance:0,stat:0,skilluse:0,stagereach:0},
   gachaLevel:1, gachaTotalCount:0, totalGachaCount:0, autoGacha:false, gachaEverAuto:false, slotAutoEver:false, enhAutoEver:false, statAutoEver:false,
   agCount:1, agAutoEquip:false, agAutoShard:false,
-  enhanceLevels:{atk:0,hp:0,def:0,critdmg:0,normaldmg:0,bossdmg:0,crit:0,executeChance:0,executeDmg:0,lifeSteal:0},
+  enhanceLevels:{atk:0,hp:0,def:0,critdmg:0,normaldmg:0,bossdmg:0,crit:0,executeChance:0,executeDmg:0,lifeSteal:0,acc:0,eva:0,pen:0},
   overallEnhanceLv:0,
   slotLevels:{weapon:0,armor:0,helmet:0,boots:0,ring:0,necklace:0,shoulder:0,gloves:0,belt:0,earring:0,bracelet:0,offhand:0},
   equipped:{weapon:null,armor:null,helmet:null,boots:null,ring:null,necklace:null,shoulder:null,gloves:null,belt:null,earring:null,bracelet:null,offhand:null},
@@ -3133,17 +3177,17 @@ function getFinalDmgMult(){
 }
 // 명중: 기본 100 + 포인트*2 + 슬롯(목걸이/팔찌) + 접두사 + 정밀 패시브
 function getFinalAcc(){
-  const base=Math.floor(100+(G.ptAcc||0)*2+getSlotBonus('necklace','acc')+getSlotBonus('bracelet','acc')+getEqPrefixSum('acc'));
+  const base=Math.floor(100+(G.ptAcc||0)*2+getSlotBonus('necklace','acc')+getSlotBonus('bracelet','acc')+getEqPrefixSum('acc')+(G.enhanceLevels.acc||0)*5);
   const precPct=(getPassiveStat('precision')||{precisionPct:0}).precisionPct;
   return Math.floor(base*(1+precPct/100));
 }
-// 회피: 포인트*2 + 슬롯(장화/귀걸이) + 접두사
+// 회피: 포인트*2 + 슬롯(장화/귀걸이) + 접두사 + 강화
 function getFinalEva(){
-  return Math.floor((G.ptEva||0)*2+getSlotBonus('boots','eva')+getSlotBonus('earring','eva')+getEqPrefixSum('eva'));
+  return Math.floor((G.ptEva||0)*2+getSlotBonus('boots','eva')+getSlotBonus('earring','eva')+getEqPrefixSum('eva')+(G.enhanceLevels.eva||0)*3);
 }
-// 방어구 관통: 포인트*3 + 슬롯(장갑) + 접두사, 이후 철갑파쇄 % 곱적용
+// 방어구 관통: 포인트*3 + 슬롯(장갑) + 접두사 + 강화, 이후 철갑파쇄 % 곱적용
 function getFinalPen(){
-  const base=Math.floor((G.ptPen||0)*3+getSlotBonus('gloves','pen')+getEqPrefixSum('pen'));
+  const base=Math.floor((G.ptPen||0)*3+getSlotBonus('gloves','pen')+getEqPrefixSum('pen')+(G.enhanceLevels.pen||0)*8);
   const penPct=(getPassiveStat('penetration')||{penetrationPct:0}).penetrationPct;
   return Math.floor(base*(1+penPct/100));
 }
@@ -3227,9 +3271,9 @@ function getMonsterStats(isBoss,bossType){
   const baseAcc=Math.floor(100+gs*0.7);                  // 완만화
   const baseDef=Math.floor(gs*3.0);      // 방어 대폭 상향
   const exp=Math.floor((30+gs*4)*getExpBonus());          // 대폭 상향
-  // 골드: 선형 기반 + 지수 보정 (gs100부터 의미있게 증가)
-  const goldBase=10+gs*1.4;
-  const goldExpBoost=gs>100?Math.pow(1.006,gs-100):1;
+  // 골드: 초반 기반 확대 + 지수 보정 강화 (후반 스테이지 재화 의미있게)
+  const goldBase=50+gs*3;
+  const goldExpBoost=gs>50?Math.pow(1.012,gs-50):1;
   const gold=Math.floor(goldBase*goldExpBoost*getGoldBonus());
   if(isBoss){
     const bt=bossType||getBossType(G.stage);
@@ -3620,7 +3664,7 @@ function fireSkill(sid){
   const skillHitRate=getHitRate(ms.eva||0);
   if(Math.random()>=skillHitRate){showMissPopup();G.skillCooldowns[sid]=sk.cd*1000;return;}
   const om=G.isBoss?1+(G.enhanceLevels.bossdmg*.03)+(G.permBossDmg||0)/100:1;
-  const piercePas=G.isBoss?(getPassiveStat('pierce')||{piercePct:0}).piercePct:0;
+  const piercePas=(getPassiveStat('pierce')||{piercePct:0}).piercePct;
   // ── 방어구 관통 반영 ──
   const mDefSk=(ms.def||0)*(1-getPenRate());
   const mDefRedSk=Math.min(0.75,mDefSk/(mDefSk+300));
@@ -3789,7 +3833,7 @@ function onMonsterDead(){
     const wasNoShard=G.shards===0;
     G.shards+=gainedShards;
     if(wasNoShard&&G.shards>0)showCtxTutorial('firstShard');
-    if(bt==='elite'){G.skillPts+=1;showCtxTutorial('firstSkillPt');}
+    showCtxTutorial('firstSkillPt');
     G.bossDefeated=true;
     playSfx('chapClear');
     if(Math.random()<pm)gainedSouls=_dropSoul(bt);
@@ -3798,9 +3842,9 @@ function onMonsterDead(){
     if(!G.bossFirstKills[bossKey]){
       G.bossFirstKills[bossKey]=true;
       const firstReward=bt==='elite'
-        ?{tickets:30,shards:300,skillPts:3}
+        ?{tickets:30,shards:300}
         :bt==='vip'
-        ?{tickets:15,shards:100,skillPts:1}
+        ?{tickets:15,shards:100}
         :{tickets:5,shards:30};
       G.tickets=Math.min(9999,G.tickets+(firstReward.tickets||0));
       G.shards+=(firstReward.shards||0);
@@ -3913,6 +3957,34 @@ function hideBossGauge(){
   document.getElementById('boss-gauge-wrap').style.display='none';
   document.getElementById('boss-timer-display').style.display='none';
 }
+// ── 몬스터 표시 헬퍼: 이미지 어셋 있으면 img, 없으면 이모지 fallback ──
+// GitHub 경로(mData.img)에 이미지를 업로드하면 자동으로 이미지로 전환됩니다.
+function _setMonsterDisplay(el, mData, isBoss){
+  if(mData.img){
+    const testImg=new Image();
+    testImg.onload=function(){
+      el.textContent='';
+      el.style.backgroundImage='url('+mData.img+')';
+      el.style.backgroundSize='contain';
+      el.style.backgroundRepeat='no-repeat';
+      el.style.backgroundPosition='center bottom';
+      el.style.fontSize='0';
+      el.style.width=isBoss?'64px':'46px';
+      el.style.height=isBoss?'64px':'46px';
+    };
+    testImg.onerror=function(){
+      el.style.backgroundImage='';el.style.fontSize='';
+      el.style.width='';el.style.height='';
+      el.textContent=mData.e||mData.emoji||'❓';
+    };
+    testImg.src=mData.img;
+  } else {
+    el.style.backgroundImage='';el.style.fontSize='';
+    el.style.width='';el.style.height='';
+    el.textContent=mData.e||mData.emoji||'❓';
+  }
+}
+
 function spawnMonster(){
   clearInterval(tickInterval);
   // 스킬 쿨타임 초기화 (새 몬스터/보스 등장마다 리셋)
@@ -3927,7 +3999,8 @@ function spawnMonster(){
   G.monsterCurHp=stats.hp;G.monsterMaxHp=stats.hp;
   const me=document.getElementById('monster-emoji');
   me.style.opacity='';
-  me.textContent=mData.e||mData.emoji||'❓';
+  // 이미지 어셋 지원: mData.img 경로 존재 시 이미지 표시, 없으면 이모지 fallback
+  _setMonsterDisplay(me, mData, G.isBoss);
   me.className='fighter-emoji'+(G.isBoss?' boss':'')+' mon-spawn';
   setTimeout(()=>me.classList.remove('mon-spawn'),400);
   document.getElementById('monster-name-label').textContent=mData.n||mData.name||'???';
@@ -4106,7 +4179,7 @@ function gainExp(amt){
     playSfx('levelup');
     showNotif(`🎉 레벨 업! Lv.${G.level}`,'top');
     if(G.level===2)showCtxTutorial('firstLevelUp');
-    if(G.level%10===0){G.skillPts++;showNotif(`✨ 스킬포인트 +1 (Lv.${G.level})`,'reward');showCtxTutorial('firstSkillPt');}
+    G.skillPts+=5;showNotif(`✨ 스킬포인트 +5 (Lv.${G.level})`,'reward');showCtxTutorial('firstSkillPt');
     checkSkillUnlocks();checkMilestones();
   }
   refreshActiveTab();
@@ -4225,6 +4298,26 @@ function getEnhRecommend(){
       effPerGold=(dmgRatio*pct*0.3)/cost;
     } else if(item.id==='lifeSteal'){
       effPerGold=(dmgRatio*pct*0.2)/cost;
+    } else if(item.id==='acc'){
+      // 명중 1레벨 = +5 acc → hitRate 향상 → DPS 증가
+      const gs=currGS();const monEva=Math.floor(gs*0.3);
+      const curAcc=getFinalAcc();
+      const hitB=Math.max(0.20,curAcc/(curAcc+monEva+1));
+      const hitA=Math.max(0.20,(curAcc+item.pct)/((curAcc+item.pct)+monEva+1));
+      effPerGold=hitB>=0.97?0:(hitA-hitB)/Math.max(0.001,hitB)/cost;
+    } else if(item.id==='eva'){
+      const gs=currGS();const monAcc=Math.floor(100+gs*0.7);
+      const curEva=getFinalEva();
+      const evaB=Math.min(0.75,curEva/(curEva+monAcc+1));
+      const evaA=Math.min(0.75,(curEva+item.pct)/((curEva+item.pct)+monAcc+1));
+      effPerGold=(evaA-evaB)*dmgRatio*0.5/cost;
+    } else if(item.id==='pen'){
+      const gs=currGS();const monDef=Math.floor(gs*3.0);
+      const curPen=getFinalPen();
+      const penB=Math.min(0.9,curPen/(curPen+500));
+      const penA=Math.min(0.9,(curPen+item.pct)/((curPen+item.pct)+500));
+      const defRed=(d,p)=>monDef<=0?0:monDef*(1-p)/(monDef*(1-p)+300);
+      effPerGold=monDef<=0?0:((1-defRed(monDef,penA))-(1-defRed(monDef,penB)))/Math.max(0.001,1-defRed(monDef,penB))/cost;
     } else {
       effPerGold=pct/cost*0.1;
     }
@@ -4265,7 +4358,19 @@ function getDpsEnhId(){
     else if(item.id==='critdmg'){dps=(getFinalAtk()*(1+getFinalCrit()*(getFinalCritDmg()+item.pct/100))-base)/base;}
     else if(item.id==='crit'){dps=(getFinalAtk()*(1+(getFinalCrit()+item.pct/100)*getFinalCritDmg())-base)/base;}
     else if(item.id==='normaldmg'||item.id==='bossdmg'){dps=item.pct/100*0.5;}
-    else{dps=0;}
+    else if(item.id==='acc'){
+      const gs=currGS();const monEva=Math.floor(gs*0.3);
+      const curAcc=getFinalAcc();const hitB=Math.max(0.20,curAcc/(curAcc+monEva+1));
+      const hitA=Math.max(0.20,(curAcc+item.pct)/((curAcc+item.pct)+monEva+1));
+      dps=hitB>=0.97?0:(hitA-hitB)/Math.max(0.001,hitB);
+    } else if(item.id==='pen'){
+      const gs=currGS();const monDef=Math.floor(gs*3.0);
+      const curPen=getFinalPen();
+      const penB=Math.min(0.9,curPen/(curPen+500));
+      const penA=Math.min(0.9,(curPen+item.pct)/((curPen+item.pct)+500));
+      const defRed=(p)=>monDef<=0?0:monDef*(1-p)/(monDef*(1-p)+300);
+      dps=monDef<=0?0:((1-defRed(penA))-(1-defRed(penB)))/Math.max(0.001,1-defRed(penB));
+    } else{dps=0;}
     scores[item.id]=cost>0?dps/cost*1000:0;
   });
   const sorted=Object.entries(scores).filter(e=>e[1]>0).sort((a,b)=>b[1]-a[1]);
@@ -4541,9 +4646,22 @@ function renderStatTab(){
       dispStr=vals[sd.id];
     }
     const ptLv=ptMap[sd.id]||0;
-    return'\n    <div class="stat-row">\n      <span class="s-icon">'+sd.emoji+'</span>\n      <div class="s-info">\n        <div class="s-name">'+sd.name+badge1+badge2+dpsBadge+'<span style="font-size:9px;color:var(--text3);margin-left:4px">Lv.'+ptLv+'</span></div>\n        <div class="s-val">'+dispStr+'</div>\n        <div style="font-size:9px;color:var(--text3);margin-top:1px">+1 → '+perPt[sd.id]+'</div>\n      </div>\n      <div class="stat-btns">\n        <button class="stat-plus-btn" '+( hp?'':' disabled')+' onclick="addStat(\''+ sd.id +'\',1)">+1</button>\n        <button class="stat-plus-btn" '+(hp?'':' disabled')+' onclick="addStat(\''+ sd.id +'\',10)">+10</button>\n        <button class="stat-plus-btn" '+(hp?'':' disabled')+' onclick="addStat(\''+ sd.id +'\',100)">+100</button>\n        <button class="stat-plus-btn max-btn" '+(hp?'':' disabled')+' onclick="addStatMax(\''+ sd.id +'\')">최대</button>\n      </div>\n    </div>';
+    const ptKey={atk:'ptAtk',hp:'ptHp',def:'ptDef',critdmg:'ptCritDmg',finaldmg:'ptFinalDmg',acc:'ptAcc',eva:'ptEva',pen:'ptPen',hpregen:'ptHpRegen'}[sd.id];
+    const hasInvested=ptLv>0;
+    return'\n    <div class="stat-row">\n      <span class="s-icon">'+sd.emoji+'</span>\n      <div class="s-info">\n        <div class="s-name">'+sd.name+badge1+badge2+dpsBadge+'<span style="font-size:9px;color:var(--text3);margin-left:4px">Lv.'+ptLv+'</span>'+(hasInvested?'<button onclick="resetSingleStat(\''+ptKey+'\')" style="margin-left:4px;font-size:9px;padding:1px 5px;background:rgba(255,71,87,0.1);border:1px solid rgba(255,71,87,0.4);border-radius:2px;color:var(--hp);cursor:pointer;font-family:var(--font)" title="이 스탯만 초기화">↺</button>':'')+'</div>\n        <div class="s-val">'+dispStr+'</div>\n        <div style="font-size:9px;color:var(--text3);margin-top:1px">+1 → '+perPt[sd.id]+'</div>\n      </div>\n      <div class="stat-btns">\n        <button class="stat-plus-btn" '+( hp?'':' disabled')+' onclick="addStat(\''+ sd.id +'\',1)">+1</button>\n        <button class="stat-plus-btn" '+(hp?'':' disabled')+' onclick="addStat(\''+ sd.id +'\',10)">+10</button>\n        <button class="stat-plus-btn" '+(hp?'':' disabled')+' onclick="addStat(\''+ sd.id +'\',100)">+100</button>\n        <button class="stat-plus-btn max-btn" '+(hp?'':' disabled')+' onclick="addStatMax(\''+ sd.id +'\')">최대</button>\n      </div>\n    </div>';
   }).join('');
   updateAutoDistButtons();
+}
+
+function resetSingleStat(ptKey){
+  const cur=G[ptKey]||0;
+  if(cur<=0){showNotif('💡 투자된 포인트가 없습니다','top');return;}
+  const prevCP=calcCP();
+  G.pts+=cur;
+  G[ptKey]=0;
+  G.playerCurHp=Math.min(G.playerCurHp,getFinalHp());
+  showCPChange(prevCP,calcCP());updateUI();renderStatTab();
+  showNotif('🔄 스탯 초기화 완료 (+'+cur+'pt)','top');
 }
 
 // ══════════════════════════════════════════
@@ -5174,7 +5292,6 @@ function updateGachaMini(){
   if(countEl)countEl.textContent=`${fmtNum(cur)}/${fmtNum(next)}회`;
 }
 function fragToTicket(){if(G.shards<100){showNotif('🔩 파편 100개 필요','top');return;}G.shards-=100;G.tickets=Math.min(9999,G.tickets+1);showNotif('🎫 뽑기권 +1','reward');updateUI();}
-function fragToSkillPt(){if(G.shards<500){showNotif('🔩 파편 500개 필요','top');return;}G.shards-=500;G.skillPts++;showNotif('✨ 스킬포인트 +1','reward');updateUI();}
 
 // ══════════════════════════════════════════
 //  EQUIP TAB
@@ -5557,8 +5674,8 @@ function equipSkill(id){
   if(!G.equippedSkills)G.equippedSkills=[];
   const idx=G.equippedSkills.indexOf(id);
   if(idx>=0){G.equippedSkills.splice(idx,1);}
-  else if(G.equippedSkills.length<5){G.equippedSkills.push(id);}
-  else{showNotif('슬롯이 가득 찼습니다 (최대 5개)','top');}
+  else if(G.equippedSkills.length<7){G.equippedSkills.push(id);}
+  else{showNotif('슬롯이 가득 찼습니다 (최대 7개)','top');}
   playSfx('click');renderSkillTab();updateSkillBar();
 }
 function resetSkills(){
@@ -5578,7 +5695,7 @@ function resetSkills(){
 function renderSkillTab(){
   const sg=document.getElementById('active-slots-grid');
   if(!sg)return;
-  sg.innerHTML=[0,1,2,3,4].map(i=>{
+  sg.innerHTML=[0,1,2,3,4,5,6].map(i=>{
     const sid=(G.equippedSkills||[])[i];
     if(!sid)return`<div class="active-skill-slot empty"><span class="as-emoji">➕</span><span class="as-name">빈 슬롯</span></div>`;
     const sk=ACTIVE_SKILLS.find(s=>s.id===sid);const lv=G.activeSkillLevels[sid]||0;
@@ -5663,6 +5780,14 @@ function getCollLevel(){
   for(const cl of COLL_LEVELS)if(c>=cl.need)lv++;
   return lv;
 }
+// 도감 아이콘: 이미지 어셋 있으면 <img>, 없으면 이모지
+function _collMonIcon(mData, collected){
+  if(collected && mData.img){
+    return `<img src="${mData.img}" style="width:28px;height:28px;object-fit:contain;image-rendering:pixelated" onerror="this.outerHTML='${mData.e||'❓'}'">`;
+  }
+  return mData.e||'❓';
+}
+
 function renderCollTab(){
   const count=Object.keys(G.monsterColl).length;
   const lv=getCollLevel();
@@ -5702,20 +5827,20 @@ function renderCollTab(){
     const bCol=G.monsterColl[bKey];
     const vCol=G.monsterColl[vKey];
     collHtml+=`<div class="coll-seg-row">
-      <div class="coll-seg-name" style="color:var(--text3);font-size:9px">${si*10+1}~${si*10+10}스테이지</div>
+      <div class="coll-seg-name" style="color:var(--text3);font-size:9px">${si*10+1}~${si*10+10}스테이지 · ${seg.name}</div>
       <div class="coll-mon-group">
         <div class="coll-mon-entry">
-          <div class="coll-mon-item${mobCol?' collected':' unknown'}" title="${seg.monster.n}">${seg.monster.e}</div>
+          <div class="coll-mon-item${mobCol?' collected':' unknown'}" title="${seg.monster.n}">${_collMonIcon(seg.monster,mobCol)}</div>
           <div class="coll-mon-name" style="color:${mobCol?gradeColor.mob:'var(--text3)'}">${seg.monster.n}</div>
           ${makeSoulDisplay(mobKey,mobCol)}
         </div>
         <div class="coll-mon-entry">
-          <div class="coll-mon-item boss-item${bCol?' collected':' unknown'}" title="${seg.boss.n}">${bCol?seg.boss.e:'👹'}</div>
+          <div class="coll-mon-item boss-item${bCol?' collected':' unknown'}" title="${seg.boss.n}">${bCol?_collMonIcon(seg.boss,bCol):'👹'}</div>
           <div class="coll-mon-name" style="color:${bCol?gradeColor.normal:'var(--text3)'}">${seg.boss.n}</div>
           ${makeSoulDisplay(bKey,bCol)}
         </div>
         ${si<9?`<div class="coll-mon-entry">
-          <div class="coll-mon-item vip-item${vCol?' collected':' unknown'}" title="${seg.eliteBoss.n}">${vCol?seg.eliteBoss.e:'💎'}</div>
+          <div class="coll-mon-item vip-item${vCol?' collected':' unknown'}" title="${seg.eliteBoss.n}">${vCol?_collMonIcon(seg.eliteBoss,vCol):'💎'}</div>
           <div class="coll-mon-name" style="color:${vCol?gradeColor.vip:'var(--text3)'}">${seg.eliteBoss.n}</div>
           ${makeSoulDisplay(vKey,vCol)}
         </div>`:''}
@@ -5729,9 +5854,7 @@ function renderCollTab(){
     <div class="coll-seg-name" style="color:#ff4757;font-size:9px">👑 100스테이지 엘리트보스</div>
     <div class="coll-mon-group">
       <div class="coll-mon-entry">
-        <div class="coll-mon-item elite-item${eCol?' collected':' unknown'}" title="${theme0.eliteFinal.n}">` +
-        (eCol?theme0.eliteFinal.e:'👑') +
-        `</div>
+        <div class="coll-mon-item elite-item${eCol?' collected':' unknown'}" title="${theme0.eliteFinal.n}">${eCol?_collMonIcon(theme0.eliteFinal,eCol):'👑'}</div>
         <div class="coll-mon-name" style="color:${eCol?'#ff4757':'var(--text3)'}">${theme0.eliteFinal.n}</div>
         ${makeSoulDisplay(eKey,eCol)}
       </div>
@@ -6655,7 +6778,7 @@ function towerReward(floor){
   r.push({label:'💰 골드',val:Math.floor(5000*Math.pow(1.07,floor-1))});
   if(floor%5===0)  r.push({label:'🎫 뽑기권',val:floor<=30?1:floor<=70?2:3});
   if(floor%10===0) r.push({label:'🔩 파편',val:Math.ceil(floor/8)});
-  if(floor%30===0) r.push({label:'✨ 스킬포인트',val:Math.ceil(floor/30)});
+  if(floor%30===0) r.push({label:'🔩 파편',val:Math.ceil(floor/5)});
   if(floor%100===0)r.push({label:'⚡ 스탯포인트',val:Math.ceil(floor/100)});
   return r;
 }
@@ -7523,7 +7646,9 @@ function checkOfflineReward(){
   const sec=Math.min(elapsed,8*3600);
   const bestGs=G.highestGlobalStage||currGS();
   // 현재 공식과 동일한 기준으로 계산
-  const bestGold=Math.floor((10+bestGs*1.4)*getGoldBonus());
+  const bestGoldBase=50+bestGs*3;
+  const bestGoldBoost=bestGs>50?Math.pow(1.012,bestGs-50):1;
+  const bestGold=Math.floor(bestGoldBase*bestGoldBoost*getGoldBonus());
   const bestExp=Math.floor((12+bestGs*1.5)*getExpBonus());
   const killsPerSec=1/(getTickSpeed()/1000*2.5);
   const offGold=Math.floor(killsPerSec*bestGold*sec*0.6);
@@ -7660,6 +7785,28 @@ function initGameUI(){
   if(_refundPts>0){
     G.skillPts=(G.skillPts||0)+_refundPts;
     console.log('[마이그레이션] 스킬포인트 '+_refundPts+'pt 환급 (삭제/만렙 초과분)');
+  }
+  // ── 스킬포인트 레벨 기준 재계산 (수급처 변경 마이그레이션) ──
+  // 신규: 레벨업마다 5pt. 기존: 레벨10마다 1pt
+  // 기존 유저 총 지급 예상 = level/10, 신규 기준 = level*5
+  // 투자 포인트 보존 + 잉여분만 지급 (과도한 회수 방지)
+  if(!G._skillPtsMigrated){
+    const totalInvested=(Object.values(G.activeSkillLevels||{}).reduce((a,b)=>a+b,0)+
+                         Object.values(G.passiveSkillLevels||{}).reduce((a,b)=>a+b,0));
+    const correctTotal=(G.level||1)*5;
+    const currentHeld=(G.skillPts||0);
+    // 정확한 지급량 = correctTotal. 현재 (투자+보유)와 비교
+    const currentTotal=totalInvested+currentHeld;
+    if(correctTotal>currentTotal){
+      // 레벨 기준으로 더 줘야 하는 경우 → 지급
+      G.skillPts=(G.skillPts||0)+(correctTotal-currentTotal);
+    } else if(correctTotal<currentTotal){
+      // 초과 보유 → 보유분에서만 회수 (투자분은 건드리지 않음)
+      const excess=Math.min(currentHeld, currentTotal-correctTotal);
+      G.skillPts=Math.max(0,(G.skillPts||0)-excess);
+    }
+    G._skillPtsMigrated=true;
+    console.log('[마이그레이션] 스킬포인트 재계산: 레벨'+G.level+' × 5pt = '+correctTotal+'pt (현재보유:'+G.skillPts+')');
   }
   // Auto gacha button state
   if(G.gachaLevel>=2){
