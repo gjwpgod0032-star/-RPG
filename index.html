@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<title>우유의 대모험</title>
+<title>Dotrium</title>
 <link href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" rel="stylesheet">
 <style>
 @font-face {
@@ -1550,10 +1550,10 @@ input[type=range]{width:100%;accent-color:var(--accent)}
       onerror="this.style.display='none';document.getElementById('title-default-wrap').style.display='block'">
     <!-- 디폴트 로고 (title_logo.png 없을 때) -->
     <div id="title-default-wrap" style="display:none">
-      <img src="assets/img/title.png" id="title-img" alt="우유의 대모험"
+      <img src="assets/img/title.png" id="title-img" alt="Dotrium"
         onerror="this.style.display='none';document.getElementById('title-icon-fallback').style.display='block'">
       <span class="t-icon" id="title-icon-fallback" style="display:none">⚔️</span>
-      <h1>우유의 대모험</h1>
+      <h1>Dotrium</h1>
       <div class="t-deco"></div>
       <div class="t-sub">IDLE RPG</div>
     </div>
@@ -1566,7 +1566,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 <div id="name-screen">
   <div id="name-panel">
     <h2>⚔️ 용사의 이름을 입력하세요</h2>
-    <input type="text" id="name-input" maxlength="8" placeholder="멋진 우유" oninput="onNameInput()">
+    <input type="text" id="name-input" maxlength="8" placeholder="모험가" oninput="onNameInput()">
     <div id="name-hint">1~8자, 특수문자 불가</div>
     <button id="name-start-btn" onclick="startGame()">모험 시작 ▶</button>
   </div>
@@ -1661,11 +1661,12 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 
 <!-- MIGRATE MODAL -->
 <div class="modal-overlay" id="migrate-modal">
-  <div class="modal-box" style="max-width:280px">
-    <h3>⚠️ 버전 업데이트</h3>
-    <p>v4 업데이트로 인해 기존 저장 데이터와 호환되지 않습니다.<br>새로 시작하시겠습니까?</p>
-    <div class="confirm-btns">
-      <button style="border-color:var(--accent);color:var(--accent);background:rgba(88,166,255,0.08)" onclick="doMigrate()">새 게임 시작</button>
+  <div class="modal-box" style="max-width:290px">
+    <h3>🎮 Dotrium 업데이트</h3>
+    <p style="font-size:11px;color:var(--text2);line-height:1.7">이전 버전의 저장 데이터가 발견되었습니다.<br>데이터를 이어서 플레이하거나 새 게임을 시작할 수 있습니다.</p>
+    <div class="confirm-btns" style="flex-direction:column;gap:8px">
+      <button style="border-color:var(--shard);color:var(--shard);background:rgba(63,185,80,0.1)" onclick="doMigrateCarry()">💾 이전 데이터 이어하기</button>
+      <button style="border-color:var(--text3);color:var(--text3);background:transparent;font-size:11px" onclick="doMigrateNew()">🆕 새 게임 시작</button>
     </div>
   </div>
 </div>
@@ -1852,7 +1853,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
         <div class="hp-bar-wrap">
           <div class="hp-bar-label"><span>HP</span><span id="player-hp-text">100/100</span></div>
           <div class="hp-bar"><div class="hp-fill player-hp-fill" id="player-hp-fill" style="width:100%"></div></div>
-          <div class="fighter-name" id="player-name-label">멋진 우유</div>
+          <div class="fighter-name" id="player-name-label">모험가</div>
         </div>
       </div>
       <div class="vs-text">VS</div>
@@ -2165,12 +2166,12 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 // ══════════════════════════════════════════
 //  DATA DEFINITIONS
 // ══════════════════════════════════════════
-const SAVE_KEY = 'milkAdv_v6';
+const SAVE_KEY = 'dotrium_v1';
 
 // ══════════════════════════════════════════
 //  VERSION CHECK
 // ══════════════════════════════════════════
-const GAME_VERSION = 'v03_03';
+const GAME_VERSION = 'v03_09';
 // GitHub Pages 배포 시 아래 URL을 본인 레포로 변경하세요
 // 예: 'https://[계정].github.io/[레포]/version.json'
 const VERSION_CHECK_URL = 'version.json';
@@ -2223,7 +2224,7 @@ function startVersionCheck(){
   checkVersion(); // 즉시 1회 체크
   _versionCheckTimer = setInterval(checkVersion, VERSION_CHECK_INTERVAL);
 }
-const OLD_KEY = 'milkAdv_v5';
+const OLD_KEY = 'milkAdv_v6'; // 구버전 세이브 마이그레이션용
 
 // ── 단일 테마 (모든 챕터 공통) ──
 // 모든 챕터는 동일한 숲 테마를 사용합니다.
@@ -2431,9 +2432,9 @@ const ENHANCE_ITEMS=[
    desc:'치명타 확률을 높입니다. 100% 초과분은 치명타 피해로 전환됩니다.',
    masterDesc:'Lv.1000 달성 시 → 결정타 시스템 해금',maxLv:1000},
   {id:'critdmg',name:'치명타 피해',emoji:'💥',pct:0.5,base:120,desc:'치명타 발생 시 피해 배율을 높입니다.'},
-  {id:'acc',name:'명중',emoji:'🎯',pct:5,base:60,unit:'',costMult:1.2,desc:'명중 수치를 올려 적의 회피를 무력화합니다. 레벨당 +5 증가.'},
-  {id:'eva',name:'회피',emoji:'💨',pct:3,base:70,unit:'',costMult:1.2,desc:'회피 수치를 올려 적 공격을 피합니다. 레벨당 +3 증가.'},
-  {id:'pen',name:'관통',emoji:'🗡️',pct:8,base:55,unit:'',costMult:1.3,desc:'방어구 관통 수치를 올려 실효 피해를 높입니다. 레벨당 +8 증가.'},
+  {id:'acc',name:'명중',emoji:'🎯',pct:0.1,base:60,unit:'',costMult:1.2,desc:'명중 수치를 올립니다. 레벨당 +0.1 증가. (Lv500 기준 기본 명중의 +50%)'},
+  {id:'eva',name:'회피',emoji:'💨',pct:0.1,base:70,unit:'',costMult:1.2,desc:'회피 수치를 올립니다. 레벨당 +0.1 증가. (Lv500 기준 +50)'},
+  {id:'pen',name:'관통',emoji:'🗡️',pct:0.1,base:55,unit:'',costMult:1.3,desc:'방어구 관통 수치를 올립니다. 레벨당 +0.1 증가. (Lv500 기준 +50)'},
   {id:'executeChance',name:'결정타 확률',emoji:'⚡',pct:1,base:300,unit:'%',
    desc:'HP 30% 이하 적에게 결정타가 발동할 확률입니다.',
    unlockReq:{id:'crit',lv:1000},maxLv:100},
@@ -2632,8 +2633,8 @@ const ACHIEVEMENTS=[
 ];
 
 const TITLES=[
-  {id:'newcomer',name:'우유의 모험가',desc:'모험을 시작한 신참 용사',cond:g=>true,bonus:{allPct:1}},
-  {id:'milk',name:'진짜 멋진 우유',desc:'이름이 특별한 자만이 얻을 수 있는 칭호',cond:g=>g.name==='멋진 우유',bonus:{allPct:2}},
+  {id:'newcomer',name:'도트리움의 모험가',desc:'모험을 시작한 신참 용사',cond:g=>true,bonus:{allPct:1}},
+  {id:'legend_name',name:'전설의 모험가',desc:'특별한 이름을 가진 자만이 얻을 수 있는 칭호',cond:g=>g.name==='모험가',bonus:{allPct:2}},
   {id:'chap1',name:'첫 챕터의 용사',desc:'첫 챕터를 정복한 자',cond:g=>g.chaptersCleared>=1,bonus:{atkPct:2}},
   {id:'chap2',name:'두 번째 정복자',desc:'두 챕터를 정복한 자',cond:g=>g.chaptersCleared>=2,bonus:{atkPct:2,hpPct:1}},
   {id:'chap3',name:'세 챕터의 전사',desc:'세 챕터를 정복한 자',cond:g=>g.chaptersCleared>=3,bonus:{defPct:3}},
@@ -2846,7 +2847,7 @@ function setPxCharAnim(el,anim){
 //  GAME STATE
 // ══════════════════════════════════════════
 let G={
-  name:'멋진 우유', level:1, exp:0, pts:0,
+  name:'모험가', level:1, exp:0, pts:0,
   ptAtk:0, ptHp:0, ptDef:0, ptCrit:0, ptCritDmg:0, ptFinalDmg:0,
   ptAcc:0, ptEva:0, ptPen:0, ptHpRegen:0,
   gold:0, shards:0, tickets:0, skillPts:0,
@@ -3177,17 +3178,17 @@ function getFinalDmgMult(){
 }
 // 명중: 기본 100 + 포인트*2 + 슬롯(목걸이/팔찌) + 접두사 + 정밀 패시브
 function getFinalAcc(){
-  const base=Math.floor(100+(G.ptAcc||0)*2+getSlotBonus('necklace','acc')+getSlotBonus('bracelet','acc')+getEqPrefixSum('acc')+(G.enhanceLevels.acc||0)*5);
+  const base=Math.floor(100+(G.ptAcc||0)*2+getSlotBonus('necklace','acc')+getSlotBonus('bracelet','acc')+getEqPrefixSum('acc')+(G.enhanceLevels.acc||0)*0.1);
   const precPct=(getPassiveStat('precision')||{precisionPct:0}).precisionPct;
   return Math.floor(base*(1+precPct/100));
 }
 // 회피: 포인트*2 + 슬롯(장화/귀걸이) + 접두사 + 강화
 function getFinalEva(){
-  return Math.floor((G.ptEva||0)*2+getSlotBonus('boots','eva')+getSlotBonus('earring','eva')+getEqPrefixSum('eva')+(G.enhanceLevels.eva||0)*3);
+  return Math.floor((G.ptEva||0)*2+getSlotBonus('boots','eva')+getSlotBonus('earring','eva')+getEqPrefixSum('eva')+(G.enhanceLevels.eva||0)*0.1);
 }
 // 방어구 관통: 포인트*3 + 슬롯(장갑) + 접두사 + 강화, 이후 철갑파쇄 % 곱적용
 function getFinalPen(){
-  const base=Math.floor((G.ptPen||0)*3+getSlotBonus('gloves','pen')+getEqPrefixSum('pen')+(G.enhanceLevels.pen||0)*8);
+  const base=Math.floor((G.ptPen||0)*3+getSlotBonus('gloves','pen')+getEqPrefixSum('pen')+(G.enhanceLevels.pen||0)*0.1);
   const penPct=(getPassiveStat('penetration')||{penetrationPct:0}).penetrationPct;
   return Math.floor(base*(1+penPct/100));
 }
@@ -3578,10 +3579,11 @@ function gameTick(){
     const cr=Math.min(1,getFinalCrit()+bfx.critBonus+focusCritBonus);const cd=getFinalCritDmg();
     const isCrit=Math.random()<cr;
     if(isCrit)dmg=Math.floor(dmg*cd);
-    // 방어구 관통 반영 (몬스터 방어력 감소)
+    // 방어구 관통 반영 (몬스터 방어력 감소) + 약점간파 패시브
     const mDef=(ms.def||0)*(1-getPenRate());
     const mDefRed=Math.min(0.75,mDef/(mDef+300));
-    dmg=Math.max(1,Math.floor(dmg*(1-mDefRed)));
+    const piercePasBasic=(getPassiveStat('pierce')||{piercePct:0}).piercePct;
+    dmg=Math.max(1,Math.floor(dmg*(1-mDefRed)*(1+piercePasBasic)));
     const normEnh=1+(G.enhanceLevels.normaldmg||0)*.015;
     const bossEnh=G.isBoss?1+getBossDmgBonus()+(G.permBossDmg||0)/100:1;
     const finalMult=getFinalDmgMult();
@@ -3663,15 +3665,17 @@ function fireSkill(sid){
   // ── 명중 판정 (일반 공격과 동일) ──
   const skillHitRate=getHitRate(ms.eva||0);
   if(Math.random()>=skillHitRate){showMissPopup();G.skillCooldowns[sid]=sk.cd*1000;return;}
-  const om=G.isBoss?1+(G.enhanceLevels.bossdmg*.03)+(G.permBossDmg||0)/100:1;
   const piercePas=(getPassiveStat('pierce')||{piercePct:0}).piercePct;
   // ── 방어구 관통 반영 ──
   const mDefSk=(ms.def||0)*(1-getPenRate());
   const mDefRedSk=Math.min(0.75,mDefSk/(mDefSk+300));
-  // ── 최종데미지 배율 ──
+  // ── 최종데미지 배율 (normEnh + bossEnh + finalDmgMult 통합) ──
   const normEnh=1+(G.enhanceLevels.normaldmg||0)*.015;
+  // bossEnh: getBossDmgBonus(강화+장비접두+보스킬러패시브) + permBossDmg 통합
   const bossEnh=G.isBoss?1+getBossDmgBonus()+(G.permBossDmg||0)/100:1;
   const fmSk=getFinalDmgMult()*normEnh*bossEnh;
+  // om: 스킬 데미지 계산용 보스 배율 (bossEnh와 동일 — om은 piercePas 미포함, fmSk로 일괄 처리)
+  const om=G.isBoss?bossEnh:1;
   // 5레벨 보너스 계산 (스킬마다 의미가 다름: 배율 추가 or 타수 추가)
   const b5=sk.bonus5?sk.bonus5(lv):0;
   let ed=0;
@@ -3680,32 +3684,27 @@ function fireSkill(sid){
     ed=getFinalAtk()*(200+lv*16+b5)/100*om;
   }
   else if(sid==='combo'){
-    // 연속베기: 타수 고정 4회, 각 타 데미지 = base+lv성장+b5(5레벨마다 +15%)
     const perHitPct=(80+lv*8+b5)/100;
-    const hits=4;
-    let total=0;
-    for(let i=0;i<hits;i++){
-      const hitDmg=getFinalAtk()*perHitPct*om;
-      total+=hitDmg;
-      // 실제 다단 히트: 각 타마다 몬스터 HP 차감 + 데미지 팝업
-      if(i>0){
-        G.monsterCurHp=Math.max(0,G.monsterCurHp-Math.floor(hitDmg));
-        showDmgPopup(Math.floor(hitDmg),false,true);
-        if(G.monsterCurHp<=0)break;
-      }
+    const rawPerHit=getFinalAtk()*perHitPct*om;
+    const hitDmgFull=Math.floor(rawPerHit*(1-mDefRedSk)*(1+piercePas)*fmSk);
+    // 2~4타: 여기서 직접 차감 (배율 포함)
+    for(let i=1;i<4;i++){
+      G.monsterCurHp=Math.max(0,G.monsterCurHp-hitDmgFull);
+      showDmgPopup(hitDmgFull,false,true);
+      if(G.monsterCurHp<=0)break;
     }
-    ed=Math.floor(getFinalAtk()*perHitPct*om); // 첫 타는 아래 공통 처리
+    ed=rawPerHit; // 1타는 공통 처리에서 배율 적용
   }
   else if(sid==='slash'){
     ed=getFinalAtk()*(420+lv*23+b5)/100*om;
   }
   else if(sid==='stab'){
-    // 2연타: 각 타 독립 팝업
-    const perHit=getFinalAtk()*(160+lv*7+b5)/100*om;
-    ed=Math.floor(perHit);
-    G.monsterCurHp=Math.max(0,G.monsterCurHp-ed);
-    showDmgPopup(ed,false,true);
-    ed=Math.floor(perHit); // 2타도 동일, 아래서 처리
+    // 2연타: 1타는 공통 처리, 2타는 여기서 별도 차감 (배율 동일 적용)
+    const rawPerHit=getFinalAtk()*(160+lv*7+b5)/100*om;
+    const hit1=Math.floor(rawPerHit*(1-mDefRedSk)*(1+piercePas)*fmSk);
+    G.monsterCurHp=Math.max(0,G.monsterCurHp-hit1);
+    showDmgPopup(hit1,false,true);
+    ed=rawPerHit; // 공통처리에서 2타 배율 적용됨
   }
   else if(sid==='pierce_shot'){
     ed=getFinalAtk()*(1100+lv*40+b5)/100*om;
@@ -3726,11 +3725,11 @@ function fireSkill(sid){
   }
   else if(sid==='cross_slash'){
     // 2타, 5레벨마다 +120% 추가
-    const perHit=getFinalAtk()*(950+lv*40+b5)/100*om;
-    ed=Math.floor(perHit);
-    G.monsterCurHp=Math.max(0,G.monsterCurHp-ed);
-    showDmgPopup(ed,false,true);
-    ed=Math.floor(perHit);
+    const rawPerHit=getFinalAtk()*(950+lv*40+b5)/100*om;
+    const hit1=Math.floor(rawPerHit*(1-mDefRedSk)*(1+piercePas)*fmSk);
+    G.monsterCurHp=Math.max(0,G.monsterCurHp-hit1);
+    showDmgPopup(hit1,false,true);
+    ed=rawPerHit; // 2타 공통처리
   }
   else if(sid==='execute_slash'){
     if(G.monsterCurHp/G.monsterMaxHp<0.35){
@@ -3741,17 +3740,14 @@ function fireSkill(sid){
   }
   else if(sid==='blade_storm'){
     const baseHits=5+b5;
-    let total=0;
-    for(let i=0;i<baseHits;i++){
-      const hitDmg=Math.floor(getFinalAtk()*(800+lv*28)/100*om*(1+i*0.2));
-      total+=hitDmg;
-      if(i>0){
-        G.monsterCurHp=Math.max(0,G.monsterCurHp-hitDmg);
-        showDmgPopup(hitDmg,false,true);
-        if(G.monsterCurHp<=0)break;
-      }
+    // 2타~: 여기서 직접 차감 (방어감소+piercePas+fmSk 포함)
+    for(let i=1;i<baseHits;i++){
+      const hitDmg=Math.floor(getFinalAtk()*(800+lv*28)/100*om*(1+i*0.2)*(1-mDefRedSk)*(1+piercePas)*fmSk);
+      G.monsterCurHp=Math.max(0,G.monsterCurHp-hitDmg);
+      showDmgPopup(hitDmg,false,true);
+      if(G.monsterCurHp<=0)break;
     }
-    ed=Math.floor(getFinalAtk()*(800+lv*28)/100*om); // 첫 타
+    ed=getFinalAtk()*(800+lv*28)/100*om; // 1타 공통처리 (체증 1.0배, i=0)
   }
   else if(sid==='chaos'){
     ed=getFinalAtk()*(10000+lv*200+b5)/100*om;
@@ -4567,9 +4563,9 @@ function renderStatTab(){
   const finaldmgTotal=(getFinalDmgMult()*100).toFixed(2);
   const finaldmgAdd=((getFinalDmgMult()-1)*100).toFixed(2);
   // acc/eva/pen: 수치만 표시 (명중률 등은 스테이지 정보창에서 확인)
-  const accAdd=Math.floor((G.ptAcc||0)*2+getEqPrefixSum('acc'));
-  const evaAdd=Math.floor((G.ptEva||0)*2+getEqPrefixSum('eva'));
-  const penAdd=Math.floor((G.ptPen||0)*3+getEqPrefixSum('pen'));
+  const accAdd=getFinalAcc()-100;  // 기본 100 초과분 전체 (포인트+강화+장비)
+  const evaAdd=getFinalEva();       // 기본 0 초과분 전체
+  const penAdd=getFinalPen();       // 기본 0 초과분 전체
   // 재생: 초당 비율로 표시
   const regenPerSec=(getFinalHpRegen()*100).toFixed(3);
   const vals={
@@ -4610,7 +4606,7 @@ function renderStatTab(){
     def:Math.floor(getFinalDef())-baseLvDef,
     critdmg:critdmgAdd,finaldmg:finaldmgAdd,
     acc:accAdd,eva:evaAdd,pen:penAdd,
-    hpregen:((G.ptHpRegen||0)*0.0005*100).toFixed(3),
+    hpregen:(getFinalHpRegen()*100).toFixed(3),  // 포인트+슬롯+장비 전체
   };
   const hp=G.pts>0;
   const rec=getStatRecommend();
@@ -4636,8 +4632,9 @@ function renderStatTab(){
       dispStr=vals[sd.id]+'<span style="font-size:9px;color:var(--text3);margin-left:4px">(기본 '+baseVals.finaldmg+'%'+addPart+')</span>';
     } else if(['acc','eva','pen'].includes(sd.id)){
       const add=addVals[sd.id];
-      const addPart=add>0?' <span style="font-size:9px;color:var(--shard)">+'+add+'</span>':'';
-      dispStr=vals[sd.id]+'<span style="font-size:9px;color:var(--text3);margin-left:4px">(기본 '+baseVals[sd.id]+addPart+')</span>';
+      const base=baseVals[sd.id];
+      const addPart=add>0?` <span style="font-size:9px;color:var(--shard)">+${add}</span>`:'';
+      dispStr=vals[sd.id]+`<span style="font-size:9px;color:var(--text3);margin-left:4px">(기본 ${base}${addPart})</span>`;
     } else if(sd.id==='hpregen'){
       const add=parseFloat(addVals.hpregen);
       const addPart=add>0?' <span style="font-size:9px;color:var(--shard)">+'+add.toFixed(3)+'%</span>':'';
@@ -6923,8 +6920,9 @@ function startTowerChallenge(){
       const mDefT=Math.floor(f*3.0);const penR=getPenRate();
       const mDefAfter=mDefT*(1-penR);
       const mDefRed=Math.min(0.75,mDefAfter/(mDefAfter+300));
+      const piercePasT=(getPassiveStat('pierce')||{piercePct:0}).piercePct;
       const normEnh=1+(G.enhanceLevels.normaldmg||0)*.015;
-      dmg=Math.max(1,Math.floor(dmg*(1-mDefRed)*getFinalDmgMult()*normEnh));
+      dmg=Math.max(1,Math.floor(dmg*(1-mDefRed)*(1+piercePasT)*getFinalDmgMult()*normEnh));
       G.monsterCurHp=Math.max(0,G.monsterCurHp-dmg);
       G.towerEnemyHp=G.monsterCurHp;
       // 흡혈
@@ -7010,33 +7008,62 @@ function fireSkillTower(sid, floor){
   const penR=getPenRate();
   const mDefAfter=mDefT*(1-penR);
   const mDefRedSk=Math.min(0.75,mDefAfter/(mDefAfter+300));
+  const piercePasT=(getPassiveStat('pierce')||{piercePct:0}).piercePct;
   const normEnh=1+(G.enhanceLevels.normaldmg||0)*.015;
   const fmSk=getFinalDmgMult()*normEnh;
   const b5=sk.bonus5?sk.bonus5(lv):0;
+  // 공통 배율 적용 헬퍼
+  const applyMult=(raw)=>Math.floor(raw*(1-mDefRedSk)*(1+piercePasT)*fmSk);
+  const dealHit=(dmg)=>{G.monsterCurHp=Math.max(0,G.monsterCurHp-dmg);G.towerEnemyHp=G.monsterCurHp;showDmgPopup(dmg,false,true);};
   let ed=0;
-  if(sid==='strike')ed=getFinalAtk()*(200+lv*16+b5)/100;
-  else if(sid==='combo'){const p=getFinalAtk()*(80+lv*8+b5)/100;ed=Math.floor(p);for(let i=1;i<4;i++){const h=Math.floor(p);G.monsterCurHp=Math.max(0,G.monsterCurHp-Math.floor(h*(1-mDefRedSk)*fmSk));G.towerEnemyHp=G.monsterCurHp;showDmgPopup(Math.floor(h*(1-mDefRedSk)*fmSk),false,true);if(G.monsterCurHp<=0)break;}}
-  else if(sid==='slash')ed=getFinalAtk()*(420+lv*23+b5)/100;
-  else if(sid==='stab'){const p=Math.floor(getFinalAtk()*(160+lv*7+b5)/100*(1-mDefRedSk)*fmSk);G.monsterCurHp=Math.max(0,G.monsterCurHp-p);G.towerEnemyHp=G.monsterCurHp;showDmgPopup(p,false,true);ed=getFinalAtk()*(160+lv*7+b5)/100;}
-  else if(sid==='pierce_shot')ed=getFinalAtk()*(1100+lv*40+b5)/100;
-  else if(sid==='whirlwind')ed=getFinalAtk()*(2000+lv*50+b5)/100+G.monsterCurHp*(4+lv*.12)/100;
-  else if(sid==='skyfall')ed=getFinalAtk()*(2200+lv*60+b5)/100*1.5;
-  else if(sid==='explosion')ed=getFinalAtk()*(2400+lv*60+b5)/100+G.monsterCurHp*(6+lv*.2)/100;
-  else if(sid==='cross_slash'){const p=Math.floor(getFinalAtk()*(950+lv*40+b5)/100*(1-mDefRedSk)*fmSk);G.monsterCurHp=Math.max(0,G.monsterCurHp-p);G.towerEnemyHp=G.monsterCurHp;showDmgPopup(p,false,true);ed=getFinalAtk()*(950+lv*40+b5)/100;}
-  else if(sid==='execute_slash'){if(G.monsterCurHp/G.monsterMaxHp<0.35){G.monsterCurHp=0;G.towerEnemyHp=0;}else ed=getFinalAtk()*(3400+lv*80+b5)/100;}
-  else if(sid==='blade_storm'){const baseHits=5+b5;for(let i=1;i<baseHits;i++){const h=Math.floor(getFinalAtk()*(800+lv*28)/100*(1+i*0.2)*(1-mDefRedSk)*fmSk);G.monsterCurHp=Math.max(0,G.monsterCurHp-h);G.towerEnemyHp=G.monsterCurHp;showDmgPopup(h,false,true);if(G.monsterCurHp<=0)break;}ed=getFinalAtk()*(800+lv*28)/100;}
-  else if(sid==='chaos')ed=getFinalAtk()*(10000+lv*200+b5)/100;
+  if(sid==='strike')   ed=getFinalAtk()*(200+lv*16+b5)/100;
+  else if(sid==='combo'){
+    const raw=getFinalAtk()*(80+lv*8+b5)/100;
+    const hit=applyMult(raw);
+    for(let i=1;i<4;i++){dealHit(hit);if(G.monsterCurHp<=0)break;}
+    ed=raw; // 1타 공통처리
+  }
+  else if(sid==='slash')  ed=getFinalAtk()*(420+lv*23+b5)/100;
+  else if(sid==='stab'){
+    const raw=getFinalAtk()*(160+lv*7+b5)/100;
+    dealHit(applyMult(raw)); // 1타 직접
+    ed=raw; // 2타 공통처리
+  }
+  else if(sid==='pierce_shot') ed=getFinalAtk()*(1100+lv*40+b5)/100;
+  else if(sid==='whirlwind')   ed=getFinalAtk()*(2000+lv*50+b5)/100+G.monsterCurHp*(4+lv*.12)/100;
+  else if(sid==='skyfall')     ed=getFinalAtk()*(2200+lv*60+b5)/100*1.5;
+  else if(sid==='explosion')   ed=getFinalAtk()*(2400+lv*60+b5)/100+G.monsterCurHp*(6+lv*.2)/100;
+  else if(sid==='cross_slash'){
+    const raw=getFinalAtk()*(950+lv*40+b5)/100;
+    dealHit(applyMult(raw)); // 1타
+    ed=raw; // 2타 공통
+  }
+  else if(sid==='execute_slash'){
+    if(G.monsterCurHp/G.monsterMaxHp<0.35){G.monsterCurHp=0;G.towerEnemyHp=0;}
+    else ed=getFinalAtk()*(3400+lv*80+b5)/100;
+  }
+  else if(sid==='blade_storm'){
+    const baseHits=5+b5;
+    for(let i=1;i<baseHits;i++){
+      const h=applyMult(getFinalAtk()*(800+lv*28)/100*(1+i*0.2));
+      dealHit(h);if(G.monsterCurHp<=0)break;
+    }
+    ed=getFinalAtk()*(800+lv*28)/100; // 1타(i=0) 공통
+  }
+  else if(sid==='chaos') ed=getFinalAtk()*(10000+lv*200+b5)/100;
   if(ed>0){
-    ed=Math.max(1,Math.floor(ed*(1-mDefRedSk)*fmSk));
-    G.monsterCurHp=Math.max(0,G.monsterCurHp-ed);
-    G.towerEnemyHp=G.monsterCurHp;
-    showDmgPopup(ed,false,true);playSfx('skill');
+    const final=applyMult(ed);
+    dealHit(Math.max(1,final));
+    playSfx('skill');
     const mEl=document.getElementById('monster-emoji');
     if(mEl){mEl.classList.remove('mon-hit');void mEl.offsetWidth;mEl.classList.add('mon-hit');setTimeout(()=>mEl.classList.remove('mon-hit'),320);}
     updateMonsterHpBar();
   }
   G.skillCooldowns[sid]=sk.cd*1000;
   G.skillUseCount=(G.skillUseCount||0)+1;
+  // cycle 패시브
+  const cp2=getPassiveStat('cycle');
+  if(cp2){G.equippedSkills.forEach(s=>{if(s!==sid&&(G.skillCooldowns[s]||0)>0){G.skillCooldowns[s]=Math.max(0,(G.skillCooldowns[s]||0)*(1-(cp2.cyclePct||0)/100));}});}
 }
 
 function surrenderTower(){
@@ -7696,7 +7723,7 @@ function onNameInput(){
 }
 function startGame(){
   let n=document.getElementById('name-input').value.trim();
-  n=n.replace(/[^가-힣a-zA-Z0-9ㄱ-ㅎㅏ-ㅣ]/g,'').slice(0,8)||'멋진 우유';
+  n=n.replace(/[^가-힣a-zA-Z0-9ㄱ-ㅎㅏ-ㅣ]/g,'').slice(0,8)||'모험가';
   G.name=n;G.gold=1500;G.shards=50;G.tickets=20;
   G.playerCurHp=getFinalHp();
   document.getElementById('name-screen').classList.remove('show');
@@ -7718,11 +7745,29 @@ function tapTitle(){
   }
   else{document.getElementById('title-screen').style.display='none';document.getElementById('name-screen').classList.add('show');}
 }
-function doMigrate(){
+// 이전 데이터를 새 키로 복사해서 이어하기
+function doMigrateCarry(){
+  try{
+    const oldData=localStorage.getItem(OLD_KEY);
+    if(oldData){
+      localStorage.setItem(SAVE_KEY,oldData);
+      localStorage.removeItem(OLD_KEY);
+      closeModal('migrate-modal');
+      location.reload(); // 새 키로 로드
+    }
+  }catch(e){
+    showNotif('❌ 데이터 이전 실패. 새 게임으로 시작합니다.','top');
+    doMigrateNew();
+  }
+}
+// 구버전 데이터 버리고 새 게임
+function doMigrateNew(){
   localStorage.removeItem(OLD_KEY);
   closeModal('migrate-modal');
   document.getElementById('name-screen').classList.add('show');
 }
+// 하위 호환용 alias
+function doMigrate(){doMigrateNew();}
 function initGameUI(){
   document.getElementById('char-name').textContent=G.name;
   document.getElementById('player-name-label').textContent=G.name;
