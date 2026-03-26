@@ -2226,7 +2226,7 @@ const SAVE_KEY = 'dotrium_v1';
 // ══════════════════════════════════════════
 //  VERSION CHECK
 // ══════════════════════════════════════════
-const GAME_VERSION = 'v03_20';
+const GAME_VERSION = 'v03_21';
 // GitHub Pages 배포 시 아래 URL을 본인 레포로 변경하세요
 // 예: 'https://[계정].github.io/[레포]/version.json'
 const VERSION_CHECK_URL = 'version.json';
@@ -2288,62 +2288,127 @@ const OLD_KEY = 'milkAdv_v6'; // 구버전 세이브 마이그레이션용
 const THEMES=[
   {
     emoji:'🌲', bgClass:'stage-bg-0',
-    bgClasses:['stage-bg-0','stage-bg-1','stage-bg-2','stage-bg-3','stage-bg-4','stage-bg-5','stage-bg-6','stage-bg-7','stage-bg-8','stage-bg-9'],
-    bgm:[0,1,2,3,4,5,6,7,8,9],
+    bgClasses:['stage-bg-0','stage-bg-1','stage-bg-2','stage-bg-3','stage-bg-4','stage-bg-5','stage-bg-6','stage-bg-7','stage-bg-8','stage-bg-9','stage-bg-9'],
+    bgm:[0,1,2,3,4,5,6,7,8,9,10],
     segments:[
-      // ── seg0: 여정을 떠나는 들판 ──
-      {name:'황금 들판',
-        monster:  {n:'들판 도적',     e:'🐀', img:'assets/img/monster/s0_mob.png'},
-        boss:     {n:'도적단 두목',   e:'🗡️',img:'assets/img/monster/s0_boss.png'},
-        eliteBoss:{n:'평원의 약탈왕', e:'⚔️', img:'assets/img/monster/s0_vip.png'}},
-      // ── seg1: 숲 입구 ──
-      {name:'숲 입구',
-        monster:  {n:'이끼 슬라임',   e:'🟢', img:'assets/img/monster/s1_mob.png'},
-        boss:     {n:'가시덤불 정령', e:'🌿', img:'assets/img/monster/s1_boss.png'},
-        eliteBoss:{n:'숲 입구의 파수꾼',e:'🌳',img:'assets/img/monster/s1_vip.png'}},
-      // ── seg2: 신비로운 숲 기슭 ──
-      {name:'신비로운 숲 기슭',
-        monster:  {n:'요정 도깨비',   e:'🧚', img:'assets/img/monster/s2_mob.png'},
-        boss:     {n:'숲 기슭의 군주',e:'🦌', img:'assets/img/monster/s2_boss.png'},
-        eliteBoss:{n:'고대 숲의 정령왕',e:'🌙',img:'assets/img/monster/s2_vip.png'}},
-      // ── seg3: 썩어버린 깊은 숲 ──
-      {name:'썩어버린 깊은 숲',
-        monster:  {n:'부패 포자균',   e:'🍄', img:'assets/img/monster/s3_mob.png'},
-        boss:     {n:'부패목의 군주', e:'🪵', img:'assets/img/monster/s3_boss.png'},
-        eliteBoss:{n:'심연 부패의 왕',e:'☠️', img:'assets/img/monster/s3_vip.png'}},
-      // ── seg4: 독안개 늪지대 ──
+      // ── seg0: 1~10 금빛 바람 평원 ──
+      {name:'금빛 바람 평원',
+        monsters:[
+          {n:'개울 달팽이',     e:'🐌', img:'assets/img/monster/s0_mob1.png'},
+          {n:'굶주린 들쥐',     e:'🐀', img:'assets/img/monster/s0_mob2.png'},
+          {n:'흙먼지 두더지',   e:'🦔', img:'assets/img/monster/s0_mob3.png'},
+          {n:'성난 허수아비',   e:'🌾', img:'assets/img/monster/s0_mob4.png'},
+          {n:'난폭한 까마귀',   e:'🐦', img:'assets/img/monster/s0_mob5.png'},
+        ],
+        boss:     {n:'들판의 정령',   e:'🌬️',img:'assets/img/monster/s0_boss.png'},
+        eliteBoss:{n:'풍요를 삼킨 자',e:'⚔️', img:'assets/img/monster/s0_vip.png'}},
+      // ── seg1: 11~20 속삭이는 숲길 ──
+      {name:'속삭이는 숲길',
+        monsters:[
+          {n:'풀잎 애벌레',     e:'🐛', img:'assets/img/monster/s1_mob1.png'},
+          {n:'이끼 버섯',       e:'🍄', img:'assets/img/monster/s1_mob2.png'},
+          {n:'뾰족 사슴벌레',   e:'🪲', img:'assets/img/monster/s1_mob3.png'},
+          {n:'풀숲 개구리',     e:'🐸', img:'assets/img/monster/s1_mob4.png'},
+          {n:'숲안개 올빼미',   e:'🦉', img:'assets/img/monster/s1_mob5.png'},
+        ],
+        boss:     {n:'뒤엉킨 덩굴 골렘',e:'🌿',img:'assets/img/monster/s1_boss.png'},
+        eliteBoss:{n:'태고 숲의 심장',  e:'🌳',img:'assets/img/monster/s1_vip.png'}},
+      // ── seg2: 21~30 몽환의 산기슭 ──
+      {name:'몽환의 산기슭',
+        monsters:[
+          {n:'작은 날개 요정', e:'🧚', img:'assets/img/monster/s2_mob1.png'},
+          {n:'뒤틀린 고목',   e:'🌲', img:'assets/img/monster/s2_mob2.png'},
+          {n:'푸른 갈기 늑대',e:'🐺', img:'assets/img/monster/s2_mob3.png'},
+          {n:'수정 도마뱀',   e:'🦎', img:'assets/img/monster/s2_mob4.png'},
+          {n:'오래된 나무 정령',e:'🌳',img:'assets/img/monster/s2_mob5.png'},
+        ],
+        boss:     {n:'깊은 숲의 감시자',e:'🦌',img:'assets/img/monster/s2_boss.png'},
+        eliteBoss:{n:'녹빛의 수호자',   e:'🌙',img:'assets/img/monster/s2_vip.png'}},
+      // ── seg3: 31~40 부패한 심연 동굴 ──
+      {name:'부패한 심연 동굴',
+        monsters:[
+          {n:'무쇠턱 개미',   e:'🐜', img:'assets/img/monster/s3_mob1.png'},
+          {n:'포악한 동굴쥐', e:'🐀', img:'assets/img/monster/s3_mob2.png'},
+          {n:'그늘 털거미',   e:'🕷️',img:'assets/img/monster/s3_mob3.png'},
+          {n:'흡혈 박쥐',    e:'🦇', img:'assets/img/monster/s3_mob4.png'},
+          {n:'동굴 거대뱀',  e:'🐍', img:'assets/img/monster/s3_mob5.png'},
+        ],
+        boss:     {n:'심연 대왕 지네', e:'🪱', img:'assets/img/monster/s3_boss.png'},
+        eliteBoss:{n:'공허의 주인',    e:'☠️', img:'assets/img/monster/s3_vip.png'}},
+      // ── seg4: 41~50 독안개 늪지대 ──
       {name:'독안개 늪지대',
-        monster:  {n:'늪 독거미',     e:'🕷️',img:'assets/img/monster/s4_mob.png'},
-        boss:     {n:'독안개 지배자', e:'🐸', img:'assets/img/monster/s4_boss.png'},
-        eliteBoss:{n:'독늪의 여왕',   e:'🌫️',img:'assets/img/monster/s4_vip.png'}},
-      // ── seg5: 황폐한 바위산 ──
-      {name:'황폐한 바위산',
-        monster:  {n:'암석 골렘',     e:'🪨', img:'assets/img/monster/s5_mob.png'},
-        boss:     {n:'바위산 수호자', e:'⛰️', img:'assets/img/monster/s5_boss.png'},
-        eliteBoss:{n:'폭풍의 암산왕', e:'🗻', img:'assets/img/monster/s5_vip.png'}},
-      // ── seg6: 음산한 유령 성당 폐허 ──
-      {name:'유령 성당 폐허',
-        monster:  {n:'방황하는 망령', e:'👻', img:'assets/img/monster/s6_mob.png'},
-        boss:     {n:'폐허의 사령관', e:'💀', img:'assets/img/monster/s6_boss.png'},
-        eliteBoss:{n:'저주받은 대사제',e:'⚰️',img:'assets/img/monster/s6_vip.png'}},
-      // ── seg7: 고대 유적 불모지 ──
-      {name:'고대 유적 불모지',
-        monster:  {n:'유적 파수꾼',   e:'🗿', img:'assets/img/monster/s7_mob.png'},
-        boss:     {n:'유적의 수호신', e:'🏛️',img:'assets/img/monster/s7_boss.png'},
-        eliteBoss:{n:'봉인된 고대 신',e:'🔱', img:'assets/img/monster/s7_vip.png'}},
-      // ── seg8: 오래된 지하 신전 ──
-      {name:'지하 신전',
-        monster:  {n:'신전 광신도',   e:'🕯️',img:'assets/img/monster/s8_mob.png'},
-        boss:     {n:'신전 수호 골렘',e:'🗽', img:'assets/img/monster/s8_boss.png'},
-        eliteBoss:{n:'지하 신전의 신관',e:'🌑',img:'assets/img/monster/s8_vip.png'}},
-      // ── seg9: 세상의 끝 마그마 산맥 ──
-      {name:'마그마 산맥',
-        monster:  {n:'용암 원소',     e:'🔥', img:'assets/img/monster/s9_mob.png'},
-        boss:     {n:'마그마 군주',   e:'🌋', img:'assets/img/monster/s9_boss.png'},
-        eliteBoss:{n:'세계 끝의 화신',e:'💥', img:'assets/img/monster/s9_vip.png'}},
+        monsters:[
+          {n:'점액 기생충',   e:'🦠', img:'assets/img/monster/s4_mob1.png'},
+          {n:'맹독 두꺼비',   e:'🐸', img:'assets/img/monster/s4_mob2.png'},
+          {n:'늪지 거머리',   e:'🐛', img:'assets/img/monster/s4_mob3.png'},
+          {n:'오염된 슬라임', e:'🟢', img:'assets/img/monster/s4_mob4.png'},
+          {n:'습지 악어',    e:'🐊', img:'assets/img/monster/s4_mob5.png'},
+        ],
+        boss:     {n:'수렁의 포식자', e:'🌫️',img:'assets/img/monster/s4_boss.png'},
+        eliteBoss:{n:'부패의 근원',   e:'💀', img:'assets/img/monster/s4_vip.png'}},
+      // ── seg5: 51~60 메마른 바위산 ──
+      {name:'메마른 바위산',
+        monsters:[
+          {n:'흙바람 여우',   e:'🦊', img:'assets/img/monster/s5_mob1.png'},
+          {n:'절벽 까마귀',   e:'🐦', img:'assets/img/monster/s5_mob2.png'},
+          {n:'바위 전갈',    e:'🦂', img:'assets/img/monster/s5_mob3.png'},
+          {n:'모래바람 독수리',e:'🦅',img:'assets/img/monster/s5_mob4.png'},
+          {n:'암석 골렘',    e:'🪨', img:'assets/img/monster/s5_mob5.png'},
+        ],
+        boss:     {n:'황야의 수행자', e:'⛰️',img:'assets/img/monster/s5_boss.png'},
+        eliteBoss:{n:'풍화의 거인',   e:'🗻', img:'assets/img/monster/s5_vip.png'}},
+      // ── seg6: 61~70 안개낀 고대 유적 ──
+      {name:'안개낀 고대 유적',
+        monsters:[
+          {n:'떠돌이 망령',   e:'👻', img:'assets/img/monster/s6_mob1.png'},
+          {n:'룬의 파편',    e:'💎', img:'assets/img/monster/s6_mob2.png'},
+          {n:'깨어난 석상',  e:'🗿', img:'assets/img/monster/s6_mob3.png'},
+          {n:'부서진 무덤지기',e:'⚰️',img:'assets/img/monster/s6_mob4.png'},
+          {n:'봉인된 가디언', e:'🛡️',img:'assets/img/monster/s6_mob5.png'},
+        ],
+        boss:     {n:'고대의 감시자', e:'🏛️',img:'assets/img/monster/s6_boss.png'},
+        eliteBoss:{n:'침묵의 심판자', e:'🔱', img:'assets/img/monster/s6_vip.png'}},
+      // ── seg7: 71~80 망자의 안식처 ──
+      {name:'망자의 안식처',
+        monsters:[
+          {n:'해골 병사',     e:'💀', img:'assets/img/monster/s7_mob1.png'},
+          {n:'울부짖는 영혼', e:'👻', img:'assets/img/monster/s7_mob2.png'},
+          {n:'빛바랜 신도',   e:'🕯️',img:'assets/img/monster/s7_mob3.png'},
+          {n:'저주받은 망령', e:'🌑', img:'assets/img/monster/s7_mob4.png'},
+          {n:'성당의 문지기', e:'⚔️', img:'assets/img/monster/s7_mob5.png'},
+        ],
+        boss:     {n:'타락한 대사제', e:'🪦', img:'assets/img/monster/s7_boss.png'},
+        eliteBoss:{n:'영혼의 인도자', e:'✝️', img:'assets/img/monster/s7_vip.png'}},
+      // ── seg8: 81~90 잊혀진 지하 신전 ──
+      {name:'잊혀진 지하 신전',
+        monsters:[
+          {n:'불길한 석상',   e:'🗿', img:'assets/img/monster/s8_mob1.png'},
+          {n:'암흑 수호병',   e:'🛡️',img:'assets/img/monster/s8_mob2.png'},
+          {n:'신전 골렘',    e:'🗽', img:'assets/img/monster/s8_mob3.png'},
+          {n:'변형된 실험체', e:'🧬', img:'assets/img/monster/s8_mob4.png'},
+          {n:'잊혀진 혼령',  e:'💫', img:'assets/img/monster/s8_mob5.png'},
+        ],
+        boss:     {n:'제단의 수호자', e:'🌑', img:'assets/img/monster/s8_boss.png'},
+        eliteBoss:{n:'망각의 군주',   e:'🔮', img:'assets/img/monster/s8_vip.png'}},
+      // ── seg9: 91~100 녹아내린 대지 ──
+      {name:'녹아내린 대지',
+        monsters:[
+          {n:'마그마 슬라임', e:'🟠', img:'assets/img/monster/s9_mob1.png'},
+          {n:'불꽃 정령',    e:'🔥', img:'assets/img/monster/s9_mob2.png'},
+          {n:'용암 거인',    e:'🌋', img:'assets/img/monster/s9_mob3.png'},
+          {n:'형체를 잃은 짐승',e:'💥',img:'assets/img/monster/s9_mob4.png'},
+          {n:'잿빛 거신병',  e:'⚫', img:'assets/img/monster/s9_mob5.png'},
+        ],
+        boss:     {n:'불의 화신',     e:'🌋', img:'assets/img/monster/s9_boss.png'},
+        eliteBoss:{n:'타오르는 숨결', e:'🔥', img:'assets/img/monster/s9_vip.png'}},
+      // ── seg10: 101 봉인된 왕의 무덤 (엘리트보스 전용) ──
+      {name:'봉인된 왕의 무덤',
+        monsters:[],
+        boss:     {n:'태초의 지배자', e:'👑', img:'assets/img/monster/s10_elite.png'},
+        eliteBoss:{n:'태초의 지배자', e:'👑', img:'assets/img/monster/s10_elite.png'}},
     ],
-    // 챕터 100스테이지 엘리트 최종보스
-    eliteFinal:{n:'세계의 지배자', e:'👑', img:'assets/img/monster/elite_final.png'},
+    // 챕터 101스테이지 엘리트 최종보스 (seg10과 동일)
+    eliteFinal:{n:'태초의 지배자', e:'👑', img:'assets/img/monster/s10_elite.png'},
   },
 ];
 
@@ -2365,10 +2430,13 @@ function getStageBgm(chap,stage){
   return (theme.bgm&&theme.bgm[si])||1;
 }
 // 스테이지 → 세그먼트 인덱스 (0~9)
-function getSegIdx(stage){return Math.min(9,Math.floor((stage-1)/10));}
-// 보스 타입: 'elite'(100), 'vip'(10,20..90), 'normal'(나머지)
+function getSegIdx(stage){
+  if(stage===101)return 10;
+  return Math.min(9,Math.floor((stage-1)/10));
+}
+// 보스 타입: 'elite'(101), 'vip'(10,20..100), 'normal'(나머지)
 function getBossType(stage){
-  if(stage===100)return'elite';
+  if(stage===101)return'elite';
   if(stage%10===0)return'vip';
   return'normal';
 }
@@ -2376,8 +2444,12 @@ function getMonsterData(chap,stage){
   const theme=THEMES[0];
   const seg=theme.segments[getSegIdx(stage)];
   const bossType=getBossType(stage);
-  const boss=bossType==='elite'?theme.eliteFinal:bossType==='vip'?seg.eliteBoss:seg.boss;
-  return{monster:seg.monster,boss,segName:seg.name,bossType};
+  const boss=bossType==='elite'?seg.eliteBoss:bossType==='vip'?seg.eliteBoss:seg.boss;
+  // 5종 몬스터 중 killCount 기반으로 순환 선택
+  const monsters=seg.monsters&&seg.monsters.length>0?seg.monsters:[seg.monster||{n:'???',e:'❓'}];
+  const monIdx=(G.stageKillCount||0)%monsters.length;
+  const monster=monsters[monIdx];
+  return{monster,monsters,boss,segName:seg.name,bossType};
 }
 
 // 7 grades: common, uncommon, rare, hero, legend, myth, sacred
@@ -3301,7 +3373,7 @@ function getTickSpeed(){const h=getPassiveStat('haste');return h?h.tickSpeed:700
 // ══════════════════════════════════════════
 //  GLOBAL STAGE
 // ══════════════════════════════════════════
-function globalStage(chap,stage){return(chap-1)*100+stage;}
+function globalStage(chap,stage){return(chap-1)*101+stage;}
 function currGS(){return globalStage(G.chapter,G.stage);}
 
 
@@ -3915,12 +3987,19 @@ function onMonsterDead(){
       showNotif(`🌾 ${G.chapter}-${G.stage} 파밍 반복`,'top');
       updateStageLbl();setTimeout(()=>spawnMonster(),450);
     }else{
-      if(G.stage>=100){
+      if(G.stage===101){
+        // 101스테이지(엘리트) 클리어 → 다음 챕터
         G.chaptersCleared=Math.max(G.chaptersCleared,G.chapter);
+        const wasChap=G.chapter;
         G.chapter++;
         G.stage=1;updateBattleBg();
-        showNotif(`🎉 ${wasChap}-100 클리어!`,'top');
+        showNotif(`🎉 ${wasChap}챕터 완전 정복!`,'top');
         stopBgm();startBgm();
+      }else if(G.stage===100){
+        // 100스테이지 정예보스 클리어 → 101스테이지로
+        const prevSeg=getSegIdx(G.stage);
+        G.stage=101;
+        updateBattleBg();stopBgm();startBgm();
       }else{
         const prevSeg=getSegIdx(G.stage);
         G.stage++;
@@ -4079,7 +4158,16 @@ function spawnMonster(){
   // 도감 키: 0_segIdx_type — 모든 챕터 공통(themeIdx=0 고정)
   const themeIdx=0;
   const segIdx=getSegIdx(G.stage);
-  const collKey=G.isBoss?`${themeIdx}_${segIdx}_boss_${bt}`:`${themeIdx}_${segIdx}_mob`;
+  let collKey;
+  if(G.isBoss){
+    collKey=`${themeIdx}_${segIdx}_boss_${bt}`;
+  } else {
+    // 5종 몬스터 중 현재 표시된 몬스터 인덱스
+    const seg=THEMES[0].segments[segIdx];
+    const monsters=seg.monsters&&seg.monsters.length>0?seg.monsters:[seg.monster];
+    const monIdx=(G.stageKillCount-1+monsters.length)%monsters.length;
+    collKey=`${themeIdx}_${segIdx}_mob${monIdx}`;
+  }
   G.monsterColl[collKey]=true;
   _applyMonsterSpawnDebuffs(mData,stats);
   renderBuffBar();
@@ -5930,47 +6018,54 @@ function renderCollTab(){
   };
   const theme0=THEMES[0];
   let collHtml='';
-  theme0.segments.forEach((seg,si)=>{
-    const mobKey=`0_${si}_mob`;
+  // seg0~9: 1~100스테이지
+  theme0.segments.slice(0,10).forEach((seg,si)=>{
     const bKey=`0_${si}_boss_normal`;
     const vKey=`0_${si}_boss_vip`;
-    const mobCol=G.monsterColl[mobKey];
     const bCol=G.monsterColl[bKey];
     const vCol=G.monsterColl[vKey];
+    const monsters=seg.monsters&&seg.monsters.length>0?seg.monsters:[seg.monster||{n:'???',e:'❓'}];
+    const mobEntries=monsters.map((mon,mi)=>{
+      const mKey=`0_${si}_mob${mi}`;
+      const mCol=G.monsterColl[mKey]||G.monsterColl[`0_${si}_mob`];
+      return`<div class="coll-mon-entry">
+          <div class="coll-mon-item${mCol?' collected':' unknown'}" title="${mon.n}">${_collMonIcon(mon,mCol)}</div>
+          <div class="coll-mon-name" style="color:${mCol?gradeColor.mob:'var(--text3)'}">${mon.n}</div>
+          ${makeSoulDisplay(mKey,mCol)}
+        </div>`;
+    }).join('');
     collHtml+=`<div class="coll-seg-row">
       <div class="coll-seg-name" style="color:var(--text3);font-size:9px">${si*10+1}~${si*10+10}스테이지 · ${seg.name}</div>
       <div class="coll-mon-group">
-        <div class="coll-mon-entry">
-          <div class="coll-mon-item${mobCol?' collected':' unknown'}" title="${seg.monster.n}">${_collMonIcon(seg.monster,mobCol)}</div>
-          <div class="coll-mon-name" style="color:${mobCol?gradeColor.mob:'var(--text3)'}">${seg.monster.n}</div>
-          ${makeSoulDisplay(mobKey,mobCol)}
-        </div>
+        ${mobEntries}
         <div class="coll-mon-entry">
           <div class="coll-mon-item boss-item${bCol?' collected':' unknown'}" title="${seg.boss.n}">${bCol?_collMonIcon(seg.boss,bCol):'👹'}</div>
           <div class="coll-mon-name" style="color:${bCol?gradeColor.normal:'var(--text3)'}">${seg.boss.n}</div>
           ${makeSoulDisplay(bKey,bCol)}
         </div>
-        ${si<9?`<div class="coll-mon-entry">
+        <div class="coll-mon-entry">
           <div class="coll-mon-item vip-item${vCol?' collected':' unknown'}" title="${seg.eliteBoss.n}">${vCol?_collMonIcon(seg.eliteBoss,vCol):'💎'}</div>
           <div class="coll-mon-name" style="color:${vCol?gradeColor.vip:'var(--text3)'}">${seg.eliteBoss.n}</div>
           ${makeSoulDisplay(vKey,vCol)}
-        </div>`:''}
+        </div>
       </div>
     </div>`;
   });
-  // 엘리트 보스
-  const eKey=`0_9_boss_elite`;
-  const eCol=G.monsterColl[eKey];
+  // seg10: 101스테이지 엘리트보스
+  const eKey=`0_10_boss_elite`;
+  const eCol=G.monsterColl[eKey]||G.monsterColl[`0_9_boss_elite`];
+  const eliteSeg=theme0.segments[10];
   collHtml+=`<div class="coll-seg-row">
-    <div class="coll-seg-name" style="color:#ff4757;font-size:9px">👑 100스테이지 엘리트보스</div>
+    <div class="coll-seg-name" style="color:#ff4757;font-size:9px">👑 101스테이지 · ${eliteSeg.name}</div>
     <div class="coll-mon-group">
       <div class="coll-mon-entry">
-        <div class="coll-mon-item elite-item${eCol?' collected':' unknown'}" title="${theme0.eliteFinal.n}">${eCol?_collMonIcon(theme0.eliteFinal,eCol):'👑'}</div>
-        <div class="coll-mon-name" style="color:${eCol?'#ff4757':'var(--text3)'}">${theme0.eliteFinal.n}</div>
+        <div class="coll-mon-item elite-item${eCol?' collected':' unknown'}" title="${eliteSeg.eliteBoss.n}">${eCol?_collMonIcon(eliteSeg.eliteBoss,eCol):'👑'}</div>
+        <div class="coll-mon-name" style="color:${eCol?'#ff4757':'var(--text3)'}">${eliteSeg.eliteBoss.n}</div>
         ${makeSoulDisplay(eKey,eCol)}
       </div>
     </div>
   </div>`;
+
   // coll-level-box, coll-bulk-lvup는 mc 안에 있으므로 보존 후 재삽입
   const lvBox=document.getElementById('coll-level-box');
   const bulkEl=document.getElementById('coll-bulk-lvup');
@@ -6333,9 +6428,10 @@ function updateNotifDots(){
 //  STAGE NAV
 // ══════════════════════════════════════════
 function updateStageLbl(){
-  const d=getMonsterData(G.chapter,G.stage);
-  document.getElementById('stage-label-main').textContent=`${G.chapter}-${G.stage}스테이지`;
-  document.getElementById('stage-label-sub').textContent=`${G.chapter}챕터 ${G.stage}스테이지`;
+  const stageStr=G.stage===101?`${G.chapter}-101 ★엘리트★`:`${G.chapter}-${G.stage}스테이지`;
+  document.getElementById('stage-label-main').textContent=stageStr;
+  const seg=THEMES[0].segments[getSegIdx(G.stage)];
+  document.getElementById('stage-label-sub').textContent=seg?seg.name:'';
 }
 let stagePopupTab2='info';
 let _popupChapOpen={};
@@ -6387,7 +6483,7 @@ function renderStagePopup(){
     const hitColor=parseFloat(curHit)>=90?'var(--shard)':parseFloat(curHit)>=80?'var(--gold)':'var(--hp)';
     const defColor=defOk?'var(--shard)':parseFloat(curDefRed)<=50?'var(--gold)':'var(--hp)';
 
-    let html=`<div style="font-size:9px;color:var(--accent);margin-bottom:3px">${G.chapter}챕터 ${G.stage}스테이지</div>`;
+    let html=`<div style="font-size:9px;color:var(--accent);margin-bottom:3px">${THEMES[0].segments[getSegIdx(G.stage)]?.name||''}</div>`;
     html+=`<div class="popup-monster-row"><span>${d.monster.e} ${d.monster.n}</span><span style="color:var(--text3)">체력:${fmtNum(stats.hp)} 공격:${fmtNum(stats.atk)}</span></div>`;
     html+=`<div style="font-size:10px;color:var(--gold);padding:2px 0;border-bottom:1px solid var(--border)">💰 ${fmtNum(goldPerKill)} &nbsp;<span style="display:inline-block;background:#1a4d2a;color:#3fb950;font-size:8px;font-weight:bold;padding:1px 4px;border-radius:3px;border:1px solid #2ea043;vertical-align:middle">경험치</span> ${fmtNum(expPerKill)}</div>`;
     html+=`<div class="popup-monster-row" style="color:var(--hp);margin-top:2px"><span>${d.boss.e} ${d.boss.n} <span style="font-size:9px;opacity:.7">(${bossLabel})</span></span><span style="color:var(--text3)">체력:${fmtNum(bs.hp)} ⏱${bs.bossTimer}s</span></div>`;
@@ -6532,19 +6628,25 @@ function removeFavStage(c,s){
 }
 function moveToMaxStage(){
   const bestGs=G.highestGlobalStage||currGS();
-  const bestChap=Math.ceil(bestGs/100);
-  const bestSt=((bestGs-1)%100)+1;
+  const bestChap=Math.ceil(bestGs/101);
+  const bestSt=((bestGs-1)%101)+1;
   moveToStage(bestChap,bestSt);
 }
 function moveToStage(chap,stage){
-  const isMaxStage=(chap===Math.ceil((G.highestGlobalStage||1)/100))&&(stage===((G.highestGlobalStage-1)%100)+1);
+  const bestGs=G.highestGlobalStage||1;
+  const bestChap=Math.ceil(bestGs/101);
+  const bestSt=((bestGs-1)%101)+1;
+  const isMaxStage=(chap===bestChap&&stage===bestSt);
+  // 101스테이지는 파밍 불가
+  const isEliteStage=stage===101;
   G.chapter=chap;G.stage=stage;G.monsterIdx=0;G.isBoss=false;G.stageKillCount=0;
-  G._farmMode=!isMaxStage;
+  G._farmMode=(!isMaxStage&&!isEliteStage);
   if(bossTimerInterval){clearInterval(bossTimerInterval);bossTimerInterval=null;}
   hideBossGauge();
   updateStageLbl();updateBattleBg();stopBgm();startBgm();spawnMonster();
   updateFarmPenaltyLabel();
-  showNotif(G._farmMode?`🌾 ${chap}-${stage} 파밍 중`:`📍 ${chap}-${stage} 이동`,'top');
+  const modeLabel=isEliteStage?`👑 ${chap}-101 엘리트 도전`:G._farmMode?`🌾 ${chap}-${stage} 파밍 중`:`📍 ${chap}-${stage} 이동`;
+  showNotif(modeLabel,'top');
   document.getElementById('stage-popup').classList.remove('show');
 }
 
