@@ -540,12 +540,12 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 /* Battle scene */
 .battle-scene{
   flex:1;min-height:0;
-  display:flex;align-items:center;justify-content:space-around;
-  padding:4px 8px;position:relative;
+  display:flex;align-items:flex-end;justify-content:space-around;
+  padding:4px 8px 0;position:relative;
 }
 .fighter{display:flex;flex-direction:column;align-items:center;gap:0;flex:1}
 .fighter-emoji{
-  font-size:46px;line-height:1;
+  font-size:90px;line-height:1;
   filter:drop-shadow(0 2px 6px rgba(0,0,0,0.9));
   text-shadow:2px 2px 0 rgba(0,0,0,0.5);
 }
@@ -558,8 +558,8 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 .px-attack{animation:pxAttack 0.25s ease-out forwards;}
 .px-hit{animation:pxHit 0.35s ease-out forwards;}
 .px-death{animation:pxDeath 0.7s ease-out forwards;}
-#player-emoji{width:46px;height:46px;display:flex;align-items:center;justify-content:center;}
-#player-emoji svg{width:46px;height:46px;}
+#player-emoji{width:100px;height:100px;display:flex;align-items:center;justify-content:center;}
+#player-emoji svg{width:100px;height:100px;}
 .fighter-title{font-size:9px;color:var(--gold);text-align:center;display:none;
   background:rgba(13,19,28,0.78);border:1px solid rgba(227,179,65,0.45);
   border-radius:3px;padding:1px 7px;margin-bottom:8px;
@@ -588,7 +588,9 @@ input[type=range]{width:100%;accent-color:var(--accent)}
   text-shadow:1px 1px 0 rgba(0,0,0,1),0 0 8px rgba(0,0,0,0.8);flex-shrink:0}
 
 /* Boss is large */
-.fighter-emoji.boss{font-size:54px}
+.fighter-emoji.boss{font-size:130px}
+.fighter-emoji.boss-vip{font-size:175px}
+.fighter-emoji.boss-elite{font-size:220px}
 @keyframes monDieFade{0%{opacity:1;transform:scale(1) translateY(0)}60%{opacity:0.3;transform:scale(0.85) translateY(4px)}100%{opacity:0;transform:scale(0.7) translateY(14px)}}
 @keyframes monDieSpin{0%{opacity:1;transform:rotate(0deg) scale(1)}70%{opacity:0.4;transform:rotate(120deg) scale(0.6)}100%{opacity:0;transform:rotate(180deg) scale(0.2)}}
 @keyframes monDieExplode{0%{opacity:1;transform:scale(1)}30%{opacity:1;transform:scale(1.35)}100%{opacity:0;transform:scale(0.1)}}
@@ -2226,7 +2228,7 @@ const SAVE_KEY = 'dotrium_v1';
 // ══════════════════════════════════════════
 //  VERSION CHECK
 // ══════════════════════════════════════════
-const GAME_VERSION = 'v03_21';
+const GAME_VERSION = 'v03_22';
 // GitHub Pages 배포 시 아래 URL을 본인 레포로 변경하세요
 // 예: 'https://[계정].github.io/[레포]/version.json'
 const VERSION_CHECK_URL = 'version.json';
@@ -4075,7 +4077,15 @@ function hideBossGauge(){
 }
 // ── 몬스터 표시 헬퍼: 이미지 어셋 있으면 img, 없으면 이모지 fallback ──
 // GitHub 경로(mData.img)에 이미지를 업로드하면 자동으로 이미지로 전환됩니다.
-function _setMonsterDisplay(el, mData, isBoss){
+// 크기 체계: 일반몹=90px / 일반보스=130px / vip보스=175px / elite보스=220px
+function _getMonsterSize(isBoss, bossType){
+  if(!isBoss) return 90;
+  if(bossType==='elite') return 220;
+  if(bossType==='vip')   return 175;
+  return 130; // normal boss
+}
+function _setMonsterDisplay(el, mData, isBoss, bossType){
+  const sz = _getMonsterSize(isBoss, bossType);
   if(mData.img){
     const testImg=new Image();
     testImg.onload=function(){
@@ -4085,8 +4095,8 @@ function _setMonsterDisplay(el, mData, isBoss){
       el.style.backgroundRepeat='no-repeat';
       el.style.backgroundPosition='center bottom';
       el.style.fontSize='0';
-      el.style.width=isBoss?'64px':'46px';
-      el.style.height=isBoss?'64px':'46px';
+      el.style.width=sz+'px';
+      el.style.height=sz+'px';
     };
     testImg.onerror=function(){
       el.style.backgroundImage='';el.style.fontSize='';
@@ -4116,8 +4126,9 @@ function spawnMonster(){
   const me=document.getElementById('monster-emoji');
   me.style.opacity='';
   // 이미지 어셋 지원: mData.img 경로 존재 시 이미지 표시, 없으면 이모지 fallback
-  _setMonsterDisplay(me, mData, G.isBoss);
-  me.className='fighter-emoji'+(G.isBoss?' boss':'')+' mon-spawn';
+  _setMonsterDisplay(me, mData, G.isBoss, bt);
+  const bossClass = bt==='elite'?'boss-elite':bt==='vip'?'boss-vip':G.isBoss?'boss':'';
+  me.className='fighter-emoji'+(bossClass?' '+bossClass:'')+' mon-spawn';
   setTimeout(()=>me.classList.remove('mon-spawn'),400);
   document.getElementById('monster-name-label').textContent=mData.n||mData.name||'???';
   // 보스 이름 강조 처리
