@@ -539,31 +539,28 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 
 /* Battle scene */
 .battle-scene{
-  flex:1;min-height:0;
-  display:flex;align-items:center;justify-content:space-around;
-  padding:4px 8px 0;position:relative;
+  position:absolute;left:0;right:0;bottom:0;
+  display:flex;align-items:flex-end;justify-content:space-around;
+  padding:4px 8px 0;
+  pointer-events:none;
+  z-index:8;
 }
-.fighter{display:flex;flex-direction:column;align-items:center;gap:0;flex:1}
+.fighter{display:flex;flex-direction:column;align-items:center;gap:0;flex:1;pointer-events:all}
 .fighter-emoji{
   font-size:90px;line-height:1;
-  filter:drop-shadow(0 2px 6px rgba(0,0,0,0.9));
-  text-shadow:2px 2px 0 rgba(0,0,0,0.5);
 }
 .px-char{image-rendering:pixelated;image-rendering:crisp-edges;display:block;}
 @keyframes pxIdle{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
 @keyframes pxAttack{0%{transform:translateX(0)}35%{transform:translateX(10px) scaleX(1.1)}70%{transform:translateX(16px)}100%{transform:translateX(0)}}
-@keyframes pxHit{0%{filter:brightness(1) drop-shadow(0 0 0px rgba(255,60,60,0))}20%{filter:brightness(1.15) sepia(0.6) saturate(3) hue-rotate(-30deg) drop-shadow(0 0 6px rgba(255,60,60,0.7))}60%{filter:brightness(1.1) sepia(0.4) saturate(2) hue-rotate(-20deg) drop-shadow(0 0 4px rgba(255,60,60,0.4))}100%{filter:brightness(1) drop-shadow(0 0 0px rgba(255,60,60,0))}}
+@keyframes pxHit{0%{filter:brightness(1)}20%{filter:brightness(1.15) sepia(0.6) saturate(3) hue-rotate(-30deg)}60%{filter:brightness(1.1) sepia(0.4) saturate(2) hue-rotate(-20deg)}100%{filter:brightness(1)}}
 @keyframes pxDeath{0%{transform:rotate(0deg) translateY(0);opacity:1}70%{transform:rotate(85deg) translateY(6px);opacity:0.5}100%{transform:rotate(90deg) translateY(10px);opacity:0}}
 .px-idle{animation:pxIdle 1.4s ease-in-out infinite;}
 .px-attack{animation:pxAttack 0.25s ease-out forwards;}
 .px-hit{animation:pxHit 0.35s ease-out forwards;}
 .px-death{animation:pxDeath 0.7s ease-out forwards;}
-#player-emoji{width:100px;height:100px;display:flex;align-items:center;justify-content:center;}
-#player-emoji svg{width:100px;height:100px;}
-.fighter-title{font-size:9px;color:var(--gold);text-align:center;display:none;
-  background:rgba(13,19,28,0.78);border:1px solid rgba(227,179,65,0.45);
-  border-radius:3px;padding:1px 7px;margin-bottom:8px;
-  text-shadow:1px 1px 0 rgba(0,0,0,0.9)}
+#player-emoji{width:75px;height:75px;display:flex;align-items:center;justify-content:center;}
+#player-emoji svg{width:75px;height:75px;}
+.fighter-title{display:none!important;}
 .hp-bar-wrap{
   width:100%;max-width:120px;
   background:rgba(13,19,28,0.78);
@@ -669,7 +666,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 .dmg-popup.skill{font-size:15px}
 @keyframes dmgFloat{0%{opacity:1;transform:translateY(0)}80%{opacity:1;transform:translateY(-28px)}100%{opacity:0;transform:translateY(-36px)}}
 @keyframes monsterAttackShake{0%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(4px)}100%{transform:translateX(0)}}
-@keyframes monHit{0%{filter:brightness(1)}20%{filter:brightness(1.2) sepia(0.7) saturate(4) hue-rotate(-30deg) drop-shadow(0 0 7px rgba(255,50,50,0.9))}65%{filter:brightness(1.1) sepia(0.4) saturate(2) hue-rotate(-20deg) drop-shadow(0 0 4px rgba(255,50,50,0.5))}100%{filter:brightness(1)}}
+@keyframes monHit{0%{filter:brightness(1)}20%{filter:brightness(1.2) sepia(0.7) saturate(4) hue-rotate(-30deg)}65%{filter:brightness(1.1) sepia(0.4) saturate(2) hue-rotate(-20deg)}100%{filter:brightness(1)}}
 @keyframes healFloat{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-12px)}}
 .monster-attack-anim{animation:monsterAttackShake .22s ease}
 .mon-hit{animation:monHit 0.32s ease-out forwards;}
@@ -2228,7 +2225,7 @@ const SAVE_KEY = 'dotrium_v1';
 // ══════════════════════════════════════════
 //  VERSION CHECK
 // ══════════════════════════════════════════
-const GAME_VERSION = 'v03_22';
+const GAME_VERSION = 'v03_23';
 // GitHub Pages 배포 시 아래 URL을 본인 레포로 변경하세요
 // 예: 'https://[계정].github.io/[레포]/version.json'
 const VERSION_CHECK_URL = 'version.json';
@@ -2953,10 +2950,10 @@ function makePxChar(size){
 }
 function setPxCharAnim(el,anim){
   if(!el)return;
-  const svg=el.tagName==='svg'?el:el.querySelector('svg');
-  if(!svg)return;
-  svg.classList.remove('px-idle','px-attack','px-hit','px-death');
-  if(anim)svg.classList.add('px-'+anim);
+  const target=el.tagName==='svg'||el.tagName==='IMG'?el:(el.querySelector('svg')||el.querySelector('img'));
+  if(!target)return;
+  target.classList.remove('px-idle','px-attack','px-hit','px-death');
+  if(anim)target.classList.add('px-'+anim);
 }
 
 // ══════════════════════════════════════════
@@ -3764,7 +3761,7 @@ function gameTick(){
         if(_dmg>0)showMonsterDmgPopup(_dmg);
         if(_dmg>0){
           G.focusStacks=0;
-          const psvg=document.querySelector('#player-emoji svg');
+          const psvg=_getPlayerEl();
           if(psvg){psvg.classList.remove('px-idle','px-attack','px-hit','px-death');void psvg.offsetWidth;psvg.classList.add('px-hit');setTimeout(()=>{psvg.classList.remove('px-hit');psvg.classList.add('px-idle');},370);}
         }
         if(G.playerCurHp<=0){onPlayerDeath();}
@@ -3895,7 +3892,7 @@ function fireSkill(sid){
   checkQuestProgress();
 }
 function onPlayerDeath(){
-  const psvg=document.querySelector('#player-emoji svg');
+  const psvg=_getPlayerEl();
   if(psvg){psvg.classList.remove('px-idle','px-attack','px-hit','px-death');void psvg.offsetWidth;psvg.classList.add('px-death');setTimeout(()=>{psvg.classList.remove('px-death');psvg.classList.add('px-idle');},750);}
   clearCombatBuffs();
   G.playerCurHp=getFinalHp();
@@ -4097,7 +4094,18 @@ function _getMonsterDisplaySize(mData, isBoss, bossType){
 
 function _setMonsterDisplay(el, mData, isBoss, bossType){
   const {w, h} = _getMonsterDisplaySize(mData, isBoss, bossType);
-  const maxH = MAX_MON_PX;
+  // 스테이지 탭 하단 ~ battle-bg 하단 사이의 가용 높이로 max-height 클램핑
+  function _getAvailH(){
+    const bg=document.getElementById('battle-bg');
+    const si=document.getElementById('stage-info-box');
+    if(bg&&si){
+      const bgR=bg.getBoundingClientRect();
+      const siR=si.getBoundingClientRect();
+      return Math.max(60, bgR.bottom - siR.bottom - 8);
+    }
+    return MAX_MON_PX;
+  }
+  const maxH = Math.min(MAX_MON_PX, _getAvailH());
   if(mData.img){
     const testImg=new Image();
     testImg.onload=function(){
@@ -4126,13 +4134,8 @@ function _setMonsterDisplay(el, mData, isBoss, bossType){
   }
 }
 
-// 탭 열림/닫힘에 따라 battle-scene 수직 정렬 조정
-function _updateBattleSceneAlign(){
-  const bs=document.querySelector('.battle-scene');
-  if(!bs)return;
-  const expanded=document.getElementById('bottom').classList.contains('expanded');
-  bs.style.alignItems=expanded?'flex-end':'center';
-}
+// battle-scene은 position:absolute bottom:0 고정이므로 탭 상태와 무관하게 항상 최하단
+function _updateBattleSceneAlign(){ /* no-op: battle-scene은 absolute bottom:0 */ }
 
 function spawnMonster(){
   clearInterval(tickInterval);
@@ -7225,7 +7228,7 @@ function startTowerChallenge(){
         G.playerCurHp=Math.max(0,G.playerCurHp-mDmg);
         updatePlayerHpBar();showMonsterDmgPopup(mDmg);
         animateEl('monster-emoji','monster-attack-anim');
-        const psvg=document.querySelector('#player-emoji svg');
+        const psvg=_getPlayerEl();
         if(psvg){psvg.classList.remove('px-idle','px-attack','px-hit','px-death');void psvg.offsetWidth;psvg.classList.add('px-hit');setTimeout(()=>{psvg.classList.remove('px-hit');psvg.classList.add('px-idle');},370);}
       }
     }
@@ -7497,14 +7500,17 @@ function updateMonsterHpBar(){
 function _popupAt(b,el,anchorId,offsetX,offsetY){
   const battle=b.getBoundingClientRect();
   const anchor=document.getElementById(anchorId);
+  // 스테이지 정보탭 하단을 팝업 최소 top으로 클램핑
+  const stageBox=document.getElementById('stage-info-box');
+  const minTop=stageBox?(stageBox.getBoundingClientRect().bottom-battle.top+2):0;
   if(anchor){
     const r=anchor.getBoundingClientRect();
     const cx=r.left+r.width/2-battle.left;
     const cy=r.top+r.height/2-battle.top;
     el.style.left=(cx+offsetX)+'px';
-    el.style.top=(cy+offsetY)+'px';
+    el.style.top=Math.max(minTop, cy+offsetY)+'px';
   }else{
-    el.style.left='50%';el.style.top='50%';
+    el.style.left='50%';el.style.top=Math.max(minTop,battle.height/2)+'px';
   }
 }
 // 데미지 팝업 스택 — 동시에 여러 데미지가 위로 층층이 쌓임
@@ -7567,29 +7573,48 @@ function showEvadePopup(){
   _popupAt(b,el,'player-emoji',-30,ry);
   b.appendChild(el);setTimeout(()=>el.remove(),900);
 }
+// 플레이어 전투 요소 가져오기 (svg 또는 img 모두 지원)
+function _getPlayerEl(){
+  const pe=document.getElementById('player-emoji');
+  if(!pe)return null;
+  return pe.querySelector('svg')||pe.querySelector('img')||null;
+}
 function animateEl(id,cls){
   const el=document.getElementById(id);if(!el)return;
   if(id==='player-emoji'){
-    const svg=el.querySelector('svg');
-    if(svg){
-      svg.classList.remove('px-idle','px-attack','px-hit','px-death');
-      void svg.offsetWidth;
-      svg.classList.add('px-attack');
-      setTimeout(()=>{svg.classList.remove('px-attack');svg.classList.add('px-idle');},280);
+    const target=_getPlayerEl();
+    if(target){
+      target.classList.remove('px-idle','px-attack','px-hit','px-death');
+      void target.offsetWidth;
+      target.classList.add('px-attack');
+      setTimeout(()=>{target.classList.remove('px-attack');target.classList.add('px-idle');},280);
       return;
     }
   }
   el.classList.remove(cls);void el.offsetWidth;el.classList.add(cls);
   setTimeout(()=>el.classList.remove(cls),220);
 }
+// 플레이어 이미지 GitHub 경로 (이미지 업로드 시 자동 적용, 없으면 SVG fallback)
+const PLAYER_IMG = 'assets/img/player/player.png';
+
 function initPxChars(){
-  // 1. 전투 플레이어 (46px) — idle 애니메이션 있음
+  // 1. 전투 플레이어 — GitHub 이미지 우선, 없으면 SVG fallback
   const pe=document.getElementById('player-emoji');
   if(pe){
-    const svgStr=PLAYER_SVG.replace(/style="[^"]*"/g,'');
-    pe.innerHTML=svgStr;
-    const s=pe.querySelector('svg');
-    if(s){s.removeAttribute('id');}
+    const testImg=new Image();
+    testImg.onload=function(){
+      pe.innerHTML='';
+      pe.style.display='flex';pe.style.alignItems='flex-end';pe.style.justifyContent='center';
+      pe.innerHTML='<img src="'+PLAYER_IMG+'" class="px-char px-idle" style="width:75px;height:75px;object-fit:contain;object-position:center bottom;image-rendering:pixelated;">';
+    };
+    testImg.onerror=function(){
+      // SVG fallback
+      const svgStr=PLAYER_SVG.replace(/style="[^"]*"/g,'');
+      pe.innerHTML=svgStr;
+      const s=pe.querySelector('svg');
+      if(s){s.removeAttribute('id');}
+    };
+    testImg.src=PLAYER_IMG;
   }
   // 2. 상단 프로필 아바타 — 얼굴만 크롭
   const av=document.getElementById('avatar');
