@@ -540,7 +540,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 /* Battle scene */
 .battle-scene{
   flex:1;min-height:0;
-  display:flex;align-items:flex-end;justify-content:space-around;
+  display:flex;align-items:center;justify-content:space-around;
   padding:4px 8px 0;position:relative;
 }
 .fighter{display:flex;flex-direction:column;align-items:center;gap:0;flex:1}
@@ -587,10 +587,10 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 .vs-text{font-size:13px;color:var(--text2);font-weight:bold;
   text-shadow:1px 1px 0 rgba(0,0,0,1),0 0 8px rgba(0,0,0,0.8);flex-shrink:0}
 
-/* Boss is large */
-.fighter-emoji.boss{font-size:130px}
-.fighter-emoji.boss-vip{font-size:175px}
-.fighter-emoji.boss-elite{font-size:220px}
+/* Boss 이모지 fallback 크기 (이미지 있으면 JS가 인라인 스타일로 오버라이드) */
+.fighter-emoji.boss{font-size:54px}
+.fighter-emoji.boss-vip{font-size:64px}
+.fighter-emoji.boss-elite{font-size:72px}
 @keyframes monDieFade{0%{opacity:1;transform:scale(1) translateY(0)}60%{opacity:0.3;transform:scale(0.85) translateY(4px)}100%{opacity:0;transform:scale(0.7) translateY(14px)}}
 @keyframes monDieSpin{0%{opacity:1;transform:rotate(0deg) scale(1)}70%{opacity:0.4;transform:rotate(120deg) scale(0.6)}100%{opacity:0;transform:rotate(180deg) scale(0.2)}}
 @keyframes monDieExplode{0%{opacity:1;transform:scale(1)}30%{opacity:1;transform:scale(1.35)}100%{opacity:0;transform:scale(0.1)}}
@@ -4075,40 +4075,63 @@ function hideBossGauge(){
   document.getElementById('boss-gauge-wrap').style.display='none';
   document.getElementById('boss-timer-display').style.display='none';
 }
-// ── 몬스터 표시 헬퍼: 이미지 어셋 있으면 img, 없으면 이모지 fallback ──
-// GitHub 경로(mData.img)에 이미지를 업로드하면 자동으로 이미지로 전환됩니다.
-// 크기 체계: 일반몹=90px / 일반보스=130px / vip보스=175px / elite보스=220px
-function _getMonsterSize(isBoss, bossType){
-  if(!isBoss) return 90;
-  if(bossType==='elite') return 220;
-  if(bossType==='vip')   return 175;
-  return 130; // normal boss
+// ── 몬스터 표시 헬퍼 ──
+// 크기 규격화: 원본 이미지 크기(mData.imgW×imgH)를 기준으로 비율 계산
+//   기준: 원본 250px = 표시 MAX_MON_PX(220px)
+//   imgW/imgH 없을 시 타입별 기본값 사용 (mob=80, boss=120, vip=160, elite=220)
+// 세로 긴 이미지: max-height로 배틀존 초과 방지, object-fit:contain으로 비율 유지
+const MAX_MON_PX = 220;   // 250px 원본 파일 → 이 크기로 표시
+const MON_REF_PX = 250;   // 원본 기준 최대 크기
+
+function _getMonsterDisplaySize(mData, isBoss, bossType){
+  const srcSize = (mData.imgW || mData.imgH)
+    ? Math.max(mData.imgW||0, mData.imgH||0)
+    : (!isBoss ? 80 : bossType==='elite' ? 250 : bossType==='vip' ? 180 : 120);
+  const scale = MAX_MON_PX / MON_REF_PX;
+  if(mData.imgW && mData.imgH){
+    return {w: Math.round(mData.imgW * scale), h: Math.round(mData.imgH * scale)};
+  }
+  const d = Math.round(srcSize * scale);
+  return {w: d, h: d};
 }
+
 function _setMonsterDisplay(el, mData, isBoss, bossType){
-  const sz = _getMonsterSize(isBoss, bossType);
+  const {w, h} = _getMonsterDisplaySize(mData, isBoss, bossType);
+  const maxH = MAX_MON_PX;
   if(mData.img){
     const testImg=new Image();
     testImg.onload=function(){
       el.textContent='';
-      el.style.backgroundImage='url('+mData.img+')';
-      el.style.backgroundSize='contain';
-      el.style.backgroundRepeat='no-repeat';
-      el.style.backgroundPosition='center bottom';
+      el.style.backgroundImage='';
       el.style.fontSize='0';
-      el.style.width=sz+'px';
-      el.style.height=sz+'px';
+      el.style.width=w+'px';
+      el.style.height=Math.min(h, maxH)+'px';
+      el.style.display='flex';
+      el.style.alignItems='flex-end';
+      el.style.justifyContent='center';
+      el.innerHTML='<img src="'+mData.img+'" style="width:'+w+'px;max-height:'+maxH+'px;object-fit:contain;object-position:center bottom;image-rendering:pixelated;display:block;">';
     };
     testImg.onerror=function(){
       el.style.backgroundImage='';el.style.fontSize='';
-      el.style.width='';el.style.height='';
+      el.style.width='';el.style.height='';el.style.display='';
+      el.innerHTML='';
       el.textContent=mData.e||mData.emoji||'❓';
     };
     testImg.src=mData.img;
   } else {
     el.style.backgroundImage='';el.style.fontSize='';
-    el.style.width='';el.style.height='';
+    el.style.width='';el.style.height='';el.style.display='';
+    el.innerHTML='';
     el.textContent=mData.e||mData.emoji||'❓';
   }
+}
+
+// 탭 열림/닫힘에 따라 battle-scene 수직 정렬 조정
+function _updateBattleSceneAlign(){
+  const bs=document.querySelector('.battle-scene');
+  if(!bs)return;
+  const expanded=document.getElementById('bottom').classList.contains('expanded');
+  bs.style.alignItems=expanded?'flex-end':'center';
 }
 
 function spawnMonster(){
@@ -6966,6 +6989,7 @@ function _tutRestoreTab(){
     if(_tutPrevTab==='growth')switchGrowthTab(_tutPrevGrowthTab||'stat');
   }
   _tutPrevTab=null;_tutPrevGrowthTab=null;
+  _updateBattleSceneAlign();
 }
 
 function _showCtxBox(t){
@@ -7669,7 +7693,7 @@ function switchTab(name){
   const wasActive=_activeTab===name&&bottom.classList.contains('expanded');
   if(wasActive){
     bottom.classList.remove('expanded');
-    _activeTab='';playSfx('click');return;
+    _activeTab='';_updateBattleSceneAlign();playSfx('click');return;
   }
   _activeTab=name;
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
@@ -7677,6 +7701,7 @@ function switchTab(name){
   document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
   const panel=document.getElementById('panel-'+name);if(panel)panel.classList.add('active');
   bottom.classList.add('expanded');
+  _updateBattleSceneAlign();
   if(name==='growth')switchGrowthTab(_growthTab);
   if(name==='equip')renderEquipTab();
   if(name==='skill'){renderSkillTab();if(!G._skillTabVisited){G._skillTabVisited=true;showCtxTutorial('skillTab');}}
