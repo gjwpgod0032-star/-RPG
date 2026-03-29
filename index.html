@@ -2221,7 +2221,7 @@ const SAVE_KEY = 'dotrium_v1';
 // ══════════════════════════════════════════
 //  VERSION CHECK
 // ══════════════════════════════════════════
-const GAME_VERSION = 'v03_38';
+const GAME_VERSION = 'v03_43';
 // GitHub Pages 배포 시 아래 URL을 본인 레포로 변경하세요
 // 예: 'https://[계정].github.io/[레포]/version.json'
 const VERSION_CHECK_URL = 'version.json';
@@ -2293,7 +2293,7 @@ const THEMES=[
           {n:'굶주린 들쥐',     e:'🐀', img:'assets/img/monster/s0_mob2.png'},
           {n:'흙먼지 두더지',   e:'🦔', img:'assets/img/monster/s0_mob3.png'},
           {n:'성난 허수아비',   e:'🌾', img:'assets/img/monster/s0_mob4.png'},
-          {n:'난폭한 까마귀',   e:'🐦', img:'assets/img/monster/s0_mob5.png'},
+          {n:'난폭한 참새',   e:'🐦', img:'assets/img/monster/s0_mob5.png'},
         ],
         boss:     {n:'들판의 정령',   e:'🌬️',img:'assets/img/monster/s0_boss.png'},
         eliteBoss:{n:'풍요를 삼킨 자',e:'⚔️', img:'assets/img/monster/s0_vip.png'}},
@@ -4101,47 +4101,25 @@ function hideBossGauge(){
 // 탭 닫힌 상태 기준 battle 영역에서 상하좌우 여백을 뺀 실제 인게임 높이 계산
 // 가장 큰 몬스터(MON_MAX_SRC=250px)가 인게임 영역에 여백 포함해서 딱 맞도록 계수 결정
 const MON_MAX_SRC = 250; // 원본 최대 크기(px) 기준
-const PLAYER_BASE_SIZE = 108; // 플레이어 원본 기준 크기(px) — 90px 대비 약 20% 확대
+const PLAYER_BASE_SIZE = 130; // 플레이어 원본 기준 크기(px) — 108px 대비 약 20% 확대
 // 인게임 영역 여백 계수: 탭 닫혔을 때 battle-scene 높이 대비 몬스터 최대 표시 비율
 // (상하 약간의 여백을 두고 가장 큰 몬스터가 표시되는 비율)
-const MON_SCENE_FIT = 0.369; // battle-scene 높이의 36.9%를 몬스터 최대 표시 높이로 사용 (원본 72%에서 총 ~49% 축소)
+const MON_SCENE_FIT = 0.512; // battle-scene 직접 측정 높이의 51.2% (0.64의 80%)
 
-let _cachedInGameScale = 0; // 초기화 후 캐시 (탭 무관 고정값)
+let _cachedInGameScale = 0; // 0이면 미계산 상태
 
 function _calcInGameScale(){
-  // #battle 높이 = 전체 dvh - topbar - quest-zone - gacha-zone - bottom(탭닫힘=tab-h)
-  // 직접 #battle 요소에서 측정하되 탭 확장 여부와 무관하게 계산
-  const appEl = document.getElementById('app');
-  const topbarEl = document.getElementById('topbar');
-  const questEl = document.getElementById('quest-zone');
-  const gachaEl = document.getElementById('gacha-zone');
-  const bottomEl = document.getElementById('bottom');
-
-  if(!appEl || !topbarEl || !questEl || !gachaEl || !bottomEl) return 1;
-
-  const appH = appEl.getBoundingClientRect().height;
-  const topH = topbarEl.getBoundingClientRect().height;
-  const questH = questEl.getBoundingClientRect().height;
-  const gachaH = gachaEl.getBoundingClientRect().height;
-  // 탭 닫힌 상태 기준: bottom은 항상 var(--tab-h)=42px
-  const tabH = 42;
-
-  // battle 전체 높이(탭 닫힘 기준)
-  const battleH = Math.max(80, appH - topH - questH - gachaH - tabH);
-
-  // battle-scene은 battle-bg 내부 flex:1 — stage-info-box, skill-bar, buff-bar 등이 고정 높이 차지
-  // stage-info-box ~28px, skill-bar ~32px, buff-bar ~20px = 약 80px 제외
-  const sceneH = Math.max(40, battleH - 80);
-
-  // 가장 큰 몬스터(250px 원본)가 sceneH * MON_SCENE_FIT 에 맞도록 계수 결정
+  // battle-scene 요소를 직접 측정
+  const sceneEl = document.querySelector('.battle-scene');
+  if(!sceneEl) return 1;
+  const sceneH = sceneEl.getBoundingClientRect().height;
+  if(sceneH < 10) return 1;
   const scale = (sceneH * MON_SCENE_FIT) / MON_MAX_SRC;
   return Math.max(0.2, Math.min(2.0, scale));
 }
 
 function _getInGameScale(){
-  if(_cachedInGameScale > 0) return _cachedInGameScale;
-  _cachedInGameScale = _calcInGameScale();
-  return _cachedInGameScale;
+  return _calcInGameScale();
 }
 
 // 강제 재계산 (레이아웃 초기화 시 호출)
