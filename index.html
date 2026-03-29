@@ -2221,7 +2221,7 @@ const SAVE_KEY = 'dotrium_v1';
 // ══════════════════════════════════════════
 //  VERSION CHECK
 // ══════════════════════════════════════════
-const GAME_VERSION = 'v03_31';
+const GAME_VERSION = 'v03_32';
 // GitHub Pages 배포 시 아래 URL을 본인 레포로 변경하세요
 // 예: 'https://[계정].github.io/[레포]/version.json'
 const VERSION_CHECK_URL = 'version.json';
@@ -2546,8 +2546,8 @@ const ENHANCE_ITEMS=[
   {id:'atk',name:'공격력',emoji:'⚔️',pct:1,base:80,desc:'기본 공격력을 높입니다. 모든 피해에 영향을 줍니다.'},
   {id:'hp',name:'최대 체력',emoji:'❤️',pct:1,base:80,desc:'최대 HP를 늘려 전투 지속력을 높습니다.'},
   {id:'def',name:'방어력',emoji:'🛡️',pct:1,base:80,desc:'받는 피해를 줄여줍니다. 높을수록 생존력이 올라갑니다.'},
-  {id:'normaldmg',name:'일반몹 피해',emoji:'🗡️',pct:1.5,base:100,desc:'일반몹에게만 적용되는 추가 피해. 보스에게는 적용되지 않습니다.'},
-  {id:'bossdmg',name:'보스 피해',emoji:'👹',pct:1.5,base:120,desc:'보스 몬스터에게 가하는 피해를 추가로 높입니다.'},
+  {id:'normaldmg',name:'일반몹 피해',emoji:'🗡️',pct:0.1,base:100,desc:'일반몹에게만 적용되는 추가 피해. 보스에게는 적용되지 않습니다.'},
+  {id:'bossdmg',name:'보스 피해',emoji:'👹',pct:0.1,base:120,desc:'보스 몬스터에게 가하는 피해를 추가로 높입니다.'},
   {id:'lifeSteal',name:'흡혈',emoji:'🩸',pct:0.01,base:600,unit:'%',costMult:2.2,maxLv:1000,desc:'가한 피해의 일부를 HP로 흡수합니다. (최대 10%)'},
   {id:'crit',name:'치명타 확률',emoji:'🎯',pct:0.1,base:500,unit:'%',
    desc:'치명타 확률을 높입니다. 100% 초과분은 치명타 피해로 전환됩니다.',
@@ -2568,7 +2568,6 @@ const STAT_DEFS=[
   {id:'atk',name:'공격력',emoji:'⚔️'},
   {id:'hp',name:'체력',emoji:'❤️'},
   {id:'def',name:'방어력',emoji:'🛡️'},
-  {id:'critdmg',name:'치명타 피해',emoji:'💥'},
   {id:'finaldmg',name:'최종 데미지',emoji:'🌟'},
   {id:'acc',name:'명중',emoji:'🎯'},
   {id:'eva',name:'회피',emoji:'💨'},
@@ -2580,66 +2579,66 @@ const ACTIVE_SKILLS=[
   // ── 초반 ──
   {id:'strike',name:'강타',emoji:'⚔️',unlockLv:10,cd:4,maxLv:100,
     descFull:'기본 강타. 빠른 쿨타임의 단타 일격. 초반 주력기.',
-    desc:lv=>`공격력의 ${200+lv*3+Math.floor(lv/5)*15}% / 5레벨마다 +15%`,
-    nextDesc:lv=>`공격력의 ${200+(lv+1)*3+Math.floor((lv+1)/5)*15}%`,
-    bonus5:lv=>Math.floor(lv/5)*15},
+    desc:lv=>`공격력의 ${200+lv*2+Math.floor(lv/5)*10}% / 5레벨마다 +10%`,
+    nextDesc:lv=>`공격력의 ${200+(lv+1)*2+Math.floor((lv+1)/5)*10}%`,
+    bonus5:lv=>Math.floor(lv/5)*10},
   {id:'combo',name:'연속베기',emoji:'🗡️',unlockLv:20,cd:5,maxLv:100,
-    descFull:'빠른 연속 베기. 타수 고정 4회, 레벨마다 배율 성장. 5레벨마다 각 타격 데미지 +6%.',
-    desc:lv=>`4회 × 공격력의 ${80+lv*1.5+Math.floor(lv/5)*6}% / 5레벨마다 각 타 +6%`,
-    nextDesc:lv=>`4회 × 공격력의 ${80+(lv+1)*1.5+Math.floor((lv+1)/5)*6}%`,
-    bonus5:lv=>Math.floor(lv/5)*6},
+    descFull:'빠른 연속 베기. 타수 고정 4회, 레벨마다 배율 성장. 5레벨마다 각 타격 데미지 +4%.',
+    desc:lv=>`4회 × 공격력의 ${80+lv*1+Math.floor(lv/5)*4}% / 5레벨마다 각 타 +4%`,
+    nextDesc:lv=>`4회 × 공격력의 ${80+(lv+1)*1+Math.floor((lv+1)/5)*4}%`,
+    bonus5:lv=>Math.floor(lv/5)*4},
   {id:'slash',name:'횡참',emoji:'🌙',unlockLv:35,cd:4,maxLv:100,
     descFull:'빠른 쿨타임의 횡베기. 자주 쓸 수 있는 중거리 일격.',
-    desc:lv=>`공격력의 ${420+lv*5+Math.floor(lv/5)*20}% / 5레벨마다 +20%`,
-    nextDesc:lv=>`공격력의 ${420+(lv+1)*5+Math.floor((lv+1)/5)*20}%`,
-    bonus5:lv=>Math.floor(lv/5)*20},
+    desc:lv=>`공격력의 ${420+lv*3+Math.floor(lv/5)*14}% / 5레벨마다 +14%`,
+    nextDesc:lv=>`공격력의 ${420+(lv+1)*3+Math.floor((lv+1)/5)*14}%`,
+    bonus5:lv=>Math.floor(lv/5)*14},
   {id:'stab',name:'찌르기',emoji:'🔱',unlockLv:55,cd:3,maxLv:100,
     descFull:'초단 쿨타임 2연타. 갑옷 틈을 파고드는 빠른 찌르기.',
-    desc:lv=>`2회 × 공격력의 ${160+lv*1.5+Math.floor(lv/5)*15}% / 5레벨마다 +15%`,
-    nextDesc:lv=>`2회 × 공격력의 ${160+(lv+1)*1.5+Math.floor((lv+1)/5)*15}%`,
-    bonus5:lv=>Math.floor(lv/5)*15},
+    desc:lv=>`2회 × 공격력의 ${160+lv*1+Math.floor(lv/5)*10}% / 5레벨마다 +10%`,
+    nextDesc:lv=>`2회 × 공격력의 ${160+(lv+1)*1+Math.floor((lv+1)/5)*10}%`,
+    bonus5:lv=>Math.floor(lv/5)*10},
   // ── 중반 ──
   {id:'pierce_shot',name:'관통격',emoji:'🏹',unlockLv:80,cd:4,maxLv:100,
     descFull:'방어구 관통 + 3초 방어 약화. 탱킹 몬스터에 효과적.',
-    desc:lv=>`공격력의 ${1100+lv*8+Math.floor(lv/5)*40}% + 취약(받는 피해 +25%, 3초) / 5레벨마다 +40%`,
-    nextDesc:lv=>`공격력의 ${1100+(lv+1)*8+Math.floor((lv+1)/5)*40}%`,
-    bonus5:lv=>Math.floor(lv/5)*40},
+    desc:lv=>`공격력의 ${1100+lv*5+Math.floor(lv/5)*28}% + 취약(받는 피해 +25%, 3초) / 5레벨마다 +28%`,
+    nextDesc:lv=>`공격력의 ${1100+(lv+1)*5+Math.floor((lv+1)/5)*28}%`,
+    bonus5:lv=>Math.floor(lv/5)*28},
   {id:'whirlwind',name:'선풍참',emoji:'🌪️',unlockLv:110,cd:5,maxLv:100,
     descFull:'단타이지만 몬스터 현재 HP 비례 추가 피해. 고체력 적에게 강력.',
-    desc:lv=>`공격력의 ${2000+lv*10+Math.floor(lv/5)*50}% + 현재HP의 ${(4+lv*.06).toFixed(1)}% / 5레벨마다 +50%`,
-    nextDesc:lv=>`공격력의 ${2000+(lv+1)*10+Math.floor((lv+1)/5)*50}% + 현재HP ${(4+(lv+1)*.06).toFixed(1)}%`,
-    bonus5:lv=>Math.floor(lv/5)*50},
+    desc:lv=>`공격력의 ${2000+lv*7+Math.floor(lv/5)*35}% + 현재HP의 ${(4+lv*.06).toFixed(1)}% / 5레벨마다 +35%`,
+    nextDesc:lv=>`공격력의 ${2000+(lv+1)*7+Math.floor((lv+1)/5)*35}% + 현재HP ${(4+(lv+1)*.06).toFixed(1)}%`,
+    bonus5:lv=>Math.floor(lv/5)*35},
   {id:'skyfall',name:'낙하참',emoji:'⬇️',unlockLv:150,cd:5,maxLv:100,
     descFull:'전신 무게를 실은 낙하 일격. 보스에게 추가 배율 적용.',
-    desc:lv=>`공격력의 ${2200+lv*12+Math.floor(lv/5)*60}% (보스 +50%) / 5레벨마다 +60%`,
-    nextDesc:lv=>`공격력의 ${2200+(lv+1)*12+Math.floor((lv+1)/5)*60}%`,
-    bonus5:lv=>Math.floor(lv/5)*60},
+    desc:lv=>`공격력의 ${2200+lv*8+Math.floor(lv/5)*42}% (보스 +50%) / 5레벨마다 +42%`,
+    nextDesc:lv=>`공격력의 ${2200+(lv+1)*8+Math.floor((lv+1)/5)*42}%`,
+    bonus5:lv=>Math.floor(lv/5)*42},
   {id:'explosion',name:'폭쇄',emoji:'💥',unlockLv:200,cd:4,maxLv:100,
     descFull:'검기 폭발로 현재 HP 비례 충격파. 잔피 보스에게 특히 강력.',
-    desc:lv=>`공격력의 ${2400+lv*12+Math.floor(lv/5)*55}% + 현재HP의 ${(6+lv*.08).toFixed(1)}% / 5레벨마다 +55%`,
-    nextDesc:lv=>`공격력의 ${2400+(lv+1)*12+Math.floor((lv+1)/5)*55}% +현재HP ${(6+(lv+1)*.08).toFixed(1)}%`,
-    bonus5:lv=>Math.floor(lv/5)*55},
+    desc:lv=>`공격력의 ${2400+lv*8+Math.floor(lv/5)*38}% + 현재HP의 ${(6+lv*.08).toFixed(1)}% / 5레벨마다 +38%`,
+    nextDesc:lv=>`공격력의 ${2400+(lv+1)*8+Math.floor((lv+1)/5)*38}% +현재HP ${(6+(lv+1)*.08).toFixed(1)}%`,
+    bonus5:lv=>Math.floor(lv/5)*38},
   // ── 후반 ──
   {id:'cross_slash',name:'십자참',emoji:'✝️',unlockLv:260,cd:5,maxLv:100,
     descFull:'X자 2타 강타. 레벨당 배율 성장이 우수한 딜링기.',
-    desc:lv=>`2회 × 공격력의 ${1400+lv*8+Math.floor(lv/5)*40}% / 5레벨마다 +40%`,
-    nextDesc:lv=>`2회 × 공격력의 ${1400+(lv+1)*8+Math.floor((lv+1)/5)*40}%`,
-    bonus5:lv=>Math.floor(lv/5)*40},
+    desc:lv=>`2회 × 공격력의 ${1400+lv*5+Math.floor(lv/5)*28}% / 5레벨마다 +28%`,
+    nextDesc:lv=>`2회 × 공격력의 ${1400+(lv+1)*5+Math.floor((lv+1)/5)*28}%`,
+    bonus5:lv=>Math.floor(lv/5)*28},
   {id:'execute_slash',name:'처단격',emoji:'🩸',unlockLv:330,cd:5,maxLv:100,
     descFull:'HP 35% 이하 즉시 처단. 초과 시도 강력한 단타 발동.',
-    desc:lv=>`HP 35% 이하 즉처치 / 초과 시 공격력의 ${3400+lv*16+Math.floor(lv/5)*100}% / 5레벨마다 +100%`,
-    nextDesc:lv=>`공격력의 ${3400+(lv+1)*16+Math.floor((lv+1)/5)*100}%`,
-    bonus5:lv=>Math.floor(lv/5)*100},
+    desc:lv=>`HP 35% 이하 즉처치 / 초과 시 공격력의 ${3400+lv*10+Math.floor(lv/5)*70}% / 5레벨마다 +70%`,
+    nextDesc:lv=>`공격력의 ${3400+(lv+1)*10+Math.floor((lv+1)/5)*70}%`,
+    bonus5:lv=>Math.floor(lv/5)*70},
   {id:'blade_storm',name:'검풍진',emoji:'🌀',unlockLv:420,cd:6,maxLv:100,
     descFull:'5연속 검기 폭풍. 타격마다 배율 20% 체증으로 후반 타격이 강력.',
-    desc:lv=>`${5+Math.floor(lv/5)}회 × 공격력의 ${800+lv*5}%(타수마다 +20%) / 5레벨마다 타수 +1`,
-    nextDesc:lv=>`${5+Math.floor((lv+1)/5)}회 × 공격력의 ${800+(lv+1)*5}%`,
+    desc:lv=>`${5+Math.floor(lv/5)}회 × 공격력의 ${800+lv*3}%(타수마다 +20%) / 5레벨마다 타수 +1`,
+    nextDesc:lv=>`${5+Math.floor((lv+1)/5)}회 × 공격력의 ${800+(lv+1)*3}%`,
     bonus5:lv=>Math.floor(lv/5)},
   {id:'chaos',name:'절대검',emoji:'🌑',unlockLv:500,cd:7,maxLv:100,
-    descFull:'모든 검술의 정수를 담은 궁극 단타. 압도적인 단일 화력.',
-    desc:lv=>`공격력의 ${3000+lv*200+Math.floor(lv/5)*750}% / 5레벨마다 +750%`,
-    nextDesc:lv=>`공격력의 ${3000+(lv+1)*200+Math.floor((lv+1)/5)*750}%`,
-    bonus5:lv=>Math.floor(lv/5)*750},
+    descFull:'모든 검술의 정수를 담은 궁극 단타. 높은 기저값, 레벨당 완만한 성장.',
+    desc:lv=>`공격력의 ${3000+lv*60+Math.floor(lv/5)*200}% / 5레벨마다 +200%`,
+    nextDesc:lv=>`공격력의 ${3000+(lv+1)*60+Math.floor((lv+1)/5)*200}%`,
+    bonus5:lv=>Math.floor(lv/5)*200},
 ];
 
 const PASSIVE_SKILLS=[
@@ -3226,7 +3225,7 @@ function getLifeStealPct(){
 }
 function getBossDmgBonus(){
   const bane=(getPassiveStat('bossbane')||{bossBanePct:0}).bossBanePct;
-  return((G.enhanceLevels.bossdmg||0)*1.5+getEqPrefixSum('bossDmg')+bane)/100;
+  return((G.enhanceLevels.bossdmg||0)*0.1+getEqPrefixSum('bossDmg')+bane)/100;
 }
 // Base stats: log scale to prevent explosion
 function getBaseAtk(){return 10+Math.floor(Math.log(G.level+1)*12)+G.ptAtk*2;}
@@ -3376,12 +3375,15 @@ function currGS(){return globalStage(G.chapter,G.stage);}
 // ── 절대값 기반 몬스터 스탯 ──
 function getMonsterStats(isBoss,bossType){
   const gs=currGS();
-  const baseHp=Math.floor(42*Math.pow(1.028,gs-1));      // HP ×3
+  // HP: 기존의 5배, 후반 갈수록 추가 증폭 (gs>100부터 지수 증가폭 확대)
+  const hpBase=Math.floor(42*Math.pow(1.028,gs-1)*5);
+  const hpLateBoost=gs>100?Math.pow(1.008,gs-100):1;
+  const baseHp=Math.floor(hpBase*hpLateBoost);
   const baseAtk=Math.floor(5.0*Math.pow(1.016,gs-1));
   const baseEva=Math.floor(gs*0.3);                      // 0.8→0.3 대폭 하향
   const baseAcc=Math.floor(100+gs*0.7);                  // 완만화
   const baseDef=Math.floor(gs*3.0);      // 방어 대폭 상향
-  const exp=Math.floor((30+gs*4)*getExpBonus());          // 대폭 상향
+  const exp=Math.floor((30+gs*4)*getExpBonus()*0.25);    // 경험치 1/4 하향
   // 골드: 초반 기반 확대 + 지수 보정 강화 (후반 스테이지 재화 의미있게)
   const goldBase=50+gs*3;
   const goldExpBoost=gs>50?Math.pow(1.012,gs-50):1;
@@ -3403,7 +3405,11 @@ function getMonsterStats(isBoss,bossType){
          eva:baseEva,acc:baseAcc,def:baseDef,exp,gold};
 }
 // GS를 직접 주입해 스탯 계산 (패널티 비교용)
-function getBaseHpForGS(gs){return Math.floor(42*Math.pow(1.028,gs-1));}
+function getBaseHpForGS(gs){
+  const hpBase=Math.floor(42*Math.pow(1.028,gs-1)*5);
+  const hpLateBoost=gs>100?Math.pow(1.008,gs-100):1;
+  return Math.floor(hpBase*hpLateBoost);
+}
 // 파밍 패널티 계산
 // 반환: {mult:0~1, label:'', pct:0}
 function getFarmPenalty(){
@@ -3452,8 +3458,8 @@ function updateFarmPenaltyLabel(){
     if(bar)bar.style.display='block';
     // 버튼에 현재 최고 스테이지 표시
     const bestGs=G.highestGlobalStage||currGS();
-    const bestChap=Math.ceil(bestGs/100);
-    const bestSt=((bestGs-1)%100)+1;
+    const bestChap=Math.ceil(bestGs/101);
+    const bestSt=((bestGs-1)%101)+1;
     const btn=document.getElementById('farm-return-btn');
     if(btn)btn.textContent=`🏆 최고 스테이지로 복귀 (${bestChap}-${bestSt})`;
     // 툴팁 내용 갱신
@@ -3694,7 +3700,7 @@ function gameTick(){
     const mDefRed=Math.min(0.75,mDef/(mDef+300));
     const piercePasBasic=(getPassiveStat('pierce')||{piercePct:0}).piercePct;
     dmg=Math.max(1,Math.floor(dmg*(1-mDefRed)*(1+piercePasBasic)));
-    const normEnh=G.isBoss?1:1+(G.enhanceLevels.normaldmg||0)*.015;
+    const normEnh=G.isBoss?1:1+(G.enhanceLevels.normaldmg||0)*.001;
     const bossEnh=G.isBoss?1+getBossDmgBonus()+(G.permBossDmg||0)/100:1;
     const finalMult=getFinalDmgMult();
     dmg=Math.floor(dmg*normEnh*bossEnh*finalMult);
@@ -3781,7 +3787,7 @@ function fireSkill(sid){
   const mDefSk=(ms.def||0)*(1-getPenRate());
   const mDefRedSk=Math.min(0.75,mDefSk/(mDefSk+300));
   // ── 최종데미지 배율 (normEnh + bossEnh + finalDmgMult 통합) ──
-  const normEnh=G.isBoss?1:1+(G.enhanceLevels.normaldmg||0)*.015;
+  const normEnh=G.isBoss?1:1+(G.enhanceLevels.normaldmg||0)*.001;
   // bossEnh: getBossDmgBonus(강화+장비접두+보스킬러패시브) + permBossDmg 통합
   const bossEnh=G.isBoss?1+getBossDmgBonus()+(G.permBossDmg||0)/100:1;
   const fmSk=getFinalDmgMult()*normEnh*bossEnh;
@@ -3795,10 +3801,10 @@ function fireSkill(sid){
   let ed=0;
 
   if(sid==='strike'){
-    ed=getFinalAtk()*(200+lv*3+b5)/100*om;
+    ed=getFinalAtk()*(200+lv*2+b5)/100*om;
   }
   else if(sid==='combo'){
-    const perHitPct=(80+lv*1.5+b5)/100;
+    const perHitPct=(80+lv*1+b5)/100;
     const rawPerHit=getFinalAtk()*perHitPct*om;
     const hitDmgFull=Math.floor(rawPerHit*(1-mDefRedSk)*(1+piercePas)*fmSk);
     for(let i=1;i<4;i++){
@@ -3809,34 +3815,34 @@ function fireSkill(sid){
     ed=rawPerHit;
   }
   else if(sid==='slash'){
-    ed=getFinalAtk()*(420+lv*5+b5)/100*om;
+    ed=getFinalAtk()*(420+lv*3+b5)/100*om;
   }
   else if(sid==='stab'){
-    const rawPerHit=getFinalAtk()*(160+lv*1.5+b5)/100*om;
+    const rawPerHit=getFinalAtk()*(160+lv*1+b5)/100*om;
     const hit1=Math.floor(rawPerHit*(1-mDefRedSk)*(1+piercePas)*fmSk);
     G.monsterCurHp=Math.max(0,G.monsterCurHp-hit1);
     showDmgPopup(hit1,false,true);
     ed=rawPerHit;
   }
   else if(sid==='pierce_shot'){
-    ed=getFinalAtk()*(1100+lv*8+b5)/100*om;
+    ed=getFinalAtk()*(1100+lv*5+b5)/100*om;
     const ticks=Math.round(3000/getTickSpeed());
     addBuff({id:'vulnerable',label:'취약',emoji:'💢',ticks,type:'debuff',mDmgTakenMult:1.25});
   }
   else if(sid==='whirlwind'){
     const hpBonus=G.monsterCurHp*(4+lv*.06)/100*om;
-    ed=getFinalAtk()*(2000+lv*10+b5)/100*om+hpBonus;
+    ed=getFinalAtk()*(2000+lv*7+b5)/100*om+hpBonus;
   }
   else if(sid==='skyfall'){
     const bossMult=G.isBoss?1.5:1;
-    ed=getFinalAtk()*(2200+lv*12+b5)/100*om*bossMult;
+    ed=getFinalAtk()*(2200+lv*8+b5)/100*om*bossMult;
   }
   else if(sid==='explosion'){
     const hpPart=G.monsterCurHp*(6+lv*.08)/100*om;
-    ed=getFinalAtk()*(2400+lv*12+b5)/100*om+hpPart;
+    ed=getFinalAtk()*(2400+lv*8+b5)/100*om+hpPart;
   }
   else if(sid==='cross_slash'){
-    const rawPerHit=getFinalAtk()*(1400+lv*8+b5)/100*om;
+    const rawPerHit=getFinalAtk()*(1400+lv*5+b5)/100*om;
     const hit1=Math.floor(rawPerHit*(1-mDefRedSk)*(1+piercePas)*fmSk);
     G.monsterCurHp=Math.max(0,G.monsterCurHp-hit1);
     showDmgPopup(hit1,false,true);
@@ -3846,21 +3852,21 @@ function fireSkill(sid){
     if(G.monsterCurHp/G.monsterMaxHp<0.35){
       G.monsterCurHp=0;
     } else {
-      ed=getFinalAtk()*(3400+lv*16+b5)/100*om;
+      ed=getFinalAtk()*(3400+lv*10+b5)/100*om;
     }
   }
   else if(sid==='blade_storm'){
     const baseHits=5+b5;
     for(let i=1;i<baseHits;i++){
-      const hitDmg=Math.floor(getFinalAtk()*(800+lv*5)/100*om*(1+i*0.2)*(1-mDefRedSk)*(1+piercePas)*fmSk);
+      const hitDmg=Math.floor(getFinalAtk()*(800+lv*3)/100*om*(1+i*0.2)*(1-mDefRedSk)*(1+piercePas)*fmSk);
       G.monsterCurHp=Math.max(0,G.monsterCurHp-hitDmg);
       showDmgPopup(hitDmg,false,true);
       if(G.monsterCurHp<=0)break;
     }
-    ed=getFinalAtk()*(800+lv*5)/100*om;
+    ed=getFinalAtk()*(800+lv*3)/100*om;
   }
   else if(sid==='chaos'){
-    ed=getFinalAtk()*(3000+lv*200+b5)/100*om;
+    ed=getFinalAtk()*(3000+lv*60+b5)/100*om;
   }
 
   if(ed>0){
@@ -6626,8 +6632,8 @@ function renderStagePopup(){
     document.getElementById('popup-info-content').innerHTML=html;
   }else{
     const bestGs=G.highestGlobalStage||currGS();
-    const bestChap=Math.ceil(bestGs/100);
-    const bestStInChap=((bestGs-1)%100)+1;
+    const bestChap=Math.ceil(bestGs/101);
+    const bestStInChap=((bestGs-1)%101)+1;
     const isCurBest=(G.chapter===bestChap&&G.stage===bestStInChap);
 
     // ── 고정 상단: 즐겨찾기 (최고 스테이지 버튼은 파밍바에서 표시) ──
@@ -6694,14 +6700,14 @@ function removeFavStage(c,s){
 }
 function moveToMaxStage(){
   const bestGs=G.highestGlobalStage||currGS();
-  const bestChap=Math.ceil(bestGs/100);
-  const bestSt=((bestGs-1)%100)+1;
+  const bestChap=Math.ceil(bestGs/101);
+  const bestSt=((bestGs-1)%101)+1;
   moveToStage(bestChap,bestSt);
 }
 function moveToStage(chap,stage){
   const bestGs=G.highestGlobalStage||1;
-  const bestChap=Math.ceil(bestGs/100);
-  const bestSt=((bestGs-1)%100)+1;
+  const bestChap=Math.ceil(bestGs/101);
+  const bestSt=((bestGs-1)%101)+1;
   const isMaxStage=(chap===bestChap&&stage===bestSt);
   // 101스테이지는 파밍 불가
   const isEliteStage=stage===101;
@@ -6725,7 +6731,7 @@ function openProfileModal(){
   const sg=document.getElementById('prof-stat-grid');
   const totalDrainPct=Math.min(0.10,(getPassiveStat('drain')||{drainPct:0}).drainPct+getLifeStealPct())*100;
   const bossDmgPct=(getBossDmgBonus()+(G.permBossDmg||0)/100)*100;
-  const normMobDmgPct=((G.enhanceLevels.normaldmg||0)*1.5);
+  const normMobDmgPct=((G.enhanceLevels.normaldmg||0)*0.1);
   sg.innerHTML=[
     ['⚔️ 전투력',fmtNum(calcCP())],
     ['⚔️ 공격력',fmtNum(Math.floor(getFinalAtk()))],
@@ -6743,7 +6749,7 @@ function openProfileModal(){
   // 최고 기록
   const rg=document.getElementById('prof-record-grid');
   const bestGs=G.highestGlobalStage||currGS();
-  const bestChap=Math.ceil(bestGs/100);const bestSt=((bestGs-1)%100)+1;
+  const bestChap=Math.ceil(bestGs/101);const bestSt=((bestGs-1)%101)+1;
   rg.innerHTML=[
     ['🏆 최고 스테이지',`${bestChap}-${bestSt}`],
     ['👹 총 처치',fmtNum(G.totalKills)+'마리'],
