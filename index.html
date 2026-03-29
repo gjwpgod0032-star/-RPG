@@ -103,7 +103,7 @@ img,canvas{image-rendering:pixelated}
   overflow:hidden;
 }
 /* 타이틀 루프 영상 */
-#title-video{
+#title-gif{
   position:absolute;inset:0;
   width:100%;height:100%;
   object-fit:cover;
@@ -111,7 +111,7 @@ img,canvas{image-rendering:pixelated}
   opacity:0;
   transition:opacity 0.8s ease;
 }
-#title-video.loaded{opacity:1;}
+#title-gif.loaded{opacity:1;}
 /* 딤 오버레이 없음 — 영상 원본 그대로 표시 */
 #title-overlay{display:none;}
 #title-star-bg{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:2;}
@@ -1616,12 +1616,10 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 
 <!-- TITLE SCREEN -->
 <div id="title-screen">
-  <!-- 루프 영상 배경 -->
-  <video id="title-video" autoplay muted loop playsinline
-    oncanplay="this.classList.add('loaded')"
+  <!-- 루프 배경 (gif) -->
+  <img id="title-gif" src="assets/video/title_bg.gif" alt=""
+    onload="this.classList.add('loaded')"
     onerror="this.style.display='none'">
-    <source src="assets/video/title_bg.mp4" type="video/mp4">
-  </video>
   <!-- 가독성 오버레이 -->
   <div id="title-overlay"></div>
   <div id="title-star-bg"></div>
@@ -1757,10 +1755,11 @@ input[type=range]{width:100%;accent-color:var(--accent)}
   <div class="modal-box" style="max-width:300px;text-align:center">
     <div style="font-size:28px;margin-bottom:4px">🏆</div>
     <h3 style="color:var(--gold);margin-bottom:8px" id="tower-clear-title">층 클리어!</h3>
-    <div id="tower-clear-rewards" style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:10px;margin-bottom:12px;font-size:11px;line-height:1.8;color:var(--text2)"></div>
+    <div id="tower-clear-rewards" style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:10px;margin-bottom:8px;font-size:11px;line-height:1.8;color:var(--text2)"></div>
+    <div id="tower-auto-countdown" style="font-size:11px;color:var(--text3);margin-bottom:8px"></div>
     <div style="display:flex;gap:8px">
-      <button onclick="closeTowerClear(false)" style="flex:1;padding:9px;background:var(--bg2);border:2px solid var(--border2);border-radius:var(--radius);color:var(--text2);font-family:var(--font);font-weight:bold;font-size:12px;cursor:pointer">🏠 나가기</button>
-      <button onclick="closeTowerClear(true)" style="flex:1;padding:9px;background:rgba(227,179,65,0.15);border:2px solid var(--gold);border-radius:var(--radius);color:var(--gold);font-family:var(--font);font-weight:bold;font-size:12px;cursor:pointer">⚔️ 계속 도전</button>
+      <button onclick="cancelTowerAutoNext();closeTowerClear(false)" style="flex:1;padding:9px;background:var(--bg2);border:2px solid var(--border2);border-radius:var(--radius);color:var(--text2);font-family:var(--font);font-weight:bold;font-size:12px;cursor:pointer">🏠 나가기</button>
+      <button onclick="cancelTowerAutoNext();closeTowerClear(true)" style="flex:1;padding:9px;background:rgba(227,179,65,0.15);border:2px solid var(--gold);border-radius:var(--radius);color:var(--gold);font-family:var(--font);font-weight:bold;font-size:12px;cursor:pointer">⚔️ 계속 도전</button>
     </div>
   </div>
 </div>
@@ -7422,6 +7421,12 @@ function startTowerChallenge(){
       if(rAmt>0){G.playerCurHp=Math.min(getFinalHp(),G.playerCurHp+rAmt);updatePlayerHpBar();}
     }
 
+    // ── 쿨타임 감소 (스킬 발동 판정 전에 먼저 차감) ──
+    if(G.equippedSkills)G.equippedSkills.forEach(sid=>{
+      if((G.skillCooldowns[sid]||0)>0)
+        G.skillCooldowns[sid]=Math.max(0,(G.skillCooldowns[sid]||0)-tickSpd);
+    });
+
     // ── 플레이어 공격 (명중·치명타·관통·최종데미지·스킬 모두 반영) ──
     const monEvaT=Math.floor(f*0.3);
     const hitRate=getHitRate(monEvaT);
@@ -7456,9 +7461,6 @@ function startTowerChallenge(){
       }
       G.focusStacks=(G.focusStacks||0)+1;
     }
-
-    // ── 쿨타임 감소 ──
-    if(G.equippedSkills)G.equippedSkills.forEach(sid=>{if((G.skillCooldowns[sid]||0)>0)G.skillCooldowns[sid]-=tickSpd;});
 
     // ── 몬스터 공격 (2틱마다) ──
     if(towerTick%2===0){
@@ -7500,6 +7502,24 @@ function startTowerChallenge(){
         rw.map(r=>`<div>${r.label} <span style="color:var(--shard)">+${r.val}</span></div>`).join('')+
         `<div style="margin-top:6px;color:var(--text3)">다음 목표: ${f+1}층</div>`;
       openModal('tower-clear-modal');
+      // 3초 카운트다운 후 자동으로 다음 층 도전
+      let _countdown=3;
+      const _cdEl=document.getElementById('tower-auto-countdown');
+      if(_cdEl)_cdEl.textContent=`⏱ ${_countdown}초 후 자동으로 다음 층 도전...`;
+      _towerAutoNextInterval=setInterval(()=>{
+        _countdown--;
+        if(_cdEl){
+          if(_countdown>0)_cdEl.textContent=`⏱ ${_countdown}초 후 자동으로 다음 층 도전...`;
+          else _cdEl.textContent='⚔️ 다음 층 시작!';
+        }
+      },1000);
+      _towerAutoNextTimer=setTimeout(()=>{
+        if(_towerAutoNextInterval){clearInterval(_towerAutoNextInterval);_towerAutoNextInterval=null;}
+        // 팝업이 아직 열려있으면 자동으로 계속 도전
+        if(document.getElementById('tower-clear-modal').classList.contains('show')){
+          closeTowerClear(true);
+        }
+      },3000);
     } else if(G.playerCurHp<=0){
       clearInterval(towerTickInterval);towerTickInterval=null;G.towerActive=false;
       if(bossTimerInterval){clearInterval(bossTimerInterval);bossTimerInterval=null;}
@@ -7590,7 +7610,18 @@ function surrenderTower(){
   showNotif('🏳️ 던전 포기','top');
 }
 
+let _towerAutoNextTimer=null;
+let _towerAutoNextInterval=null;
+
+function cancelTowerAutoNext(){
+  if(_towerAutoNextTimer){clearTimeout(_towerAutoNextTimer);_towerAutoNextTimer=null;}
+  if(_towerAutoNextInterval){clearInterval(_towerAutoNextInterval);_towerAutoNextInterval=null;}
+  const el=document.getElementById('tower-auto-countdown');
+  if(el)el.textContent='';
+}
+
 function closeTowerClear(continueChallenge){
+  cancelTowerAutoNext();
   closeModal('tower-clear-modal');
   if(continueChallenge){
     // 계속 도전: 바로 다음 층 재시작 (배경·BGM 유지)
