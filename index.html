@@ -2260,7 +2260,7 @@ const SAVE_KEY = 'dotrium_v1';
 // ══════════════════════════════════════════
 //  VERSION CHECK
 // ══════════════════════════════════════════
-const GAME_VERSION = 'v03_48';
+const GAME_VERSION = 'v03_49';
 // GitHub Pages 배포 시 아래 URL을 본인 레포로 변경하세요
 // 예: 'https://[계정].github.io/[레포]/version.json'
 const VERSION_CHECK_URL = 'version.json';
@@ -3967,6 +3967,7 @@ function onPlayerDeath(){
 }
 function onMonsterDead(){
   if(tickInterval){clearInterval(tickInterval);tickInterval=null;}
+  stopCdTick();
   const _dieMe=document.getElementById('monster-emoji');
   if(_dieMe){_dieMe.classList.add(G.isBoss?'mon-die-explode':'mon-die-fade');}
   const bt=G.isBoss?getBossType(G.stage):null;
@@ -4257,9 +4258,14 @@ function _updateBattleSceneAlign(){
 }
 
 function spawnMonster(){
-  clearInterval(tickInterval);
-  // 스킬 쿨타임 초기화 (새 몬스터/보스 등장마다 리셋)
-  G.skillCooldowns={};
+  clearInterval(tickInterval);tickInterval=null;
+  stopCdTick();
+  // 스킬 쿨타임: 보스 등장 시에만 초기화, 일반몹 처치 시에는 유지
+  if(G.isBoss){
+    G.skillCooldowns={};
+  } else {
+    if(!G.skillCooldowns)G.skillCooldowns={};
+  }
   // 101스테이지(엘리트): 일반몹 없이 바로 보스 진입
   if(G.stage===101&&!G.isBoss){
     G.isBoss=true;G.monsterIdx=0;G.stageKillCount=0;
@@ -4268,7 +4274,7 @@ function spawnMonster(){
   }
   // 보스 진입 시 재도전 버튼 숨김
   if(G.isBoss)document.getElementById('boss-retry-bar').style.display='none';
-  tickInterval=setInterval(gameTick,getTickSpeed());
+  startCombat();
   const d=getMonsterData(G.chapter,G.stage);
   const mData=G.isBoss?d.boss:d.monster;
   const bt=G.isBoss?d.bossType:null;
