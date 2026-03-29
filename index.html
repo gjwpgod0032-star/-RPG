@@ -2221,7 +2221,7 @@ const SAVE_KEY = 'dotrium_v1';
 // ══════════════════════════════════════════
 //  VERSION CHECK
 // ══════════════════════════════════════════
-const GAME_VERSION = 'v03_37';
+const GAME_VERSION = 'v03_38';
 // GitHub Pages 배포 시 아래 URL을 본인 레포로 변경하세요
 // 예: 'https://[계정].github.io/[레포]/version.json'
 const VERSION_CHECK_URL = 'version.json';
@@ -3228,7 +3228,7 @@ function getBossDmgBonus(){
   return((G.enhanceLevels.bossdmg||0)*0.1+getEqPrefixSum('bossDmg')+bane)/100;
 }
 // Base stats: log scale to prevent explosion
-function getBaseAtk(){return 10+Math.floor(Math.log(G.level+1)*12)+G.ptAtk*2;}
+function getBaseAtk(){return 10+Math.floor(Math.log(G.level+1)*12)+G.ptAtk*1;}
 function getBaseHp(){return 100+Math.floor(Math.log(G.level+1)*80)+G.ptHp*8;}
 function getBaseDef(){return 5+Math.floor(Math.log(G.level+1)*6)+G.ptDef*1.5;}
 
@@ -4463,7 +4463,7 @@ function getStatRecommend(){
   const hpPctMult=1+(getEnhPct('hp')+getAllPctBonus('hp'))/100;
   const defPctMult=1+(getEnhPct('def')+getAllPctBonus('def'))/100;
 
-  const dAtkPerPt=2*atkPctMult; // ATK +2 per pt
+  const dAtkPerPt=1*atkPctMult; // ATK +1 per pt
   const dHpPerPt=8*hpPctMult;
   const dDefPerPt=1.5*defPctMult;
 
@@ -4686,7 +4686,7 @@ function autoDistStat(){
     const atkPctMult=1+(getEnhPct('atk')+getAllPctBonus('atk'))/100;
     const hpPctMult=1+(getEnhPct('hp')+getAllPctBonus('hp'))/100;
     const defPctMult=1+(getEnhPct('def')+getAllPctBonus('def'))/100;
-    const dAtkPerPt=2*atkPctMult;
+    const dAtkPerPt=1*atkPctMult;
     const dHpPerPt=8*hpPctMult;
     const dDefPerPt=1.5*defPctMult;
 
