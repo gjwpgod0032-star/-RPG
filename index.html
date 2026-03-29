@@ -2260,7 +2260,7 @@ const SAVE_KEY = 'dotrium_v1';
 // ══════════════════════════════════════════
 //  VERSION CHECK
 // ══════════════════════════════════════════
-const GAME_VERSION = 'v03_49';
+const GAME_VERSION = 'v03_50';
 // GitHub Pages 배포 시 아래 URL을 본인 레포로 변경하세요
 // 예: 'https://[계정].github.io/[레포]/version.json'
 const VERSION_CHECK_URL = 'version.json';
@@ -2594,7 +2594,7 @@ const ENHANCE_ITEMS=[
   {id:'critdmg',name:'치명타 피해',emoji:'💥',pct:0.5,base:120,desc:'치명타 발생 시 피해 배율을 높입니다.'},
   {id:'acc',name:'명중',emoji:'🎯',pct:0.1,base:60,unit:'',costMult:1.2,desc:'명중 수치를 올립니다. 레벨당 +0.1 증가. (Lv500 기준 기본 명중의 +50%)'},
   {id:'eva',name:'회피',emoji:'💨',pct:0.1,base:70,unit:'',costMult:1.2,desc:'회피 수치를 올립니다. 레벨당 +0.1 증가. (Lv500 기준 +50)'},
-  {id:'pen',name:'관통',emoji:'🗡️',pct:0.1,base:55,unit:'',costMult:1.3,desc:'방어구 관통 수치를 올립니다. 레벨당 +0.1 증가. (Lv500 기준 +50)'},
+  {id:'pen',name:'관통',emoji:'🗡️',pct:0.1,base:55,unit:'',costMult:1.3,desc:'방어구 관통 수치를 올립니다. 레벨당 +2 증가. (관통 ≥ 방어력 시 피해 100%)'},
   {id:'executeChance',name:'결정타 확률',emoji:'⚡',pct:1,base:300,unit:'%',
    desc:'HP 30% 이하 적에게 결정타가 발동할 확률입니다.',
    unlockReq:{id:'crit',lv:1000},maxLv:100},
@@ -2815,34 +2815,64 @@ const QUEST_POOL=[
   {title:'스킬 발동하기',type:'skilluse',base:5},
   {title:'1-30스테이지 돌파',type:'stagegoal',targetGs:30},
   {title:'몬스터 대량 처치',type:'kills',base:100},
+  {title:'1-40스테이지 돌파',type:'stagegoal',targetGs:40},
   {title:'뽑기 여러 번 하기',type:'gacha',base:8},
   {title:'1-50스테이지 돌파',type:'stagegoal',targetGs:50},
   {title:'보스 연속 처치',type:'boss',base:6},
+  {title:'1-60스테이지 돌파',type:'stagegoal',targetGs:60},
   {title:'강화 집중 업그레이드',type:'enhance',base:3},
-  {title:'2-10스테이지 돌파',type:'stagegoal',targetGs:110},
+  {title:'1-70스테이지 돌파',type:'stagegoal',targetGs:70},
   {title:'스탯 집중 투자',type:'stat',base:8},
+  {title:'1-80스테이지 돌파',type:'stagegoal',targetGs:80},
   {title:'스킬 집중 발동',type:'skilluse',base:20},
+  {title:'1-90스테이지 돌파',type:'stagegoal',targetGs:90},
+  {title:'몬스터 연속 처치',type:'kills',base:300},
+  {title:'1-100스테이지 돌파',type:'stagegoal',targetGs:100},
+  {title:'뽑기 집중 시도',type:'gacha',base:15},
+  {title:'2-10스테이지 돌파',type:'stagegoal',targetGs:110},
+  {title:'보스 대량 처치',type:'boss',base:12},
+  {title:'2-20스테이지 돌파',type:'stagegoal',targetGs:120},
+  {title:'강화 대량 업그레이드',type:'enhance',base:5},
+  {title:'2-30스테이지 돌파',type:'stagegoal',targetGs:130},
+  {title:'스탯 대량 투자',type:'stat',base:15},
+  {title:'2-40스테이지 돌파',type:'stagegoal',targetGs:140},
+  {title:'스킬 대량 발동',type:'skilluse',base:40},
   {title:'2-50스테이지 돌파',type:'stagegoal',targetGs:150},
 ];
 const QUEST_REWARDS=[
-  {gold:500},
-  {tickets:2},
-  {gold:2000,tickets:3},
-  {tickets:3,gold:500},
-  {gold:300},
-  {gold:5000,shards:30,tickets:5},
-  {shards:5},
-  {shards:30},
-  {gold:8000,shards:50,tickets:8},
-  {gold:2500},
-  {shards:25},
-  {gold:15000,shards:80},
-  {shards:50},
-  {gold:1500},
-  {gold:30000,shards:150,tickets:15},
-  {shards:20},
-  {shards:80},
-  {gold:80000,shards:300,tickets:30},
+  {gold:500},          // 0: 몬스터 처치
+  {tickets:2},         // 1: 뽑기
+  {gold:2000,tickets:3},      // 2: 1-10
+  {tickets:3,gold:500},       // 3: 보스
+  {gold:300},          // 4: 강화
+  {gold:5000,shards:30,tickets:5},    // 5: 1-20
+  {shards:5},          // 6: 스탯
+  {shards:30},         // 7: 스킬
+  {gold:8000,shards:50,tickets:8},    // 8: 1-30
+  {gold:2500},         // 9: 몬스터 대량
+  {gold:10000,shards:60,tickets:8},   // 10: 1-40
+  {shards:25},         // 11: 뽑기 여러번
+  {gold:15000,shards:80,tickets:10},  // 12: 1-50
+  {shards:50},         // 13: 보스 연속
+  {gold:20000,shards:100,tickets:12}, // 14: 1-60
+  {gold:1500},         // 15: 강화 집중
+  {gold:25000,shards:120,tickets:14}, // 16: 1-70
+  {shards:20},         // 17: 스탯 집중
+  {gold:30000,shards:150,tickets:16}, // 18: 1-80
+  {shards:80},         // 19: 스킬 집중
+  {gold:35000,shards:180,tickets:18}, // 20: 1-90
+  {gold:5000},         // 21: 몬스터 연속
+  {gold:50000,shards:250,tickets:25}, // 22: 1-100
+  {shards:40},         // 23: 뽑기 집중
+  {gold:60000,shards:280,tickets:28}, // 24: 2-10
+  {shards:60},         // 25: 보스 대량
+  {gold:70000,shards:300,tickets:30}, // 26: 2-20
+  {gold:3000},         // 27: 강화 대량
+  {gold:80000,shards:320,tickets:32}, // 28: 2-30
+  {shards:100},        // 29: 스탯 대량
+  {gold:90000,shards:340,tickets:34}, // 30: 2-40
+  {shards:120},        // 31: 스킬 대량
+  {gold:120000,shards:500,tickets:50}, // 32: 2-50
 ];
 
 const MILESTONES=[
@@ -3335,21 +3365,37 @@ function getFinalAcc(){
 function getFinalEva(){
   return Math.floor((G.ptEva||0)*2+getSlotBonus('boots','eva')+getSlotBonus('earring','eva')+getEqPrefixSum('eva')+(G.enhanceLevels.eva||0)*0.1);
 }
-// 방어구 관통: 포인트*3 + 슬롯(장갑) + 접두사 + 강화, 이후 철갑파쇄 % 곱적용
+// 방어구 관통: 포인트*3 + 슬롯(장갑) + 접두사 + 강화(레벨당 +2), 이후 철갑파쇄 % 곱적용
 function getFinalPen(){
-  const base=Math.floor((G.ptPen||0)*3+(G.level-1)*2+getSlotBonus('gloves','pen')+getEqPrefixSum('pen')+(G.enhanceLevels.pen||0)*0.1);
+  const base=Math.floor((G.ptPen||0)*3+(G.level-1)*2+getSlotBonus('gloves','pen')+getEqPrefixSum('pen')+(G.enhanceLevels.pen||0)*2);
   const penPct=(getPassiveStat('penetration')||{penetrationPct:0}).penetrationPct;
   return Math.floor(base*(1+penPct/100));
 }
-// 관통률: pen/(pen+500), 최대 90%
-function getPenRate(){
+// 관통률: pen >= 몬스터방어력이면 100%, 미만이면 pen/monDef 비율로 점진 반영 (기존 공식과 혼합)
+function getPenRate(monDef){
   const pen=getFinalPen();
-  return Math.min(0.9,pen/(pen+500));
+  if(monDef===undefined){
+    // monDef 없이 호출 시(기존 호환) — 현재 몬스터 기준
+    const ms=getMonsterStats(G.isBoss);
+    monDef=ms.def||0;
+  }
+  if(monDef<=0)return 1.0;
+  if(pen>=monDef)return 1.0;
+  // pen < monDef: pen/monDef 비율을 가중치로 기존 공식(pen/(pen+500))과 선형 혼합
+  const ratio=pen/monDef; // 0~1
+  const legacyRate=Math.min(0.9,pen/(pen+500));
+  // ratio가 높을수록 1.0에 가까워짐
+  return legacyRate+(1.0-legacyRate)*ratio;
 }
-// 명중률: acc/(acc+monEva), 최소 20%
+// 명중률: acc >= 몬스터회피면 100% 명중, 미만이면 acc/monEva 비율로 점진 반영 (최소 20%)
 function getHitRate(monEva){
   const acc=getFinalAcc();
-  return Math.max(0.20,acc/(acc+monEva));
+  if(monEva<=0)return 1.0;
+  if(acc>=monEva)return 1.0;
+  // acc < monEva: acc/monEva 비율을 가중치로 기존 공식과 선형 혼합
+  const ratio=acc/monEva; // 0~1
+  const legacyRate=Math.max(0.20,acc/(acc+monEva));
+  return legacyRate+(1.0-legacyRate)*ratio;
 }
 // 회피율: eva/(eva+monAcc), 최대 75%
 function getEvaRate(monAcc){
@@ -3390,7 +3436,7 @@ function calcCP(){
   const ms=getMonsterStats(G.isBoss);
   const hitBonus=(getHitRate(ms.eva||0)-0.5)*dps*0.3;   // 명중률 기여
   const evaBonus=getEvaRate(ms.acc||100)*getFinalHp()*0.02; // 회피율 기여
-  const penBonus=getPenRate()*dps*0.15;                  // 관통 기여
+  const penBonus=getPenRate(ms.def||0)*dps*0.15;                  // 관통 기여
   const regenCP=getFinalHpRegen()*getFinalHp()*5;        // 재생 기여
   return Math.floor(dps+getFinalHp()*.04+getFinalDef()*.4+drainCP+hitBonus+evaBonus+penBonus+regenCP);
 }
@@ -3736,7 +3782,7 @@ function gameTick(){
     const isCrit=Math.random()<cr;
     if(isCrit)dmg=Math.floor(dmg*cd);
     // 방어구 관통 반영 (몬스터 방어력 감소) + 약점간파 패시브
-    const mDef=(ms.def||0)*(1-getPenRate());
+    const mDef=(ms.def||0)*(1-getPenRate(ms.def||0));
     const mDefRed=Math.min(0.75,mDef/(mDef+300));
     const piercePasBasic=(getPassiveStat('pierce')||{piercePct:0}).piercePct;
     dmg=Math.max(1,Math.floor(dmg*(1-mDefRed)*(1+piercePasBasic)));
@@ -3824,7 +3870,7 @@ function fireSkill(sid){
   if(Math.random()>=skillHitRate){showMissPopup();G.skillCooldowns[sid]=sk.cd*1000;return;}
   const piercePas=(getPassiveStat('pierce')||{piercePct:0}).piercePct;
   // ── 방어구 관통 반영 ──
-  const mDefSk=(ms.def||0)*(1-getPenRate());
+  const mDefSk=(ms.def||0)*(1-getPenRate(ms.def||0));
   const mDefRedSk=Math.min(0.75,mDefSk/(mDefSk+300));
   // ── 최종데미지 배율 (normEnh + bossEnh + finalDmgMult 통합) ──
   const normEnh=G.isBoss?1:1+(G.enhanceLevels.normaldmg||0)*.001;
@@ -4890,7 +4936,7 @@ function renderStatTab(){
     finaldmg:'강화 레벨 당 +0.05% 최종데미지 증가',
     acc:'강화 레벨 당 +2 명중 증가',
     eva:'강화 레벨 당 +2 회피 증가',
-    pen:'강화 레벨 당 +3 관통 증가',
+    pen:'강화 레벨 당 +2 관통 증가',
     hpregen:'강화 레벨 당 +0.05% 재생/초 증가',
   };
   const baseVals={
@@ -6460,7 +6506,19 @@ function renderQuestPanel(){
   const pct=Math.min(100,(q.prog/q.target)*100);
   let desc;
   if(q.type==='stagegoal'){
-    desc=`${q.title}: ${q.prog>=q.target?'✅ 달성':'진행 중'} (현재 GS ${fmtNum(q.prog)} / 목표 ${fmtNum(q.target)})`;
+    // 현재 글로벌 스테이지 → 챕터-스테이지 약식 표기
+    function gsToShort(gs){
+      const chap=Math.ceil(gs/101)||1;
+      const st=((gs-1)%101)+1;
+      return `${chap}-${st}`;
+    }
+    const curShort=gsToShort(q.prog);
+    const tgtShort=gsToShort(q.target);
+    if(done){
+      desc=`${q.title}: ✅ 달성`;
+    } else {
+      desc=`${q.title}: 진행 중 (${curShort} / ${tgtShort})`;
+    }
   } else {
     desc=`${q.title}${q.round>1?` (×${q.round})`:''}: ${fmtNum(q.prog)}/${fmtNum(q.target)}`;
   }
@@ -6653,30 +6711,29 @@ function renderStagePopup(){
     const bossExp=Math.floor(bs.exp*pm);
     const gs=currGS();
 
-    // ── 명중·관통 권장 수치 계산 ──
+    // ── 명중·관통 권장 수치 계산 (새 로직 기준) ──
     const monEva=stats.eva||0;
     const monDef=stats.def||0;
-    // ACC: 명중률 90% 달성 필요치
-    const accFor90=monEva>0?Math.ceil(0.9*monEva/(1-0.9)):0;
-    // ACC: 명중률 80% (최소 권장)
-    const accFor80=monEva>0?Math.ceil(0.8*monEva/(1-0.8)):0;
-    // 현재 명중률
-    const curHit=(getFinalAcc()/(getFinalAcc()+monEva)*100).toFixed(2);
-    const hitOk=getFinalAcc()>=accFor90;
-    // PEN: 방어 감소율 50% 달성 (방어 절반 무력화)
-    // defRed(def*(1-p))=0.5 → def*(1-p)=300 → p=1-300/def
-    const penFor50=monDef>300?Math.ceil(500*(1-300/monDef)/(300/monDef)):0;
-    // PEN: 방어 감소율 30% (최소 권장, 관통 없이도 그냥 진행 가능한 수준)
-    // defRed(def*(1-p))=0.3 → def*(1-p)=300*0.3/0.7 ≈ 128.6
-    const penFor30=monDef>129?Math.ceil(500*(1-129/monDef)/(129/monDef)):0;
-    // 현재 관통률·방어감소율
-    const curPenRate=getPenRate();
-    const curDefRed=(monDef*(1-curPenRate)/(monDef*(1-curPenRate)+300)*100).toFixed(2);
-    const defOk=parseFloat(curDefRed)<=30;
+    const curAcc=getFinalAcc();
+    const curPen=getFinalPen();
+    const curPenRate=getPenRate(monDef);
 
-    // 현재 명중률 색상
-    const hitColor=parseFloat(curHit)>=90?'var(--shard)':parseFloat(curHit)>=80?'var(--gold)':'var(--hp)';
-    const defColor=defOk?'var(--shard)':parseFloat(curDefRed)<=50?'var(--gold)':'var(--hp)';
+    // 명중: acc >= monEva면 100%, 미만이면 현재 명중률 계산
+    const accFull=curAcc>=monEva; // 무조건 명중 달성 여부
+    const curHitRate=monEva>0?(accFull?1.0:getHitRate(monEva)):1.0;
+    const curHitPct=(curHitRate*100).toFixed(1);
+
+    // 관통: pen >= monDef면 100%, 미만이면 현재 실질피해율
+    const penFull=curPen>=monDef; // 완전 관통 달성 여부
+    // 실질 방어 감소율 (관통 후 남은 방어력)
+    const mDefAfterPen=monDef*(1-curPenRate);
+    const defRedPct=monDef>0?(mDefAfterPen/(mDefAfterPen+300)*100):0;
+    const effDmgPct=(100-defRedPct).toFixed(1);
+    const effDmgBase=monDef>0?(100-monDef/(monDef+300)*100).toFixed(1):'100.0';
+
+    // 색상
+    const hitColor=accFull?'var(--shard)':curHitRate>=0.9?'var(--shard)':curHitRate>=0.8?'var(--gold)':'var(--hp)';
+    const penColor=penFull?'var(--shard)':defRedPct<=30?'var(--shard)':defRedPct<=50?'var(--gold)':'var(--hp)';
 
     let html=`<div style="font-size:9px;color:var(--accent);margin-bottom:3px">${THEMES[0].segments[getSegIdx(G.stage)]?.name||''}</div>`;
     html+=`<div class="popup-monster-row"><span>${d.monster.e} ${d.monster.n}</span><span style="color:var(--text3)">체력:${fmtNum(stats.hp)} 공격:${fmtNum(stats.atk)}</span></div>`;
@@ -6724,28 +6781,26 @@ function renderStagePopup(){
 
     // 명중 게이지
     if(monEva>0){
-      const curAcc=getFinalAcc();
-      const target=accFor90; // 90% 목표
-      const curPct=target>0?(curAcc/target*100):100;
-      const shortfall=Math.max(0,target-curAcc);
-      const statusText=shortfall>0?curHit+'% 명중':'명중 충분 ✓';
-      const statusColor=parseFloat(curHit)>=90?'var(--shard)':parseFloat(curHit)>=80?'var(--gold)':'var(--hp)';
-      html+=statGauge('🎯','명중',curAcc,target,curPct,100,'','명중률 '+curHit+'%',statusColor,shortfall);
+      const target=monEva; // 무조건 명중 목표 = monEva
+      const curPct=Math.min(100,curAcc/target*100);
+      const shortfall=accFull?0:Math.max(0,target-curAcc);
+      const statusText=accFull?'⚡ 무조건 명중!':curHitPct+'% 명중';
+      html+=statGauge('🎯','명중',curAcc,target,curPct,100,'',statusText,hitColor,shortfall);
+      if(!accFull) html+=`<div style="font-size:8px;color:var(--text3);margin-top:-2px;margin-bottom:4px">목표(${monEva}) 달성 시 무조건 명중 / 회피력 ${monEva}</div>`;
+      else html+=`<div style="font-size:8px;color:var(--shard);margin-top:-2px;margin-bottom:4px">✓ 명중(${curAcc}) ≥ 회피(${monEva}) — 100% 명중</div>`;
     } else {
       html+=`<div style="font-size:9px;color:var(--text3);margin-bottom:5px">🎯 명중: 회피 없음 — 100% 명중</div>`;
     }
 
     // 관통 게이지
     if(monDef>0){
-      const curPen=getFinalPen();
-      const target=penFor50>0?penFor50:1; // 50% 목표
-      const curPct=penFor50>0?(curPen/target*100):100;
-      const effDmgNow=(100-parseFloat(curDefRed)).toFixed(2);
-      const effDmgBase=(100-parseFloat((monDef/(monDef+300)*100).toFixed(2))).toFixed(2);
-      const shortfall=penFor50>0?Math.max(0,target-curPen):0;
-      const statusColor=parseFloat(curDefRed)<=30?'var(--shard)':parseFloat(curDefRed)<=50?'var(--gold)':'var(--hp)';
-      html+=statGauge('🗡️','방어구 관통',curPen,penFor50>0?penFor50:'-',curPct,100,'','실질피해 '+effDmgNow+'%',statusColor,shortfall);
-      html+=`<div style="font-size:8px;color:var(--text3);margin-top:-2px;margin-bottom:4px">관통 0 시 피해 ${effDmgBase}% / 방어력 ${monDef}</div>`;
+      const target=monDef; // 완전 관통 목표 = monDef
+      const curPct=Math.min(100,curPen/target*100);
+      const shortfall=penFull?0:Math.max(0,target-curPen);
+      const statusText=penFull?'⚡ 완전 관통!':'실질피해 '+effDmgPct+'%';
+      html+=statGauge('🗡️','방어구 관통',curPen,target,curPct,100,'',statusText,penColor,shortfall);
+      if(!penFull) html+=`<div style="font-size:8px;color:var(--text3);margin-top:-2px;margin-bottom:4px">목표(${monDef}) 달성 시 피해 100% / 관통 0 시 피해 ${effDmgBase}%</div>`;
+      else html+=`<div style="font-size:8px;color:var(--shard);margin-top:-2px;margin-bottom:4px">✓ 관통(${curPen}) ≥ 방어(${monDef}) — 피해 100%</div>`;
     } else {
       html+=`<div style="font-size:9px;color:var(--text3);margin-bottom:5px">🗡️ 관통: 방어 없음 — 피해 100%</div>`;
     }
