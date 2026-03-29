@@ -542,7 +542,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 .battle-scene{
   flex:1;min-height:0;
   display:flex;align-items:center;justify-content:space-around;
-  padding:4px 8px;position:relative;
+  padding:10px 8px 0 8px;position:relative;
   overflow:visible;
 }
 .fighter{display:flex;flex-direction:column;align-items:center;gap:0;flex:1}
@@ -931,7 +931,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 
 /* ── BOTTOM TABS ── */
 #bottom{display:flex;flex-direction:column;flex-shrink:0;height:var(--tab-h);position:relative}
-#bottom.expanded{height:38vh;flex-shrink:0}
+#bottom.expanded{height:32vh;flex-shrink:0}
 #tab-nav{
   display:flex;height:var(--tab-h);flex-shrink:0;
   background:var(--bg2);border-top:2px solid var(--border);
@@ -951,7 +951,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
   background:var(--bg);
   display:none;
 }
-#bottom.expanded #tab-content{display:block;overflow-y:auto;height:calc(38vh - var(--tab-h))}
+#bottom.expanded #tab-content{display:block;overflow-y:auto;height:calc(32vh - var(--tab-h))}
 .tab-panel{display:none;padding:5px 6px 16px}
 .tab-panel.active{display:block}
 #panel-growth.tab-panel{padding:0 6px 16px}
@@ -2260,7 +2260,7 @@ const SAVE_KEY = 'dotrium_v1';
 // ══════════════════════════════════════════
 //  VERSION CHECK
 // ══════════════════════════════════════════
-const GAME_VERSION = 'v03_45';
+const GAME_VERSION = 'v03_48';
 // GitHub Pages 배포 시 아래 URL을 본인 레포로 변경하세요
 // 예: 'https://[계정].github.io/[레포]/version.json'
 const VERSION_CHECK_URL = 'version.json';
@@ -4155,7 +4155,7 @@ function _calcInGameScale(){
   // 탭이 열려 배틀씬이 작아졌을 때 fit 비율을 높여 몬스터 크기 보상
   const bottom = document.getElementById('bottom');
   const isExpanded = bottom && bottom.classList.contains('expanded');
-  const fit = isExpanded ? 0.82 : MON_SCENE_FIT;
+  const fit = isExpanded ? 0.88 : MON_SCENE_FIT;
   const scale = (sceneH * fit) / MON_MAX_SRC;
   return Math.max(0.2, Math.min(2.0, scale));
 }
