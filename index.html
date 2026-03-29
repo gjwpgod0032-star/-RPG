@@ -547,7 +547,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 }
 .fighter{display:flex;flex-direction:column;align-items:center;gap:0;flex:1}
 .fighter-emoji{
-  font-size:90px;line-height:1;
+  font-size:57px;line-height:1;
 }
 .px-char{image-rendering:pixelated;image-rendering:crisp-edges;display:block;}
 @keyframes pxIdle{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
@@ -584,9 +584,9 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 .vs-text{display:none!important;}
 
 /* Boss 이모지 fallback 크기 (이미지 있으면 JS가 인라인 스타일로 오버라이드) */
-.fighter-emoji.boss{font-size:54px}
-.fighter-emoji.boss-vip{font-size:64px}
-.fighter-emoji.boss-elite{font-size:72px}
+.fighter-emoji.boss{font-size:34px}
+.fighter-emoji.boss-vip{font-size:40px}
+.fighter-emoji.boss-elite{font-size:46px}
 @keyframes monDieFade{0%{opacity:1;transform:scale(1) translateY(0)}60%{opacity:0.3;transform:scale(0.85) translateY(4px)}100%{opacity:0;transform:scale(0.7) translateY(14px)}}
 @keyframes monDieSpin{0%{opacity:1;transform:rotate(0deg) scale(1)}70%{opacity:0.4;transform:rotate(120deg) scale(0.6)}100%{opacity:0;transform:rotate(180deg) scale(0.2)}}
 @keyframes monDieExplode{0%{opacity:1;transform:scale(1)}30%{opacity:1;transform:scale(1.35)}100%{opacity:0;transform:scale(0.1)}}
@@ -2221,7 +2221,7 @@ const SAVE_KEY = 'dotrium_v1';
 // ══════════════════════════════════════════
 //  VERSION CHECK
 // ══════════════════════════════════════════
-const GAME_VERSION = 'v03_33';
+const GAME_VERSION = 'v03_37';
 // GitHub Pages 배포 시 아래 URL을 본인 레포로 변경하세요
 // 예: 'https://[계정].github.io/[레포]/version.json'
 const VERSION_CHECK_URL = 'version.json';
@@ -2543,9 +2543,9 @@ const SLOTS=[
 ];
 
 const ENHANCE_ITEMS=[
-  {id:'atk',name:'공격력',emoji:'⚔️',pct:1,base:80,desc:'기본 공격력을 높입니다. 모든 피해에 영향을 줍니다.'},
-  {id:'hp',name:'최대 체력',emoji:'❤️',pct:1,base:80,desc:'최대 HP를 늘려 전투 지속력을 높습니다.'},
-  {id:'def',name:'방어력',emoji:'🛡️',pct:1,base:80,desc:'받는 피해를 줄여줍니다. 높을수록 생존력이 올라갑니다.'},
+  {id:'atk',name:'공격력',emoji:'⚔️',pct:0.5,base:80,desc:'기본 공격력을 높입니다. 모든 피해에 영향을 줍니다.'},
+  {id:'hp',name:'최대 체력',emoji:'❤️',pct:0.5,base:80,desc:'최대 HP를 늘려 전투 지속력을 높습니다.'},
+  {id:'def',name:'방어력',emoji:'🛡️',pct:0.5,base:80,desc:'받는 피해를 줄여줍니다. 높을수록 생존력이 올라갑니다.'},
   {id:'normaldmg',name:'일반몹 피해',emoji:'🗡️',pct:0.1,base:100,desc:'일반몹에게만 적용되는 추가 피해. 보스에게는 적용되지 않습니다.'},
   {id:'bossdmg',name:'보스 피해',emoji:'👹',pct:0.1,base:120,desc:'보스 몬스터에게 가하는 피해를 추가로 높입니다.'},
   {id:'lifeSteal',name:'흡혈',emoji:'🩸',pct:0.01,base:600,unit:'%',costMult:2.2,maxLv:1000,desc:'가한 피해의 일부를 HP로 흡수합니다. (최대 10%)'},
@@ -2766,24 +2766,24 @@ const TITLES=[
 ];
 
 const QUEST_POOL=[
-  {title:'몬스터 처치하기',type:'kills',base:30},
+  {title:'몬스터 처치하기',type:'kills',base:10},
   {title:'뽑기 시도하기',type:'gacha',base:3},
-  {title:'스테이지 3개 돌파',type:'stagereach',base:3},
+  {title:'1-10스테이지 돌파',type:'stagegoal',targetGs:10},
   {title:'보스 처치하기',type:'boss',base:2},
   {title:'강화 업그레이드',type:'enhance',base:1},
-  {title:'스테이지 3개 돌파',type:'stagereach',base:3},
+  {title:'1-20스테이지 돌파',type:'stagegoal',targetGs:20},
   {title:'스탯 투자하기',type:'stat',base:3},
   {title:'스킬 발동하기',type:'skilluse',base:5},
-  {title:'스테이지 3개 돌파',type:'stagereach',base:3},
+  {title:'1-30스테이지 돌파',type:'stagegoal',targetGs:30},
   {title:'몬스터 대량 처치',type:'kills',base:100},
   {title:'뽑기 여러 번 하기',type:'gacha',base:8},
-  {title:'스테이지 3개 돌파',type:'stagereach',base:3},
+  {title:'1-50스테이지 돌파',type:'stagegoal',targetGs:50},
   {title:'보스 연속 처치',type:'boss',base:6},
   {title:'강화 집중 업그레이드',type:'enhance',base:3},
-  {title:'스테이지 3개 돌파',type:'stagereach',base:3},
+  {title:'2-10스테이지 돌파',type:'stagegoal',targetGs:110},
   {title:'스탯 집중 투자',type:'stat',base:8},
   {title:'스킬 집중 발동',type:'skilluse',base:20},
-  {title:'스테이지 3개 돌파',type:'stagereach',base:3},
+  {title:'2-50스테이지 돌파',type:'stagegoal',targetGs:150},
 ];
 const QUEST_REWARDS=[
   {gold:500},
@@ -3206,9 +3206,9 @@ function getAllPctBonus(stat){
 }
 function getEnhPct(stat){
   const ol=G.overallEnhanceLv||0;
-  if(stat==='atk')return(G.enhanceLevels.atk||0)*1+ol;
-  if(stat==='hp')return(G.enhanceLevels.hp||0)*1+ol;
-  if(stat==='def')return(G.enhanceLevels.def||0)*1+ol;
+  if(stat==='atk')return(G.enhanceLevels.atk||0)*0.5+ol;
+  if(stat==='hp')return(G.enhanceLevels.hp||0)*0.5+ol;
+  if(stat==='def')return(G.enhanceLevels.def||0)*0.5+ol;
   return 0;
 }
 function getExtraHitChance(){return 0;}
@@ -3228,7 +3228,7 @@ function getBossDmgBonus(){
   return((G.enhanceLevels.bossdmg||0)*0.1+getEqPrefixSum('bossDmg')+bane)/100;
 }
 // Base stats: log scale to prevent explosion
-function getBaseAtk(){return 10+Math.floor(Math.log(G.level+1)*12)+(G.level-1)+G.ptAtk*2;}
+function getBaseAtk(){return 10+Math.floor(Math.log(G.level+1)*12)+G.ptAtk*2;}
 function getBaseHp(){return 100+Math.floor(Math.log(G.level+1)*80)+G.ptHp*8;}
 function getBaseDef(){return 5+Math.floor(Math.log(G.level+1)*6)+G.ptDef*1.5;}
 
@@ -3239,7 +3239,8 @@ function getFinalAtk(){
   const totalPct=getEnhPct('atk')+getAllPctBonus('atk');
   const rage=G.rageStacks>0?(getPassiveStat('rage')||{ragePerStack:0}).ragePerStack*(G.rageStacks||0):0;
   const assault=(getPassiveStat('assault')||{assaultAtkPct:0}).assaultAtkPct;
-  return Math.floor((base+eq+sl)*(1+(totalPct+rage+assault)/100));
+  // 레벨당 정확히 +1 공격력 (배율 적용 후 flat 가산)
+  return Math.floor((base+eq+sl)*(1+(totalPct+rage+assault)/100))+(G.level-1);
 }
 function getFinalHp(){
   const base=getBaseHp();
@@ -4103,7 +4104,7 @@ const MON_MAX_SRC = 250; // 원본 최대 크기(px) 기준
 const PLAYER_BASE_SIZE = 108; // 플레이어 원본 기준 크기(px) — 90px 대비 약 20% 확대
 // 인게임 영역 여백 계수: 탭 닫혔을 때 battle-scene 높이 대비 몬스터 최대 표시 비율
 // (상하 약간의 여백을 두고 가장 큰 몬스터가 표시되는 비율)
-const MON_SCENE_FIT = 0.72; // battle-scene 높이의 72%를 몬스터 최대 표시 높이로 사용
+const MON_SCENE_FIT = 0.369; // battle-scene 높이의 36.9%를 몬스터 최대 표시 높이로 사용 (원본 72%에서 총 ~49% 축소)
 
 let _cachedInGameScale = 0; // 초기화 후 캐시 (탭 무관 고정값)
 
@@ -4814,15 +4815,15 @@ function renderStatTab(){
     def:(1+(getEnhPct('def')+getAllPctBonus('def'))/100),
   };
   const perPt={
-    atk:'+'+fmtNum(Math.floor(2*pct.atk))+' 공격력',
-    hp:'+'+fmtNum(Math.floor(8*pct.hp))+' 체력',
-    def:'+'+(1.5*pct.def).toFixed(2)+' 방어력',
-    critdmg:'+2.5% 치명타피해',
-    finaldmg:'+0.05% 최종데미지',
-    acc:'+2 명중',
-    eva:'+2 회피',
-    pen:'+3 관통',
-    hpregen:'+0.05% 재생/초',
+    atk:'강화 레벨 당 +'+fmtNum(Math.floor(1*pct.atk))+' 공격력 증가',
+    hp:'강화 레벨 당 +'+fmtNum(Math.floor(8*pct.hp))+' 체력 증가',
+    def:'강화 레벨 당 +'+(1.5*pct.def).toFixed(2)+' 방어력 증가',
+    critdmg:'강화 레벨 당 +2.5% 치명타피해 증가',
+    finaldmg:'강화 레벨 당 +0.05% 최종데미지 증가',
+    acc:'강화 레벨 당 +2 명중 증가',
+    eva:'강화 레벨 당 +2 회피 증가',
+    pen:'강화 레벨 당 +3 관통 증가',
+    hpregen:'강화 레벨 당 +0.05% 재생/초 증가',
   };
   const baseVals={
     atk:baseLvAtk,hp:baseLvHp,def:baseLvDef,
@@ -4874,7 +4875,7 @@ function renderStatTab(){
     const ptLv=ptMap[sd.id]||0;
     const ptKey={atk:'ptAtk',hp:'ptHp',def:'ptDef',critdmg:'ptCritDmg',finaldmg:'ptFinalDmg',acc:'ptAcc',eva:'ptEva',pen:'ptPen',hpregen:'ptHpRegen'}[sd.id];
     const hasInvested=ptLv>0;
-    return'\n    <div class="stat-row">\n      <div class="stat-row-top">\n        <span class="s-icon">'+sd.emoji+'</span>\n        <div class="s-info">\n          <div class="s-name">'+sd.name+badge1+badge2+dpsBadge+'<span style="font-size:9px;color:var(--text3);margin-left:4px">Lv.'+ptLv+'</span></div>\n          <div class="s-val">'+dispStr+'</div>\n          <div style="font-size:9px;color:var(--text3);margin-top:1px">+1 \u2192 '+perPt[sd.id]+'</div>\n        </div>\n      </div>\n      <div class="stat-btns">\n        <div style="display:flex;gap:2px">\n          <button class="stat-plus-btn" '+(hp?'':' disabled')+' onclick="addStat(\''+sd.id+'\',1)">+1</button>\n          <button class="stat-plus-btn" '+(hp?'':' disabled')+' onclick="addStat(\''+sd.id+'\',10)">+10</button>\n          <button class="stat-plus-btn" '+(hp?'':' disabled')+' onclick="addStat(\''+sd.id+'\',100)">+100</button>\n          <button class="stat-plus-btn max-btn" '+(hp?'':' disabled')+' onclick="addStatMax(\''+sd.id+'\')">최대</button>\n        </div>\n        '+(hasInvested?'<button onclick="resetSingleStat(\''+ptKey+'\')" title="이 스탯만 초기화" style="font-size:8px;padding:1px 4px;background:rgba(255,71,87,0.08);border:1px solid rgba(255,71,87,0.3);border-radius:2px;color:var(--hp);cursor:pointer;font-family:var(--font);line-height:1.4;white-space:nowrap">↺ 초기화</button>':'')+
+    return'\n    <div class="stat-row">\n      <div class="stat-row-top">\n        <span class="s-icon">'+sd.emoji+'</span>\n        <div class="s-info">\n          <div class="s-name">'+sd.name+badge1+badge2+dpsBadge+'<span style="font-size:9px;color:var(--text3);margin-left:4px">Lv.'+ptLv+'</span></div>\n          <div class="s-val">'+dispStr+'</div>\n          <div style="font-size:9px;color:var(--text3);margin-top:1px">'+perPt[sd.id]+'</div>\n        </div>\n      </div>\n      <div class="stat-btns">\n        <div style="display:flex;gap:2px">\n          <button class="stat-plus-btn" '+(hp?'':' disabled')+' onclick="addStat(\''+sd.id+'\',1)">+1</button>\n          <button class="stat-plus-btn" '+(hp?'':' disabled')+' onclick="addStat(\''+sd.id+'\',10)">+10</button>\n          <button class="stat-plus-btn" '+(hp?'':' disabled')+' onclick="addStat(\''+sd.id+'\',100)">+100</button>\n          <button class="stat-plus-btn max-btn" '+(hp?'':' disabled')+' onclick="addStatMax(\''+sd.id+'\')">최대</button>\n        </div>\n        '+(hasInvested?'<button onclick="resetSingleStat(\''+ptKey+'\')" title="이 스탯만 초기화" style="font-size:8px;padding:1px 4px;background:rgba(255,71,87,0.08);border:1px solid rgba(255,71,87,0.3);border-radius:2px;color:var(--hp);cursor:pointer;font-family:var(--font);line-height:1.4;white-space:nowrap">↺ 초기화</button>':'')+
         '\n      </div>\n    </div>';
   }).join('');
   updateAutoDistButtons();
@@ -5001,8 +5002,11 @@ function renderEnhanceTab(){
     const unlocked=isEnhUnlocked(item);
     const cost=enhCost(item,lv);
     const canAfford=G.gold>=cost&&unlocked;
-    const totalVal=(lv*item.pct).toFixed(item.pct<1?1:0);
     const unit=item.unit||'%';
+    // 흡혈은 소수점 2자리, 나머지는 기존 규칙
+    const decPlaces=item.id==='lifeSteal'?2:(item.pct<1?1:0);
+    const totalVal=(lv*item.pct).toFixed(decPlaces);
+    const perLvVal=(item.pct).toFixed(decPlaces);
     // 트리 루트 구분선
     const separator=item.treeRoot?`<div style="margin:8px 0 6px;border-top:1px solid var(--border);padding-top:6px;font-size:9px;color:var(--gold);font-weight:bold">🌳 특수 강화 트리</div>`:'';
     // 잠금 해제 조건
@@ -5045,7 +5049,7 @@ function renderEnhanceTab(){
         <div class="enh-name">${item.name}${enhBadge1}${enhBadge2}${enhDpsBadge}<span style="font-size:9px;color:var(--text3);margin-left:4px">Lv.${lv}</span></div>
         <div class="enh-lv">Lv.${lv}${item.maxLv?` / ${item.maxLv}`:''} <span style="font-size:9px;color:var(--shard)">+${totalVal}${unit}</span></div>
         <div class="enh-cost">${unlocked?`💰 ${fmtNum(cost)}`:'—'}</div>
-        <div style="font-size:9px;color:var(--text3);margin-top:1px">${item.desc}</div>
+        <div style="font-size:9px;color:var(--text3);margin-top:1px">강화 레벨 당 +${perLvVal}${unit} 증가</div>
         ${lockStr}${masterBar}
       </div>
       <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px">
@@ -6322,18 +6326,41 @@ function getCurrentQuest(){
   const {q,i}=available[idx];
   const rw=QUEST_REWARDS[i];
   const round=G.questRound||1;
-  const target=q.type==='stagereach'?q.base:q.base*round;
-  let prog;
-  if(q.type==='stagereach'){
+  let target,prog;
+  if(q.type==='stagegoal'){
+    target=q.targetGs;
+    prog=Math.min(target,G.highestGlobalStage||1);
+  } else if(q.type==='stagereach'){
+    target=q.base;
     const snap=G.stageReachSnapshot||0;
     prog=Math.min(target,Math.max(0,(G.highestGlobalStage||1)-snap));
   } else {
+    target=q.base*round;
     prog=Math.min(G.questProg[q.type]||0,target);
   }
-  const rMult=q.type==='stagereach'?1:round;
+  const rMult=(q.type==='stagegoal'||q.type==='stagereach')?1:round;
   return{...q,target,prog,round,reward:Object.fromEntries(Object.entries(rw).map(([k,v])=>[k,v*rMult]))};
 }
 function checkQuestProgress(){
+  // stagegoal 퀘스트가 이미 달성됐으면 자동으로 건너뜀 (팝업 없이 수령)
+  let safetyLoop=0;
+  while(safetyLoop++<QUEST_POOL.length){
+    const q=getCurrentQuest();
+    if(q.type==='stagegoal'&&q.prog>=q.target){
+      // 이미 달성된 스테이지 목표 → 조용히 수령하고 다음 퀘스트로
+      const rStr=[];
+      if(q.reward.gold){G.gold+=q.reward.gold;rStr.push(`💰+${fmtNum(q.reward.gold)}`);}
+      if(q.reward.tickets){G.tickets=Math.min(9999,G.tickets+q.reward.tickets);rStr.push(`🎫+${q.reward.tickets}`);}
+      if(q.reward.shards){G.shards+=q.reward.shards;rStr.push(`🔩+${q.reward.shards}`);}
+      if(q.reward.skillPts){G.skillPts+=q.reward.skillPts;rStr.push(`✨+${q.reward.skillPts}`);}
+      if(rStr.length)showNotif('✅ 퀘스트 완료! '+rStr.join(' '),'reward');
+      G.questIdx=((G.questIdx||0)+1)%QUEST_POOL.length;
+      if(G.questIdx===0)G.questRound=(G.questRound||1)+1;
+      playSfx('collect');
+      continue;
+    }
+    break;
+  }
   const q=getCurrentQuest();
   const done=q.prog>=q.target;
   document.getElementById('q-dot').classList.toggle('show',done);
@@ -6351,6 +6378,8 @@ function collectQuest(){
   if(G.questIdx===0)G.questRound=(G.questRound||1)+1;
   if(q.type==='stagereach'){
     G.stageReachSnapshot=G.highestGlobalStage||1;
+  } else if(q.type==='stagegoal'){
+    // 목표 스테이지 도달 퀘스트: 별도 상태 초기화 불필요
   } else {
     G.questProg[q.type]=0;
   }
@@ -6361,7 +6390,12 @@ function renderQuestPanel(){
   const q=getCurrentQuest();
   const done=q.prog>=q.target;
   const pct=Math.min(100,(q.prog/q.target)*100);
-  const desc=`${q.title}${q.round>1?` (×${q.round})`:''}: ${fmtNum(q.prog)}/${fmtNum(q.target)}`;
+  let desc;
+  if(q.type==='stagegoal'){
+    desc=`${q.title}: ${q.prog>=q.target?'✅ 달성':'진행 중'} (현재 GS ${fmtNum(q.prog)} / 목표 ${fmtNum(q.target)})`;
+  } else {
+    desc=`${q.title}${q.round>1?` (×${q.round})`:''}: ${fmtNum(q.prog)}/${fmtNum(q.target)}`;
+  }
   document.getElementById('qp-desc').textContent=desc;
   document.getElementById('qp-bar-inner').style.width=pct+'%';
   const panel=document.getElementById('quest-panel-inline');
@@ -6391,7 +6425,7 @@ function collectQuestIfDone(){
   const QUEST_HINT_TARGETS={
     kills:'battle-bg', gacha:'gacha-main-wrap', boss:'battle-bg',
     enhance:'tab-growth', stat:'tab-growth', skilluse:'tab-skill',
-    stagereach:'stage-info-box'
+    stagereach:'stage-info-box', stagegoal:'stage-info-box'
   };
   const targetId=QUEST_HINT_TARGETS[q.type];
   if(!targetId)return;
@@ -8171,6 +8205,7 @@ function initGameUI(){
   if(G.ptEva===undefined)G.ptEva=0;
   if(G.ptPen===undefined)G.ptPen=0;
   if(G.ptHpRegen===undefined)G.ptHpRegen=0;
+  if(!G.questProg.stagegoal)G.questProg.stagegoal=0;
   // 전투 임시 상태 초기화 (세이브에 포함 안 되므로)
   G.buffs=[];G.rageStacks=0;G.focusStacks=0;
   // 탑 전투 중 강제종료 복구: 재접속 시 항상 비전투 상태로 초기화
