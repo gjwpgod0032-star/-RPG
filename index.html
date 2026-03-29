@@ -2072,17 +2072,17 @@ input[type=range]{width:100%;accent-color:var(--accent)}
       <!-- sticky 헤더 영역 -->
       <div class="growth-sticky-hdr" id="growth-sticky-hdr">
         <div class="coll-tab-row" style="margin-bottom:6px">
-          <button class="coll-tab active" id="growth-sub-stat" onclick="switchGrowthTab('stat')" style="position:relative">📊 스탯<div class="notif-dot" id="dot-stat" style="top:-4px;right:-4px"></div></button>
-          <button class="coll-tab" id="growth-sub-enhance" onclick="switchGrowthTab('enhance')" style="position:relative">🔩 강화<div class="notif-dot" id="dot-enhance" style="top:-4px;right:-4px"></div></button>
+          <button class="coll-tab active" id="growth-sub-enhance" onclick="switchGrowthTab('enhance')" style="position:relative">🔩 강화<div class="notif-dot" id="dot-enhance" style="top:-4px;right:-4px"></div></button>
+          <button class="coll-tab" id="growth-sub-stat" onclick="switchGrowthTab('stat')" style="position:relative">📊 스탯<div class="notif-dot" id="dot-stat" style="top:-4px;right:-4px"></div></button>
         </div>
         <!-- 스탯 서브헤더 -->
-        <div id="stat-sub-hdr" class="growth-sub-hdr-row">
+        <div id="stat-sub-hdr" class="growth-sub-hdr-row" style="display:none">
           <span id="pts-badge" style="flex:1">포인트 <span id="pts-val">0</span></span>
           <button id="stat-auto-hdr-btn" class="auto-dist-btn" onclick="autoDistStat()" style="padding:3px 7px;font-size:10px">⚡ 자동배분</button>
           <button class="reset-icon-btn" onclick="confirmAction('statReset')" title="스탯 초기화" style="margin-left:4px">↺</button>
         </div>
         <!-- 강화 서브헤더 -->
-        <div id="enh-sub-hdr" class="growth-sub-hdr-row" style="display:none">
+        <div id="enh-sub-hdr" class="growth-sub-hdr-row">
           <span id="enh-gold-badge" style="flex:1">💰 <span id="enh-gold-val">0</span></span>
           <button id="enh-auto-hdr-btn" class="auto-dist-btn" onclick="autoDistEnhance()" style="padding:3px 7px;font-size:10px">⚡ 자동강화</button>
           <button class="reset-icon-btn" onclick="confirmAction('enhReset')" title="강화 초기화" style="margin-left:4px">↺</button>
@@ -2090,11 +2090,11 @@ input[type=range]{width:100%;accent-color:var(--accent)}
         <!-- 경고 문구 -->
       </div>
       <!-- 스탯 배분 -->
-      <div id="growth-content-stat">
+      <div id="growth-content-stat" style="display:none">
         <div id="stat-list"></div>
       </div>
       <!-- 강화 -->
-      <div id="growth-content-enhance" style="display:none">
+      <div id="growth-content-enhance">
         <div id="enhance-overall-box" style="margin-bottom:6px;display:none">
           <div class="eob-title">⚡ 종합 강화 레벨</div>
           <div id="enhance-overall-lv">Lv.0</div>
@@ -2221,7 +2221,7 @@ const SAVE_KEY = 'dotrium_v1';
 // ══════════════════════════════════════════
 //  VERSION CHECK
 // ══════════════════════════════════════════
-const GAME_VERSION = 'v03_32';
+const GAME_VERSION = 'v03_33';
 // GitHub Pages 배포 시 아래 URL을 본인 레포로 변경하세요
 // 예: 'https://[계정].github.io/[레포]/version.json'
 const VERSION_CHECK_URL = 'version.json';
@@ -3228,7 +3228,7 @@ function getBossDmgBonus(){
   return((G.enhanceLevels.bossdmg||0)*0.1+getEqPrefixSum('bossDmg')+bane)/100;
 }
 // Base stats: log scale to prevent explosion
-function getBaseAtk(){return 10+Math.floor(Math.log(G.level+1)*12)+G.ptAtk*2;}
+function getBaseAtk(){return 10+Math.floor(Math.log(G.level+1)*12)+(G.level-1)+G.ptAtk*2;}
 function getBaseHp(){return 100+Math.floor(Math.log(G.level+1)*80)+G.ptHp*8;}
 function getBaseDef(){return 5+Math.floor(Math.log(G.level+1)*6)+G.ptDef*1.5;}
 
@@ -3297,7 +3297,7 @@ function getFinalEva(){
 }
 // 방어구 관통: 포인트*3 + 슬롯(장갑) + 접두사 + 강화, 이후 철갑파쇄 % 곱적용
 function getFinalPen(){
-  const base=Math.floor((G.ptPen||0)*3+getSlotBonus('gloves','pen')+getEqPrefixSum('pen')+(G.enhanceLevels.pen||0)*0.1);
+  const base=Math.floor((G.ptPen||0)*3+(G.level-1)*2+getSlotBonus('gloves','pen')+getEqPrefixSum('pen')+(G.enhanceLevels.pen||0)*0.1);
   const penPct=(getPassiveStat('penetration')||{penetrationPct:0}).penetrationPct;
   return Math.floor(base*(1+penPct/100));
 }
@@ -3376,14 +3376,14 @@ function currGS(){return globalStage(G.chapter,G.stage);}
 function getMonsterStats(isBoss,bossType){
   const gs=currGS();
   // HP: 기존의 5배, 후반 갈수록 추가 증폭 (gs>100부터 지수 증가폭 확대)
-  const hpBase=Math.floor(42*Math.pow(1.028,gs-1)*5);
+  const hpBase=Math.floor(42*Math.pow(1.028,gs-1)*5*0.8);
   const hpLateBoost=gs>100?Math.pow(1.008,gs-100):1;
   const baseHp=Math.floor(hpBase*hpLateBoost);
   const baseAtk=Math.floor(5.0*Math.pow(1.016,gs-1));
   const baseEva=Math.floor(gs*0.3);                      // 0.8→0.3 대폭 하향
   const baseAcc=Math.floor(100+gs*0.7);                  // 완만화
   const baseDef=Math.floor(gs*3.0);      // 방어 대폭 상향
-  const exp=Math.floor((30+gs*4)*getExpBonus()*0.25);    // 경험치 1/4 하향
+  const exp=Math.floor((30+gs*4)*getExpBonus()*0.25*1.2);    // 경험치 20% 증가
   // 골드: 초반 기반 확대 + 지수 보정 강화 (후반 스테이지 재화 의미있게)
   const goldBase=50+gs*3;
   const goldExpBoost=gs>50?Math.pow(1.012,gs-50):1;
@@ -3406,7 +3406,7 @@ function getMonsterStats(isBoss,bossType){
 }
 // GS를 직접 주입해 스탯 계산 (패널티 비교용)
 function getBaseHpForGS(gs){
-  const hpBase=Math.floor(42*Math.pow(1.028,gs-1)*5);
+  const hpBase=Math.floor(42*Math.pow(1.028,gs-1)*5*0.8);
   const hpLateBoost=gs>100?Math.pow(1.008,gs-100):1;
   return Math.floor(hpBase*hpLateBoost);
 }
@@ -3906,8 +3906,18 @@ function onPlayerDeath(){
   hideBossGauge();
   updatePlayerHpBar();spawnMonster();
   if(wasBoss){
+    // 보스 실패 시 이전 스테이지로 돌아가 파밍 가능하게
+    if(G.stage===101){
+      G.stage=100;
+    } else if(G.stage>1){
+      G.stage--;
+    } else if(G.stage===1&&G.chapter>1){
+      G.chapter--;
+      G.stage=101;
+    }
+    updateStageLbl();updateBattleBg();spawnMonster();
     document.getElementById('boss-retry-bar').style.display='block';
-    showNotif('💀 보스 도전 실패!','top');
+    showNotif('💀 보스 도전 실패! 이전 스테이지로 이동','top');
     showCtxTutorial('firstBossFail');
   }else{
     showNotif('💀 전투 패배 - 재시작','top');
@@ -4065,9 +4075,19 @@ function startBossTimer(){
       clearInterval(bossTimerInterval);bossTimerInterval=null;
       hideBossGauge();
       G.isBoss=false;G.monsterIdx=0;G.stageKillCount=0;G.playerCurHp=getFinalHp();
-      updatePlayerHpBar();spawnMonster();
+      updatePlayerHpBar();
+      // 보스 시간 초과 시 이전 스테이지로 이동
+      if(G.stage===101){
+        G.stage=100;
+      } else if(G.stage>1){
+        G.stage--;
+      } else if(G.stage===1&&G.chapter>1){
+        G.chapter--;
+        G.stage=101;
+      }
+      updateStageLbl();updateBattleBg();spawnMonster();
       document.getElementById('boss-retry-bar').style.display='block';
-      showNotif('⏱ 보스 시간 초과!','top');
+      showNotif('⏱ 보스 시간 초과! 이전 스테이지로 이동','top');
       showCtxTutorial('firstBossFail');
     }
   },1000);
@@ -4763,9 +4783,10 @@ function autoDistEnhance(){
 function renderStatTab(){
   const el=document.getElementById('stat-list');
   if(!el)return;
-  const baseLvAtk=10+Math.floor(Math.log(G.level+1)*12);
+  const baseLvAtk=10+Math.floor(Math.log(G.level+1)*12)+(G.level-1);
   const baseLvHp=100+Math.floor(Math.log(G.level+1)*80);
   const baseLvDef=5+Math.floor(Math.log(G.level+1)*6);
+  const baseLvPen=(G.level-1)*2;
   const critdmgTotal=(getFinalCritDmg()*100).toFixed(2);
   const critdmgAdd=((getFinalCritDmg()-1.5)*100).toFixed(2);
   const finaldmgTotal=(getFinalDmgMult()*100).toFixed(2);
@@ -4806,14 +4827,14 @@ function renderStatTab(){
   const baseVals={
     atk:baseLvAtk,hp:baseLvHp,def:baseLvDef,
     critdmg:'150',finaldmg:'100.00',
-    acc:'100',eva:'0',pen:'0',hpregen:'0.000',
+    acc:'100',eva:'0',pen:String(baseLvPen),hpregen:'0.000',
   };
   const addVals={
     atk:Math.floor(getFinalAtk())-baseLvAtk,
     hp:Math.floor(getFinalHp())-baseLvHp,
     def:Math.floor(getFinalDef())-baseLvDef,
     critdmg:critdmgAdd,finaldmg:finaldmgAdd,
-    acc:accAdd,eva:evaAdd,pen:penAdd,
+    acc:accAdd,eva:evaAdd,pen:Math.max(0,penAdd-baseLvPen),
     hpregen:(getFinalHpRegen()*100).toFixed(3),  // 포인트+슬롯+장비 전체
   };
   const hp=G.pts>0;
@@ -7743,7 +7764,7 @@ function fmtNum(n){
 //  TABS
 // ══════════════════════════════════════════
 let _activeTab='growth';
-let _growthTab='stat';
+let _growthTab='enhance';
 function switchGrowthTab(id){
   _growthTab=id;
   document.querySelectorAll('[id^="growth-sub-"]').forEach(b=>b.classList.toggle('active',b.id==='growth-sub-'+id));
