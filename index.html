@@ -999,6 +999,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
   margin-bottom:4px;box-shadow:2px 2px 0 rgba(0,0,0,0.4);
   position:relative;
 }
+.stat-row.has-reset{padding-bottom:20px;}
 .stat-row-top{display:flex;align-items:center;gap:7px;flex:1;min-width:0}
 .rec-badge{
   position:absolute;top:-7px;left:6px;
@@ -1074,6 +1075,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
   box-shadow:2px 2px 0 rgba(0,0,0,0.4);
   position:relative;
 }
+.enh-row.has-reset{padding-bottom:20px;}
 .enh-row.enh-locked{opacity:0.55;border-style:dashed}
 .enh-icon{font-size:15px}
 .enh-info{flex:1;min-width:0}
@@ -4146,12 +4148,15 @@ const MON_SCENE_FIT = 0.512; // battle-scene 직접 측정 높이의 51.2% (0.64
 let _cachedInGameScale = 0; // 0이면 미계산 상태
 
 function _calcInGameScale(){
-  // battle-scene 요소를 직접 측정
   const sceneEl = document.querySelector('.battle-scene');
   if(!sceneEl) return 1;
   const sceneH = sceneEl.getBoundingClientRect().height;
   if(sceneH < 10) return 1;
-  const scale = (sceneH * MON_SCENE_FIT) / MON_MAX_SRC;
+  // 탭이 열려 배틀씬이 작아졌을 때 fit 비율을 높여 몬스터 크기 보상
+  const bottom = document.getElementById('bottom');
+  const isExpanded = bottom && bottom.classList.contains('expanded');
+  const fit = isExpanded ? 0.82 : MON_SCENE_FIT;
+  const scale = (sceneH * fit) / MON_MAX_SRC;
   return Math.max(0.2, Math.min(2.0, scale));
 }
 
@@ -4207,7 +4212,49 @@ function _setMonsterDisplay(el, mData, isBoss, bossType){
   }
 }
 
-function _updateBattleSceneAlign(){ /* no-op */ }
+function _updateBattleSceneAlign(){
+  requestAnimationFrame(()=>{
+    requestAnimationFrame(()=>{
+      const scale = _getInGameScale();
+
+      // ── 몬스터 크기 재계산 ──
+      const me = document.getElementById('monster-emoji');
+      if(me){
+        const mImg = me.querySelector('img');
+        if(mImg){
+          const availH = Math.round(MON_MAX_SRC * scale);
+          const natW = mImg.naturalWidth || mImg.width;
+          const natH = mImg.naturalHeight || mImg.height;
+          if(natW && natH){
+            let dW = Math.round(natW * scale);
+            let dH = Math.round(natH * scale);
+            if(dH > availH){ const r = availH/dH; dW=Math.round(dW*r); dH=availH; }
+            mImg.style.width = dW+'px';
+            mImg.style.height = dH+'px';
+            me.style.width = dW+'px';
+            me.style.height = dH+'px';
+          }
+        }
+      }
+
+      // ── 캐릭터 크기 재계산 ──
+      const pe = document.getElementById('player-emoji');
+      if(pe){
+        const playerSz = Math.round(PLAYER_BASE_SIZE * scale);
+        const pImg = pe.querySelector('img');
+        if(pImg){
+          pImg.style.width = playerSz+'px';
+          pImg.style.height = playerSz+'px';
+        } else {
+          const svg = pe.querySelector('svg');
+          if(svg){ svg.style.width = playerSz+'px'; svg.style.height = playerSz+'px'; }
+        }
+        pe.style.width = playerSz+'px';
+        pe.style.height = playerSz+'px';
+      }
+    });
+  });
+}
 
 function spawnMonster(){
   clearInterval(tickInterval);
@@ -4890,8 +4937,8 @@ function renderStatTab(){
     const ptLv=ptMap[sd.id]||0;
     const ptKey={atk:'ptAtk',hp:'ptHp',def:'ptDef',critdmg:'ptCritDmg',finaldmg:'ptFinalDmg',acc:'ptAcc',eva:'ptEva',pen:'ptPen',hpregen:'ptHpRegen'}[sd.id];
     const hasInvested=ptLv>0;
-    return'\n    <div class="stat-row">\n      <div class="stat-row-top">\n        <span class="s-icon">'+sd.emoji+'</span>\n        <div class="s-info">\n          <div class="s-name">'+sd.name+badge1+badge2+dpsBadge+'<span style="font-size:9px;color:var(--text3);margin-left:4px">Lv.'+ptLv+'</span></div>\n          <div class="s-val">'+dispStr+'</div>\n          <div style="font-size:9px;color:var(--text3);margin-top:1px">'+perPt[sd.id]+'</div>\n        </div>\n      </div>\n      <div class="stat-btns">\n        <div style="display:flex;gap:2px">\n          <button class="stat-plus-btn" '+(hp?'':' disabled')+' onclick="addStat(\''+sd.id+'\',1)">+1</button>\n          <button class="stat-plus-btn" '+(hp?'':' disabled')+' onclick="addStat(\''+sd.id+'\',10)">+10</button>\n          <button class="stat-plus-btn" '+(hp?'':' disabled')+' onclick="addStat(\''+sd.id+'\',100)">+100</button>\n          <button class="stat-plus-btn max-btn" '+(hp?'':' disabled')+' onclick="addStatMax(\''+sd.id+'\')">최대</button>\n        </div>\n        '+(hasInvested?'<button onclick="resetSingleStat(\''+ptKey+'\')" title="이 스탯만 초기화" style="font-size:8px;padding:1px 4px;background:rgba(255,71,87,0.08);border:1px solid rgba(255,71,87,0.3);border-radius:2px;color:var(--hp);cursor:pointer;font-family:var(--font);line-height:1.4;white-space:nowrap">↺ 초기화</button>':'')+
-        '\n      </div>\n    </div>';
+    return'\n    <div class="stat-row'+(hasInvested?' has-reset':'')+'">\n      <div class="stat-row-top">\n        <span class="s-icon">'+sd.emoji+'</span>\n        <div class="s-info">\n          <div class="s-name">'+sd.name+badge1+badge2+dpsBadge+'<span style="font-size:9px;color:var(--text3);margin-left:4px">Lv.'+ptLv+'</span></div>\n          <div class="s-val">'+dispStr+'</div>\n          <div style="font-size:9px;color:var(--text3);margin-top:1px">'+perPt[sd.id]+'</div>\n        </div>\n      </div>\n      <div class="stat-btns">\n        <div style="display:flex;gap:2px">\n          <button class="stat-plus-btn" '+(hp?'':' disabled')+' onclick="addStat(\''+sd.id+'\',1)">+1</button>\n          <button class="stat-plus-btn" '+(hp?'':' disabled')+' onclick="addStat(\''+sd.id+'\',10)">+10</button>\n          <button class="stat-plus-btn" '+(hp?'':' disabled')+' onclick="addStat(\''+sd.id+'\',100)">+100</button>\n          <button class="stat-plus-btn max-btn" '+(hp?'':' disabled')+' onclick="addStatMax(\''+sd.id+'\')">최대</button>\n        </div>\n      </div>\n      '+(hasInvested?'<button onclick="resetSingleStat(\''+ptKey+'\')" title="이 스탯만 초기화" style="position:absolute;bottom:4px;right:4px;font-size:8px;padding:1px 5px;background:rgba(255,71,87,0.07);border:1px solid rgba(255,71,87,0.3);border-radius:2px;color:var(--hp);cursor:pointer;font-family:var(--font);line-height:1.4;white-space:nowrap">↺ 초기화</button>':'')+
+        '\n    </div>';
   }).join('');
   updateAutoDistButtons();
 }
@@ -5058,7 +5105,7 @@ function renderEnhanceTab(){
     const enhBadge1=isEFirst?'<span class="rec-badge-inline rec1">⭐ 강추</span>':'';
     const enhBadge2=(!isEFirst&&isESecond)?'<span class="rec-badge-inline rec2">👍 추천</span>':'';
     const enhDpsBadge=(item.id===dpsEId&&!isEFirst)?'<span class="rec-badge-inline dps">⚡ 효율</span>':'';
-    return`${separator}<div class="enh-row${!unlocked?' enh-locked':''}" style="${indent}position:relative">
+    return`${separator}<div class="enh-row${!unlocked?' enh-locked':''}${lv>0?' has-reset':''}" style="${indent}position:relative">
       <span class="enh-icon">${item.emoji}</span>
       <div class="enh-info">
         <div class="enh-name">${item.name}${enhBadge1}${enhBadge2}${enhDpsBadge}<span style="font-size:9px;color:var(--text3);margin-left:4px">Lv.${lv}</span></div>
@@ -5074,8 +5121,8 @@ function renderEnhanceTab(){
           <button class="enh-btn" onclick="doEnhance('${item.id}',100)" ${G.gold>=cost*50&&unlocked?'':'disabled'}>+100</button>
           <button class="enh-btn max" onclick="doEnhanceMax('${item.id}')">최대</button>
         </div>`:`<div class="enh-btns"><button class="enh-btn" disabled style="opacity:.3">🔒</button></div>`}
-        ${lv>0?`<button onclick="resetOneEnhance('${item.id}')" title="이 항목 초기화" style="font-size:8px;padding:1px 4px;background:rgba(255,71,87,0.08);border:1px solid rgba(255,71,87,0.3);border-radius:2px;color:var(--hp);cursor:pointer;font-family:var(--font);line-height:1.4;white-space:nowrap">↺ 초기화</button>`:''}
       </div>
+      ${lv>0?`<button onclick="resetOneEnhance('${item.id}')" title="이 항목 초기화" style="position:absolute;bottom:4px;right:4px;font-size:8px;padding:1px 5px;background:rgba(255,71,87,0.07);border:1px solid rgba(255,71,87,0.3);border-radius:2px;color:var(--hp);cursor:pointer;font-family:var(--font);line-height:1.4;white-space:nowrap">↺ 초기화</button>`:''}
     </div>`;
   }).join('');
   updateAutoDistButtons();
