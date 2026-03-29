@@ -2259,7 +2259,7 @@ const SAVE_KEY = 'dotrium_v1';
 // ══════════════════════════════════════════
 //  VERSION CHECK
 // ══════════════════════════════════════════
-const GAME_VERSION = 'v03_50';
+const GAME_VERSION = 'v03_51';
 // GitHub Pages 배포 시 아래 URL을 본인 레포로 변경하세요
 // 예: 'https://[계정].github.io/[레포]/version.json'
 const VERSION_CHECK_URL = 'version.json';
@@ -2804,7 +2804,7 @@ const TITLES=[
 ];
 
 const QUEST_POOL=[
-  {title:'몬스터 처치하기',type:'kills',base:10},
+  {title:'몬스터 처치하기',type:'kills',base:5},
   {title:'뽑기 시도하기',type:'gacha',base:3},
   {title:'1-10스테이지 돌파',type:'stagegoal',targetGs:10},
   {title:'보스 처치하기',type:'boss',base:2},
@@ -2813,7 +2813,7 @@ const QUEST_POOL=[
   {title:'스탯 투자하기',type:'stat',base:3},
   {title:'스킬 발동하기',type:'skilluse',base:5},
   {title:'1-30스테이지 돌파',type:'stagegoal',targetGs:30},
-  {title:'몬스터 대량 처치',type:'kills',base:100},
+  {title:'몬스터 대량 처치',type:'kills',base:30},
   {title:'1-40스테이지 돌파',type:'stagegoal',targetGs:40},
   {title:'뽑기 여러 번 하기',type:'gacha',base:8},
   {title:'1-50스테이지 돌파',type:'stagegoal',targetGs:50},
@@ -2825,7 +2825,7 @@ const QUEST_POOL=[
   {title:'1-80스테이지 돌파',type:'stagegoal',targetGs:80},
   {title:'스킬 집중 발동',type:'skilluse',base:20},
   {title:'1-90스테이지 돌파',type:'stagegoal',targetGs:90},
-  {title:'몬스터 연속 처치',type:'kills',base:300},
+  {title:'몬스터 연속 처치',type:'kills',base:80},
   {title:'1-100스테이지 돌파',type:'stagegoal',targetGs:100},
   {title:'뽑기 집중 시도',type:'gacha',base:15},
   {title:'2-10스테이지 돌파',type:'stagegoal',targetGs:110},
@@ -3288,8 +3288,8 @@ function getExecuteDmgBonus(){
   return((G.enhanceLevels.executeDmg||0)*2+getEqPrefixSum('executeDmg'))/100;
 }
 function getLifeStealPct(){
-  const raw=((G.enhanceLevels.lifeSteal||0)*0.01+getEqPrefixSum('lifeSteal'))/100;
-  return Math.min(0.10,raw);
+  // 강화+장비 흡혈 합산 (캡은 drain패시브와 합산 후 바깥에서 적용)
+  return ((G.enhanceLevels.lifeSteal||0)*0.01+getEqPrefixSum('lifeSteal'))/100;
 }
 function getBossDmgBonus(){
   const bane=(getPassiveStat('bossbane')||{bossBanePct:0}).bossBanePct;
@@ -6929,7 +6929,8 @@ function openProfileModal(){
   document.getElementById('prof-name-input').value=G.name;
   // 현재 스펙
   const sg=document.getElementById('prof-stat-grid');
-  const totalDrainPct=Math.min(0.10,(getPassiveStat('drain')||{drainPct:0}).drainPct+getLifeStealPct())*100;
+  const rawDrainPct=((getPassiveStat('drain')||{drainPct:0}).drainPct+getLifeStealPct())*100;
+  const totalDrainPct=Math.min(10, rawDrainPct);
   const bossDmgPct=(getBossDmgBonus()+(G.permBossDmg||0)/100)*100;
   const normMobDmgPct=((G.enhanceLevels.normaldmg||0)*0.1);
   sg.innerHTML=[
@@ -6941,10 +6942,10 @@ function openProfileModal(){
     ['💥 치명타피해',(getFinalCritDmg()*100).toFixed(2)+'%'],
     ['🌟 최종데미지',(getFinalDmgMult()*100).toFixed(2)+'%'],
     ['🎯 명중',fmtNum(getFinalAcc())],
-    ['🔩 관통',(getPenRate()*100).toFixed(1)+'%'],
+    ['🗡️ 방어구 관통',String(getFinalPen())],
     ['👹 보스 피해','+'+bossDmgPct.toFixed(1)+'%'],
     ['🗡️ 일반몹 피해','+'+normMobDmgPct.toFixed(1)+'%'],
-    ['🩸 흡혈',totalDrainPct.toFixed(2)+'%'],
+    ['🩸 흡혈',totalDrainPct.toFixed(2)+'%'+(rawDrainPct>10?' (MAX)':'')],
   ].map(([l,v])=>`<div class="prof-stat-item"><div class="ps-label">${l}</div><div class="ps-val">${v}</div></div>`).join('');
   // 최고 기록
   const rg=document.getElementById('prof-record-grid');
@@ -7329,6 +7330,8 @@ function renderTowerTab(){
   document.getElementById('tower-challenge-btn').textContent='⚔️ '+f+'층 도전하기';
 }
 let towerTickInterval=null;
+let _towerAutoNextTimer=null;
+let _towerAutoNextInterval=null;
 let _towerPlayerHp=0;
 let _towerInBattle=false;
 
@@ -7610,8 +7613,6 @@ function surrenderTower(){
   showNotif('🏳️ 던전 포기','top');
 }
 
-let _towerAutoNextTimer=null;
-let _towerAutoNextInterval=null;
 
 function cancelTowerAutoNext(){
   if(_towerAutoNextTimer){clearTimeout(_towerAutoNextTimer);_towerAutoNextTimer=null;}
@@ -8459,6 +8460,7 @@ function initGameUI(){
   updateNotifDots();
   _activeTab='';
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  updateSkillBar();
   initPxChars();
   if(!G.tutDone){
     showTutorial(0);
