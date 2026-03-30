@@ -1764,10 +1764,10 @@ input[type=range]{width:100%;accent-color:var(--accent)}
     </div>
   </div>
   <div id="currency-row">
-    <div class="cur-item"><span class="cur-icon">💰</span><span id="gold-val">0</span></div>
-    <div class="cur-item"><span class="cur-icon">🔩</span><span id="shard-val">0</span></div>
-    <div class="cur-item"><span class="cur-icon">🎫</span><span id="ticket-val">0</span></div>
-    <div class="cur-item"><span class="cur-icon">✨</span><span id="sp-val">0</span></div>
+    <div class="cur-item"><span class="cur-icon"><img src="assets/img/ui/cur_gold.png" alt="골드" style="width:14px;height:14px;image-rendering:pixelated;vertical-align:middle"></span><span id="gold-val">0</span></div>
+    <div class="cur-item"><span class="cur-icon"><img src="assets/img/ui/cur_shard.png" alt="파편" style="width:14px;height:14px;image-rendering:pixelated;vertical-align:middle"></span><span id="shard-val">0</span></div>
+    <div class="cur-item"><span class="cur-icon"><img src="assets/img/ui/cur_ticket.png" alt="뽑기권" style="width:14px;height:14px;image-rendering:pixelated;vertical-align:middle"></span><span id="ticket-val">0</span></div>
+    <div class="cur-item"><span class="cur-icon"><img src="assets/img/ui/cur_sp.png" alt="스킬포인트" style="width:14px;height:14px;image-rendering:pixelated;vertical-align:middle"></span><span id="sp-val">0</span></div>
   </div>
 </div>
 
@@ -1958,25 +1958,25 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 <div id="bottom">
   <div id="tab-nav">
     <button class="tab-btn active" onclick="switchTab('growth')" id="tab-growth">
-      <span class="t-icon">🔼</span>성장
+      <span class="t-icon"><img src="assets/img/ui/tab_growth.png" alt="성장" style="width:16px;height:16px;image-rendering:pixelated;vertical-align:middle"></span>성장
       <div class="notif-dot" id="dot-growth"></div>
     </button>
     <button class="tab-btn" onclick="switchTab('equip')" id="tab-equip">
-      <span class="t-icon">🛡️</span>장비
+      <span class="t-icon"><img src="assets/img/ui/tab_equip.png" alt="장비" style="width:16px;height:16px;image-rendering:pixelated;vertical-align:middle"></span>장비
       <div class="notif-dot" id="dot-equip"></div>
     </button>
     <button class="tab-btn locked" onclick="switchTab('skill')" id="tab-skill">
-      <span class="t-icon">⭐</span>스킬
+      <span class="t-icon"><img src="assets/img/ui/tab_skill.png" alt="스킬" style="width:16px;height:16px;image-rendering:pixelated;vertical-align:middle"></span>스킬
       <div class="notif-dot" id="dot-skill"></div>
       <span style="position:absolute;top:4px;right:4px;font-size:8px;color:var(--text3)" id="lock-skill">🔒</span>
     </button>
     <button class="tab-btn locked" onclick="switchTab('coll')" id="tab-coll">
-      <span class="t-icon">📖</span>도감
+      <span class="t-icon"><img src="assets/img/ui/tab_coll.png" alt="도감" style="width:16px;height:16px;image-rendering:pixelated;vertical-align:middle"></span>도감
       <div class="notif-dot" id="dot-coll"></div>
       <span style="position:absolute;top:4px;right:4px;font-size:8px;color:var(--text3)" id="lock-coll">🔒</span>
     </button>
     <button class="tab-btn locked" onclick="switchTab('tower')" id="tab-tower">
-      <span class="t-icon">🏰</span>던전
+      <span class="t-icon"><img src="assets/img/ui/tab_tower.png" alt="던전" style="width:16px;height:16px;image-rendering:pixelated;vertical-align:middle"></span>던전
       <span style="position:absolute;top:4px;right:4px;font-size:8px;color:var(--text3)" id="lock-tower">🔒</span>
     </button>
   </div>
@@ -2111,7 +2111,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 <script>
 const SAVE_KEY = 'dotrium_v1';
 
-const GAME_VERSION = 'v03_54';
+const GAME_VERSION = 'v03_55';
 const VERSION_CHECK_URL = 'version.json';
 const VERSION_CHECK_INTERVAL = 1 * 60 * 1000;
 
@@ -2819,6 +2819,15 @@ const PLAYER_SVG=`<svg class="px-char px-idle" viewBox="0 0 16 16" xmlns="http:/
 <rect x="9" y="12" width="3" height="1" fill="#8899aa"/>
 </svg>`;
 const PLAYER_SVG_STATIC=PLAYER_SVG.replace('px-idle','');
+
+function skillImgTag(id,emoji,size){
+  size=size||20;
+  return`<img src="assets/img/ui/skill_${id}.png" alt="${emoji}" style="width:${size}px;height:${size}px;image-rendering:pixelated;object-fit:contain;vertical-align:middle" onerror="this.outerHTML='${emoji}'">`;
+}
+function enhImgTag(id,emoji,size){
+  size=size||15;
+  return`<img src="assets/img/ui/enh_${id}.png" alt="${emoji}" style="width:${size}px;height:${size}px;image-rendering:pixelated;object-fit:contain;vertical-align:middle" onerror="this.outerHTML='${emoji}'">`;
+}
 
 function makePxChar(size){
   return PLAYER_SVG.replace('id="player-px"','').replace(/class="px-char px-idle"/,'class="px-char px-idle" style="width:'+size+'px;height:'+size+'px"');
@@ -4788,7 +4797,7 @@ function renderEnhanceTab(){
   if(!enhLvEl)return;
   enhLvEl.textContent=`Lv.${ol*10}`;
   const ib=document.getElementById('eob-items');
-  ib.innerHTML=ENHANCE_ITEMS.map(e=>{const lv=G.enhanceLevels[e.id]||0;const done=lv>=(ol+1)*10;return`<span class="eob-item${done?' done':''}">${e.emoji} ${lv}</span>`;}).join('');
+  ib.innerHTML=ENHANCE_ITEMS.map(e=>{const lv=G.enhanceLevels[e.id]||0;const done=lv>=(ol+1)*10;return`<span class="eob-item${done?' done':''}">${enhImgTag(e.id,e.emoji,10)} ${lv}</span>`;}).join('');
   const bonus=ol>0?`종합 강화 Lv.${ol} → 전 능력치 +${ol}%`:'';
   document.getElementById('enhance-overall-bonus').textContent=bonus;
   const enhRec=getEnhRecommend();
@@ -4834,7 +4843,7 @@ function renderEnhanceTab(){
     const enhBadge2=(!isEFirst&&isESecond)?'<span class="rec-badge-inline rec2">👍 추천</span>':'';
     const enhDpsBadge=(item.id===dpsEId&&!isEFirst)?'<span class="rec-badge-inline dps">⚡ 효율</span>':'';
     return`${separator}<div class="enh-row${!unlocked?' enh-locked':''}${lv>0?' has-reset':''}" style="${indent}position:relative">
-      <span class="enh-icon">${item.emoji}</span>
+      <span class="enh-icon">${enhImgTag(item.id,item.emoji,15)}</span>
       <div class="enh-info">
         <div class="enh-name">${item.name}${enhBadge1}${enhBadge2}${enhDpsBadge}<span style="font-size:9px;color:var(--text3);margin-left:4px">Lv.${lv}</span></div>
         <div class="enh-lv">Lv.${lv}${item.maxLv?` / ${item.maxLv}`:''} <span style="font-size:9px;color:var(--shard)">+${totalVal}${unit}</span></div>
@@ -5364,7 +5373,12 @@ function _buildSlotEl(slotId){
 
   const icon=document.createElement('div');
   icon.className='es-icon';
-  icon.textContent=sl.emoji;
+  const _slotImg=document.createElement('img');
+  _slotImg.src='assets/img/ui/slot_'+slotId+'.png';
+  _slotImg.alt=sl.name;
+  _slotImg.style.cssText='width:100%;height:100%;image-rendering:pixelated;object-fit:contain';
+  _slotImg.onerror=function(){this.outerHTML=sl.emoji;};
+  icon.appendChild(_slotImg);
   div.appendChild(icon);
   if(!eq){
     const nm=document.createElement('div');
@@ -5450,7 +5464,7 @@ function renderSlotEnhancePanel(slotId){
   panel.innerHTML=
     `<div class="enh-card-header">
       <div class="enh-card-icon" style="border-color:${gc}">
-        <span>${sl.emoji}</span>
+        <img src="assets/img/ui/slot_${slotId}.png" alt="${sl.name}" style="width:100%;height:100%;image-rendering:pixelated;object-fit:contain" onerror="this.outerHTML='${sl.emoji}'">
       </div>
       <div class="enh-card-info">
         <div class="enh-card-name">${sl.name}</div>
@@ -5719,7 +5733,7 @@ function renderSkillTab(){
     if(!sid)return`<div class="active-skill-slot empty"><span class="as-emoji">➕</span><span class="as-name">빈 슬롯</span></div>`;
     const sk=ACTIVE_SKILLS.find(s=>s.id===sid);const lv=G.activeSkillLevels[sid]||0;
     return`<div class="active-skill-slot equipped" onclick="equipSkill('${sid}')">
-      <span class="as-emoji">${sk.emoji}</span><span class="as-name">${sk.name}</span><span class="as-lv">Lv.${lv}</span>
+      <span class="as-emoji">${skillImgTag(sk.id,sk.emoji,16)}</span><span class="as-name">${sk.name}</span><span class="as-lv">Lv.${lv}</span>
     </div>`;
   }).join('');
   const al=document.getElementById('active-skill-list');
@@ -5727,7 +5741,7 @@ function renderSkillTab(){
     const unlocked=G.level>=sk.unlockLv;const lv=G.activeSkillLevels[sk.id]||0;const eq=(G.equippedSkills||[]).includes(sk.id);
     return`<div class="skill-row${!unlocked?' locked-skill':''}${lv>0?' has-reset':''}" style="position:relative">
       <div class="skill-row-top">
-        <span class="skill-emoji">${sk.emoji}</span>
+        <span class="skill-emoji">${skillImgTag(sk.id,sk.emoji,20)}</span>
         <div class="skill-info">
           <div class="skill-name">${sk.name} <span class="active-tag">액티브</span></div>
           <div class="skill-type-lv">Lv.${lv}${sk.maxLv?' / '+sk.maxLv:''} · 쿨${sk.cd}초${lv>=sk.maxLv?' <span style="color:var(--gold);font-size:9px">✨ MAX</span>':''}</div>
@@ -5752,7 +5766,7 @@ function renderSkillTab(){
     const atMax=sk.maxLv&&lv>=sk.maxLv;
     return`<div class="skill-row${!unlocked?' locked-skill':''}${lv>0?' has-reset':''}" style="position:relative">
       <div class="skill-row-top">
-        <span class="skill-emoji">${sk.emoji}</span>
+        <span class="skill-emoji">${skillImgTag(sk.id,sk.emoji,20)}</span>
         <div class="skill-info">
           <div class="skill-name">${sk.name} <span class="passive-tag">패시브</span></div>
           <div class="skill-type-lv">Lv.${lv}${sk.maxLv?' / '+sk.maxLv:''}${atMax?' <span style="color:var(--gold);font-size:9px">✨ MAX</span>':''}</div>
@@ -5786,7 +5800,7 @@ function updateSkillBar(){
     const sk=ACTIVE_SKILLS.find(s=>s.id===sid);if(!sk)return'';
     const cd=G.skillCooldowns?.[sid]||0;const maxCd=sk.cd*1000;const pct=cd>0?Math.min(100,cd/maxCd*100):0;
     return`<div class="skill-icon-slot" data-sid="${sid}" title="${sk.name}">
-      <span class="s-emoji">${sk.emoji}</span>
+      <span class="s-emoji">${skillImgTag(sk.id,sk.emoji,14)}</span>
       ${pct>0?`<div class="s-cd-overlay" style="height:${pct}%"></div>`:''}
     </div>`;
   }).join('');
@@ -6602,7 +6616,7 @@ function openProfileModal(){
       const sk=ACTIVE_SKILLS.find(s=>s.id===sid);if(!sk)return'';
       const lv=G.activeSkillLevels[sid]||0;
       return`<div class="prof-skill-row">
-        <span style="font-size:15px">${sk.emoji}</span>
+        <span style="font-size:15px">${skillImgTag(sk.id,sk.emoji,15)}</span>
         <div style="flex:1">
           <div style="font-size:11px;font-weight:bold">${sk.name} <span style="color:var(--accent)">Lv.${lv}</span></div>
           <div style="font-size:9px;color:var(--text3)">${sk.desc(Math.max(1,lv))}</div>
@@ -7447,17 +7461,39 @@ function initPxChars(){
   }
   const av=document.getElementById('avatar');
   if(av){
-    const svgStr=PLAYER_SVG.replace('px-idle','').replace(/id="player-px"/,'').replace('viewBox="0 0 16 16"','viewBox="3 0 10 7"');
-    av.innerHTML=svgStr;
-    const s=av.querySelector('svg');
-    if(s){s.style.width='100%';s.style.height='100%';}
+    const avImg=new Image();
+    avImg.onload=function(){
+      av.innerHTML='';
+      const i=document.createElement('img');
+      i.src='assets/img/ui/portrait.png';
+      i.style.cssText='width:100%;height:100%;image-rendering:pixelated;object-fit:cover;border-radius:var(--radius)';
+      av.appendChild(i);
+    };
+    avImg.onerror=function(){
+      const svgStr=PLAYER_SVG.replace('px-idle','').replace(/id="player-px"/,'').replace('viewBox="0 0 16 16"','viewBox="3 0 10 7"');
+      av.innerHTML=svgStr;
+      const s=av.querySelector('svg');
+      if(s){s.style.width='100%';s.style.height='100%';}
+    };
+    avImg.src='assets/img/ui/portrait.png';
   }
   const ec=document.getElementById('edoll-char-emoji');
   if(ec){
-    const svgStr=PLAYER_SVG.replace('px-idle','').replace(/id="player-px"/,'');
-    ec.innerHTML=svgStr;
-    const s=ec.querySelector('svg');
-    if(s){s.style.width='100%';s.style.height='100%';}
+    const ecImg=new Image();
+    ecImg.onload=function(){
+      ec.innerHTML='';
+      const i=document.createElement('img');
+      i.src='assets/img/ui/fullbody.png';
+      i.style.cssText='width:100%;height:100%;image-rendering:pixelated;object-fit:contain;object-position:center bottom';
+      ec.appendChild(i);
+    };
+    ecImg.onerror=function(){
+      const svgStr=PLAYER_SVG.replace('px-idle','').replace(/id="player-px"/,'');
+      ec.innerHTML=svgStr;
+      const s=ec.querySelector('svg');
+      if(s){s.style.width='100%';s.style.height='100%';}
+    };
+    ecImg.src='assets/img/ui/fullbody.png';
   }
 }
 function showCPChange(prev,next){
