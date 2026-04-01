@@ -41,7 +41,7 @@
   --hp:#ff4757; --hp2:#ff6b81;
   --common:#8b949e; --uncommon:#3fb950; --rare:#58a6ff;
   --hero:#bc8cff; --legend:#e3b341; --myth:#ff6b35; --sacred:#ffffff;
-  --pixel:2px; --radius:2px; --tab-h:42px;
+  --pixel:2px; --radius:2px; --tab-h:38px;
   --font:'Galmuri11','DotGothic16',monospace;
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -258,15 +258,18 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 .prof-stat-item{
   background:var(--bg2);border:2px solid var(--border);
   border-radius:var(--radius);padding:5px 7px;
+  display:flex;align-items:center;gap:8px;
 }
-.prof-stat-item .ps-label{font-size:11px;color:var(--text3)}
+.prof-stat-item .ps-icon{flex-shrink:0;display:flex;align-items:center}
+.prof-stat-item .ps-body{flex:1;min-width:0}
+.prof-stat-item .ps-label{font-size:9px;color:var(--text3)}
 .prof-stat-item .ps-val{font-size:12px;color:var(--text);font-weight:bold}
 .prof-equip-row{
   display:flex;align-items:center;gap:7px;
   padding:5px 7px;background:var(--bg2);border:2px solid var(--border);
   border-radius:var(--radius);margin-bottom:4px;font-size:10px;
 }
-.prof-equip-row .pe-slot{width:22px;text-align:center;font-size:13px}
+.prof-equip-row .pe-slot{width:32px;text-align:center;font-size:13px;flex-shrink:0}
 .prof-equip-row .pe-info{flex:1}
 .prof-equip-row .pe-grade{font-size:9px;margin-bottom:1px}
 .prof-equip-row .pe-stats{color:var(--text3);font-size:9px}
@@ -274,6 +277,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
   display:flex;align-items:center;gap:7px;
   padding:5px 7px;background:var(--bg2);border:2px solid var(--border);
   border-radius:var(--radius);margin-bottom:4px;font-size:10px;
+  min-height:40px;
 }
 
 .title-dropdown-wrap{position:relative;margin-bottom:10px}
@@ -573,10 +577,10 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 
 #skill-bar{
   display:flex;justify-content:center;gap:5px;
-  padding:3px 8px;flex-shrink:0;min-height:32px;
+  padding:3px 8px;flex-shrink:0;min-height:44px;
 }
 .skill-icon-slot{
-  width:26px;height:26px;position:relative;
+  width:38px;height:38px;position:relative;
   background:rgba(0,0,0,0.3);border:2px solid var(--border2);
   border-radius:var(--radius);display:flex;align-items:center;justify-content:center;
   overflow:hidden;box-shadow:2px 2px 0 rgba(0,0,0,0.4)
@@ -886,12 +890,12 @@ input[type=range]{width:100%;accent-color:var(--accent)}
   box-shadow:0 -2px 0 rgba(0,0,0,0.3)
 }
 .tab-btn{
-  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+  flex:1;display:flex;flex-direction:row;align-items:center;justify-content:center;gap:4px;
   background:none;border:none;color:var(--text3);
   font-family:var(--font);font-weight:bold;font-size:11px;cursor:pointer;
   transition:all .15s;position:relative;border-top:2px solid transparent;
 }
-.tab-btn .t-icon{font-size:16px;line-height:1}
+.tab-btn .t-icon{font-size:24px;line-height:1;display:flex;align-items:center;flex-shrink:0}
 .tab-btn.active{color:var(--accent);border-top-color:var(--accent);background:rgba(88,166,255,0.06)}
 .tab-btn.locked{opacity:.5}
 #tab-content{
@@ -1022,7 +1026,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 }
 .enh-row.has-reset{padding-bottom:20px;}
 .enh-row.enh-locked{opacity:0.55;border-style:dashed}
-.enh-icon{font-size:15px}
+.enh-icon{font-size:22px}
 .enh-info{flex:1;min-width:0}
 .enh-name{font-size:11px;color:var(--text2)}
 .enh-lv{font-size:12px;font-weight:bold;text-shadow:1px 1px 0 rgba(0,0,0,0.8)}
@@ -1055,8 +1059,8 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 }
 #equip-doll-wrap.split .equip-slot{width:40px;height:50px}
 #equip-doll-wrap.split .es-icon{font-size:16px}
-#equip-doll-wrap.split #edoll-char{width:68px;height:88px}
-#equip-doll-wrap.split #edoll-char-emoji{width:40px;height:40px;font-size:34px}
+#equip-doll-wrap.split #edoll-char{width:80px;height:100px}
+#equip-doll-wrap.split #edoll-char-emoji{width:76px;height:96px;font-size:48px}
 #equip-doll-wrap.split #edoll-top,
 #equip-doll-wrap.split #edoll-bot{gap:4px}
 #equip-doll-wrap.split #edoll-mid{gap:4px}
@@ -1129,13 +1133,14 @@ input[type=range]{width:100%;accent-color:var(--accent)}
   display:flex;flex-direction:column;gap:5px;align-items:center;
 }
 #edoll-char{
-  width:88px;height:110px;flex-shrink:0;
+  width:110px;height:138px;flex-shrink:0;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   background:linear-gradient(160deg,rgba(28,46,72,0.98),rgba(12,22,36,0.98));
   border:2px solid rgba(88,166,255,0.2);border-radius:12px;
   box-shadow:0 0 18px rgba(88,166,255,0.07),inset 0 1px 0 rgba(255,255,255,0.04),0 4px 8px rgba(0,0,0,0.5);
+  overflow:hidden;
 }
-#edoll-char-emoji{width:52px;height:52px;line-height:1;filter:drop-shadow(0 3px 6px rgba(0,0,0,0.6));display:flex;align-items:center;justify-content:center;}
+#edoll-char-emoji{width:106px;height:134px;line-height:1;filter:drop-shadow(0 3px 6px rgba(0,0,0,0.6));display:flex;align-items:center;justify-content:center;}
 #edoll-char-name{display:none}
 #edoll-cp-badge{display:none}
 .equip-slot{
@@ -1160,7 +1165,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 .equip-slot.gl-border{box-shadow:0 0 12px rgba(240,136,62,0.4),0 2px 5px rgba(0,0,0,0.5)}
 .equip-slot.gm-border{box-shadow:0 0 14px rgba(255,71,87,0.45),0 2px 5px rgba(0,0,0,0.5)}
 .equip-slot.gs-border{box-shadow:0 0 16px rgba(255,215,0,0.5),0 2px 5px rgba(0,0,0,0.5)}
-.es-icon{font-size:22px;line-height:1}
+.es-icon{font-size:15px;line-height:1}
 .es-empty-name{font-size:7px;color:rgba(100,120,145,0.75);text-align:center;line-height:1.3;padding:0 3px}
 .es-grade-dot{
   position:absolute;top:4px;right:4px;
@@ -1262,14 +1267,14 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 .active-skill-slot{
   min-width:50px;width:50px;
   background:var(--bg2);border:2px solid var(--border2);
-  border-radius:var(--radius);padding:4px;
-  display:flex;flex-direction:column;align-items:center;gap:2px;
+  border-radius:var(--radius);padding:3px;
+  display:flex;flex-direction:column;align-items:center;gap:1px;
   cursor:pointer;flex-shrink:0;box-shadow:2px 2px 0 rgba(0,0,0,0.4)
 }
 .active-skill-slot.equipped{border-color:var(--skill)}
-.active-skill-slot .as-emoji{font-size:16px}
+.active-skill-slot .as-emoji{width:36px;height:36px;display:flex;align-items:center;justify-content:center}
 .active-skill-slot .as-name{font-size:7px;color:var(--text3);font-weight:bold;text-align:center}
-.active-skill-slot .as-lv{font-size:10px;color:var(--skill)}
+.active-skill-slot .as-lv{font-size:8px;color:var(--skill)}
 .active-skill-slot.empty{opacity:.3}
 .sk-section-title{
   font-size:11px;color:var(--text3);text-align:center;
@@ -1282,7 +1287,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 }
 .skill-row.locked-skill{opacity:.6}
 .skill-row-top{display:flex;align-items:flex-start;gap:7px}
-.skill-emoji{font-size:20px;flex-shrink:0;margin-top:1px}
+.skill-emoji{width:36px;height:36px;flex-shrink:0;display:flex;align-items:flex-start;justify-content:center;padding-top:1px}
 .skill-info{flex:1;min-width:0}
 .skill-name{font-size:12px;font-weight:bold;display:flex;align-items:center;gap:4px;
   text-shadow:1px 1px 0 rgba(0,0,0,0.8)}
@@ -1679,8 +1684,8 @@ input[type=range]{width:100%;accent-color:var(--accent)}
     <div style="font-size:10px;color:var(--text3)">부재 시간: <span id="off-time">0시간</span></div>
     <div style="font-size:10px;color:var(--text3);margin-top:2px">기준 스테이지: <span id="off-best-stage">-</span></div>
     <div class="off-reward-row">
-      <div class="off-reward-item"><span class="ori">💰</span><span class="ov" id="off-gold">0</span></div>
-      <div class="off-reward-item"><span class="ori">🎫</span><span class="ov" id="off-tickets">0</span></div>
+      <div class="off-reward-item"><span class="ori"><img src="assets/img/ui/currency/cur_gold.png" alt="💰" style="width:14px;height:14px;image-rendering:pixelated;vertical-align:middle" onerror="this.outerHTML='💰'"></span><span class="ov" id="off-gold">0</span></div>
+      <div class="off-reward-item"><span class="ori"><img src="assets/img/ui/currency/cur_ticket.png" alt="🎫" style="width:14px;height:14px;image-rendering:pixelated;vertical-align:middle" onerror="this.outerHTML='🎫'"></span><span class="ov" id="off-tickets">0</span></div>
     </div>
     <div id="off-extra" style="font-size:9px;color:var(--text3);text-align:center;margin-top:3px"></div>
     <button id="offline-collect-btn" onclick="collectOffline()">수령하기 ▶</button>
@@ -1752,7 +1757,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
         <span id="title-badge"></span>
       </div>
       <div id="cp-row">
-        <span id="cp-val" title="전투력: 공격력·크리·체력·방어력 종합 수치" style="cursor:help">⚔️ 전투력 0</span>
+        <span id="cp-val" title="전투력: 공격력·크리·체력·방어력 종합 수치" style="cursor:help"><img src="assets/img/ui/stat/stat_cp.png" alt="⚔️" style="width:13px;height:13px;image-rendering:pixelated;vertical-align:middle" onerror="this.outerHTML='⚔️'"> 전투력 0</span>
       </div>
       <div id="exp-bar-row" onclick="toggleExpTooltip(event)">
         <div id="exp-bar-wrap">
@@ -1869,7 +1874,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
     <div id="gacha-main-wrap">
       <button id="gacha-main-btn" onclick="doGacha()">
         🎰 장비 뽑기
-        <span class="g-sub">🎫 뽑기권 <span id="gacha-ticket-remain">0</span>개</span>
+        <span class="g-sub"><img src="assets/img/ui/currency/cur_ticket.png" alt="🎫" style="width:12px;height:12px;image-rendering:pixelated;vertical-align:middle" onerror="this.outerHTML='🎫'"> 뽑기권 <span id="gacha-ticket-remain">0</span>개</span>
       </button>
       <div class="notif-dot" id="dot-gacha" style="position:absolute;top:-3px;right:-3px"></div>
       <button id="gacha-lvup-overlay-btn" onclick="openGachaLvPopup()" style="display:none">
@@ -1958,25 +1963,25 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 <div id="bottom">
   <div id="tab-nav">
     <button class="tab-btn active" onclick="switchTab('growth')" id="tab-growth">
-      <span class="t-icon"><img src="assets/img/ui/tab/tab_growth.png" alt="성장" style="width:16px;height:16px;image-rendering:pixelated;vertical-align:middle"></span>성장
+      <span class="t-icon"><img src="assets/img/ui/tab/tab_growth.png" alt="성장" style="width:24px;height:24px;image-rendering:pixelated;vertical-align:middle"></span>성장
       <div class="notif-dot" id="dot-growth"></div>
     </button>
     <button class="tab-btn" onclick="switchTab('equip')" id="tab-equip">
-      <span class="t-icon"><img src="assets/img/ui/tab/tab_equip.png" alt="장비" style="width:16px;height:16px;image-rendering:pixelated;vertical-align:middle"></span>장비
+      <span class="t-icon"><img src="assets/img/ui/tab/tab_equip.png" alt="장비" style="width:24px;height:24px;image-rendering:pixelated;vertical-align:middle"></span>장비
       <div class="notif-dot" id="dot-equip"></div>
     </button>
     <button class="tab-btn locked" onclick="switchTab('skill')" id="tab-skill">
-      <span class="t-icon"><img src="assets/img/ui/tab/tab_skill.png" alt="스킬" style="width:16px;height:16px;image-rendering:pixelated;vertical-align:middle"></span>스킬
+      <span class="t-icon"><img src="assets/img/ui/tab/tab_skill.png" alt="스킬" style="width:24px;height:24px;image-rendering:pixelated;vertical-align:middle"></span>스킬
       <div class="notif-dot" id="dot-skill"></div>
       <span style="position:absolute;top:4px;right:4px;font-size:8px;color:var(--text3)" id="lock-skill">🔒</span>
     </button>
     <button class="tab-btn locked" onclick="switchTab('coll')" id="tab-coll">
-      <span class="t-icon"><img src="assets/img/ui/tab/tab_coll.png" alt="도감" style="width:16px;height:16px;image-rendering:pixelated;vertical-align:middle"></span>도감
+      <span class="t-icon"><img src="assets/img/ui/tab/tab_coll.png" alt="도감" style="width:24px;height:24px;image-rendering:pixelated;vertical-align:middle"></span>도감
       <div class="notif-dot" id="dot-coll"></div>
       <span style="position:absolute;top:4px;right:4px;font-size:8px;color:var(--text3)" id="lock-coll">🔒</span>
     </button>
     <button class="tab-btn locked" onclick="switchTab('tower')" id="tab-tower">
-      <span class="t-icon"><img src="assets/img/ui/tab/tab_tower.png" alt="던전" style="width:16px;height:16px;image-rendering:pixelated;vertical-align:middle"></span>던전
+      <span class="t-icon"><img src="assets/img/ui/tab/tab_tower.png" alt="던전" style="width:24px;height:24px;image-rendering:pixelated;vertical-align:middle"></span>던전
       <span style="position:absolute;top:4px;right:4px;font-size:8px;color:var(--text3)" id="lock-tower">🔒</span>
     </button>
   </div>
@@ -1993,7 +1998,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
           <button class="reset-icon-btn" onclick="confirmAction('statReset')" title="스탯 초기화" style="margin-left:4px">↺</button>
         </div>
         <div id="enh-sub-hdr" class="growth-sub-hdr-row">
-          <span id="enh-gold-badge" style="flex:1">💰 <span id="enh-gold-val">0</span></span>
+          <span id="enh-gold-badge" style="flex:1"><img src="assets/img/ui/currency/cur_gold.png" alt="💰" style="width:12px;height:12px;image-rendering:pixelated;vertical-align:middle" onerror="this.outerHTML='💰'"> <span id="enh-gold-val">0</span></span>
           <button id="enh-auto-hdr-btn" class="auto-dist-btn" onclick="autoDistEnhance()" style="padding:3px 7px;font-size:10px">⚡ 자동강화</button>
           <button class="reset-icon-btn" onclick="confirmAction('enhReset')" title="강화 초기화" style="margin-left:4px">↺</button>
         </div>
@@ -2036,8 +2041,8 @@ input[type=range]{width:100%;accent-color:var(--accent)}
         <div id="auto-slot-enh-hint" style="font-size:9px;color:var(--text3);margin-top:2px;text-align:center">강화 수치 낮은 순 · 파편 소진 시 자동 중단</div>
       </div>
       <div id="frag-exchange-box" style="margin-top:6px">
-        <div class="fex-title">🔩 파편 교환</div>
-        <div class="fex-row"><span>파편 100개 → 🎫 뽑기권 1개</span><button class="fex-btn" onclick="fragToTicket()">교환</button></div>
+        <div class="fex-title"><img src="assets/img/ui/currency/cur_shard.png" alt="🔩" style="width:12px;height:12px;image-rendering:pixelated;vertical-align:middle" onerror="this.outerHTML='🔩'"> 파편 교환</div>
+        <div class="fex-row"><span>파편 100개 → <img src="assets/img/ui/currency/cur_ticket.png" alt="🎫" style="width:11px;height:11px;image-rendering:pixelated;vertical-align:middle" onerror="this.outerHTML='🎫'"> 뽑기권 1개</span><button class="fex-btn" onclick="fragToTicket()">교환</button></div>
         
       </div>
     </div>
@@ -2052,8 +2057,8 @@ input[type=range]{width:100%;accent-color:var(--accent)}
       <div style="font-size:9px;color:var(--text3);margin-bottom:5px">장착 슬롯 (7개)</div>
       <div id="active-slots-grid"></div>
       <div class="coll-tab-row" style="margin-top:6px">
-        <button class="coll-tab active" id="skill-sub-active" onclick="switchSkillTab('active')">⚡ 액티브</button>
-        <button class="coll-tab" id="skill-sub-passive" onclick="switchSkillTab('passive')">🌀 패시브</button>
+        <button class="coll-tab active" id="skill-sub-active" onclick="switchSkillTab('active')"><img src="assets/img/ui/tab/tab_active.png" alt="액티브" style="width:13px;height:13px;image-rendering:pixelated;vertical-align:middle" onerror="this.outerHTML='⚡'"> 액티브</button>
+        <button class="coll-tab" id="skill-sub-passive" onclick="switchSkillTab('passive')"><img src="assets/img/ui/tab/tab_passive.png" alt="패시브" style="width:13px;height:13px;image-rendering:pixelated;vertical-align:middle" onerror="this.outerHTML='🌀'"> 패시브</button>
       </div>
       <div id="active-skill-list"></div>
       <div id="passive-skill-list" style="display:none"></div>
@@ -2111,7 +2116,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 <script>
 const SAVE_KEY = 'dotrium_v1';
 
-const GAME_VERSION = 'v03_57';
+const GAME_VERSION = 'v03_61';
 const VERSION_CHECK_URL = 'version.json';
 const VERSION_CHECK_INTERVAL = 1 * 60 * 1000;
 
@@ -2824,12 +2829,8 @@ function skillImgTag(id,emoji,size){
   size=size||20;
   return`<img src="assets/img/ui/skill/skill_${id}.png" alt="${emoji}" style="width:${size}px;height:${size}px;image-rendering:pixelated;object-fit:contain;vertical-align:middle" onerror="this.outerHTML='${emoji}'">`;
 }
-function enhImgTag(id,emoji,size){
-  size=size||15;
-  return`<img src="assets/img/ui/enhance/enh_${id}.png" alt="${emoji}" style="width:${size}px;height:${size}px;image-rendering:pixelated;object-fit:contain;vertical-align:middle" onerror="this.outerHTML='${emoji}'">`;
-}
 function monTypeImg(type,size){
-  size=size||14;
+  size=size||28;
   const fb={normal:'⚔️',boss:'👹',vip:'💎',elite:'👑'};
   return`<img src="assets/img/ui/monster/mon_${type}.png" alt="${fb[type]||'❓'}" style="width:${size}px;height:${size}px;image-rendering:pixelated;object-fit:contain;vertical-align:middle" onerror="this.outerHTML='${fb[type]||'❓'}'">`;
 }
@@ -2838,8 +2839,14 @@ function expIconImg(size){
   return`<img src="assets/img/ui/currency/cur_exp.png" alt="EXP" style="width:${size}px;height:${size}px;image-rendering:pixelated;object-fit:contain;vertical-align:middle" onerror="this.outerHTML='✨'">`;
 }
 function statImgTag(id,emoji,size){
-  size=size||16;
+  size=size||22;
   return`<img src="assets/img/ui/stat/stat_${id}.png" alt="${emoji}" style="width:${size}px;height:${size}px;image-rendering:pixelated;object-fit:contain;vertical-align:middle" onerror="this.outerHTML='${emoji}'">`;
+}
+function curImgTag(type,size){
+  size=size||12;
+  const src={gold:'cur_gold',shard:'cur_shard',ticket:'cur_ticket',sp:'cur_sp',exp:'cur_exp'};
+  const fb={gold:'💰',shard:'🔩',ticket:'🎫',sp:'✨',exp:'✨'};
+  return`<img src="assets/img/ui/currency/${src[type]||'cur_gold'}.png" alt="${fb[type]||'💰'}" style="width:${size}px;height:${size}px;image-rendering:pixelated;object-fit:contain;vertical-align:middle" onerror="this.outerHTML='${fb[type]||'💰'}'">`;
 }
 
 function makePxChar(size){
@@ -3814,7 +3821,7 @@ function onMonsterDead(){
       if(firstReward.skillPts)G.skillPts+=(firstReward.skillPts||0);
       const rLabel=bt==='elite'?monTypeImg('elite',12)+' 엘리트보스':bt==='vip'?monTypeImg('vip',12)+' 정예보스':monTypeImg('boss',12)+' 일반보스';
       const notifEl=document.createElement('div');
-      notifEl.innerHTML=`🎖️ ${rLabel} 최초 격파! 🎫×${firstReward.tickets} 🔩×${firstReward.shards}${firstReward.skillPts?` ✨×${firstReward.skillPts}`:''}`;
+      notifEl.innerHTML=`🎖️ ${rLabel} 최초 격파! ${curImgTag('ticket',12)} 뽑기권×${firstReward.tickets} ${curImgTag('shard',12)} 파편×${firstReward.shards}${firstReward.skillPts?` ${curImgTag('sp',12)}×${firstReward.skillPts}`:''}`;
       showNotif(notifEl.innerHTML,'reward');
     }
   }else{
@@ -3826,7 +3833,7 @@ function onMonsterDead(){
   G.focusStacks=0;
   if(G.killSinceTicket>=5){
     G.killSinceTicket=0;G.tickets=Math.min(9999,G.tickets+1);
-    showNotif('🎫 뽑기권 +1','reward');
+    showNotif(curImgTag('ticket',12)+' 뽑기권 +1','reward');
   }
   if(G.autoGacha&&G.tickets>0&&!pendingAutoGachaPaused)doGacha(true);
   checkMilestones();checkAchievements();checkQuestProgress();checkTitles();checkUnlocks();
@@ -4238,7 +4245,7 @@ function gainExp(amt){
     playSfx('levelup');
     showNotif(`🎉 레벨 업! Lv.${G.level}`,'top');
     if(G.level===2)showCtxTutorial('firstLevelUp');
-    G.skillPts+=3;showNotif(`✨ 스킬포인트 +3 (Lv.${G.level})`,'reward');showCtxTutorial('firstSkillPt');
+    G.skillPts+=3;showNotif(curImgTag('sp',12)+` 스킬포인트 +3 (Lv.${G.level})`,'reward');showCtxTutorial('firstSkillPt');
     checkSkillUnlocks();checkMilestones();
     G.questProg.levelup=(G.questProg.levelup||0)+1;
     checkQuestProgress();
@@ -4607,7 +4614,7 @@ function autoDistEnhance(){
   G.questProg.enhance=(G.questProg.enhance||0)+upgraded;
   checkQuestProgress();
   showCPChange(prevCP,calcCP());
-  showNotif(`⚡ ${upgraded}회 자동강화 완료 (💰-${fmtNum(spent)})`,'reward');
+  showNotif(`⚡ ${upgraded}회 자동강화 완료 (${curImgTag('gold',11)}-${fmtNum(spent)})`,'reward');
   updateUI();renderEnhanceTab();
   showCtxTutorial('autoDistEnhance');
 }
@@ -4789,7 +4796,7 @@ function resetEnhance(){
   G.overallEnhanceLv=0;
   G.tutorialSeen=prevSeen;
   showCPChange(prevCP,calcCP());updateUI();renderEnhanceTab();
-  showNotif(`🔄 강화 초기화 완료 · 💰 ${fmtNum(refund)} 환급`,'top');
+  showNotif(`🔄 강화 초기화 완료 · ${curImgTag('gold',11)} ${fmtNum(refund)} 환급`,'top');
 }
 function resetOneEnhance(id){
   const lv=G.enhanceLevels[id]||0;
@@ -4814,7 +4821,7 @@ function renderEnhanceTab(){
   if(!enhLvEl)return;
   enhLvEl.textContent=`Lv.${ol*10}`;
   const ib=document.getElementById('eob-items');
-  ib.innerHTML=ENHANCE_ITEMS.map(e=>{const lv=G.enhanceLevels[e.id]||0;const done=lv>=(ol+1)*10;return`<span class="eob-item${done?' done':''}">${enhImgTag(e.id,e.emoji,10)} ${lv}</span>`;}).join('');
+  ib.innerHTML=ENHANCE_ITEMS.map(e=>{const lv=G.enhanceLevels[e.id]||0;const done=lv>=(ol+1)*10;return`<span class="eob-item${done?' done':''}">${statImgTag(e.id,e.emoji,10)} ${lv}</span>`;}).join('');
   const bonus=ol>0?`종합 강화 Lv.${ol} → 전 능력치 +${ol}%`:'';
   document.getElementById('enhance-overall-bonus').textContent=bonus;
   const enhRec=getEnhRecommend();
@@ -4860,11 +4867,11 @@ function renderEnhanceTab(){
     const enhBadge2=(!isEFirst&&isESecond)?'<span class="rec-badge-inline rec2">👍 추천</span>':'';
     const enhDpsBadge=(item.id===dpsEId&&!isEFirst)?'<span class="rec-badge-inline dps">⚡ 효율</span>':'';
     return`${separator}<div class="enh-row${!unlocked?' enh-locked':''}${lv>0?' has-reset':''}" style="${indent}position:relative">
-      <span class="enh-icon">${enhImgTag(item.id,item.emoji,15)}</span>
+      <span class="enh-icon">${statImgTag(item.id,item.emoji,22)}</span>
       <div class="enh-info">
         <div class="enh-name">${item.name}${enhBadge1}${enhBadge2}${enhDpsBadge}<span style="font-size:9px;color:var(--text3);margin-left:4px">Lv.${lv}</span></div>
         <div class="enh-lv">Lv.${lv}${item.maxLv?` / ${item.maxLv}`:''} <span style="font-size:9px;color:var(--shard)">+${totalVal}${unit}</span></div>
-        <div class="enh-cost">${unlocked?`💰 ${fmtNum(cost)}`:'—'}</div>
+        <div class="enh-cost">${unlocked?`${curImgTag('gold',11)} ${fmtNum(cost)}`:'—'}</div>
         <div style="font-size:9px;color:var(--text3);margin-top:1px">강화 레벨 당 +${perLvVal}${unit} 증가</div>
         ${lockStr}${masterBar}
       </div>
@@ -5349,7 +5356,7 @@ function updateGachaMini(){
   const countEl=document.getElementById('gacha-lv-count');
   if(countEl)countEl.textContent=`${fmtNum(cur)}/${fmtNum(next)}회`;
 }
-function fragToTicket(){if(G.shards<100){showNotif('🔩 파편 100개 필요','top');return;}G.shards-=100;G.tickets=Math.min(9999,G.tickets+1);showNotif('🎫 뽑기권 +1','reward');updateUI();}
+function fragToTicket(){if(G.shards<100){showNotif('🔩 파편 100개 필요','top');return;}G.shards-=100;G.tickets=Math.min(9999,G.tickets+1);showNotif(curImgTag('ticket',12)+' 뽑기권 +1','reward');updateUI();}
 
 const DOLL_LAYOUT={
   top:['helmet','necklace','shoulder'],
@@ -5750,7 +5757,7 @@ function renderSkillTab(){
     if(!sid)return`<div class="active-skill-slot empty"><span class="as-emoji">➕</span><span class="as-name">빈 슬롯</span></div>`;
     const sk=ACTIVE_SKILLS.find(s=>s.id===sid);const lv=G.activeSkillLevels[sid]||0;
     return`<div class="active-skill-slot equipped" onclick="equipSkill('${sid}')">
-      <span class="as-emoji">${skillImgTag(sk.id,sk.emoji,16)}</span><span class="as-name">${sk.name}</span><span class="as-lv">Lv.${lv}</span>
+      <span class="as-emoji">${skillImgTag(sk.id,sk.emoji,36)}</span><span class="as-name">${sk.name}</span><span class="as-lv">Lv.${lv}</span>
     </div>`;
   }).join('');
   const al=document.getElementById('active-skill-list');
@@ -5758,11 +5765,10 @@ function renderSkillTab(){
     const unlocked=G.level>=sk.unlockLv;const lv=G.activeSkillLevels[sk.id]||0;const eq=(G.equippedSkills||[]).includes(sk.id);
     return`<div class="skill-row${!unlocked?' locked-skill':''}${lv>0?' has-reset':''}" style="position:relative">
       <div class="skill-row-top">
-        <span class="skill-emoji">${skillImgTag(sk.id,sk.emoji,20)}</span>
+        <span class="skill-emoji">${skillImgTag(sk.id,sk.emoji,34)}</span>
         <div class="skill-info">
           <div class="skill-name">${sk.name} <span class="active-tag">액티브</span></div>
           <div class="skill-type-lv">Lv.${lv}${sk.maxLv?' / '+sk.maxLv:''} · 쿨${sk.cd}초${lv>=sk.maxLv?' <span style="color:var(--gold);font-size:9px">✨ MAX</span>':''}</div>
-          <div class="skill-desc-text">${sk.descFull}</div>
           <div class="skill-eff">${unlocked?sk.desc(Math.max(1,lv)):sk.desc(1)}</div>
           ${unlocked&&lv>0&&lv<(sk.maxLv||9999)?`<div class="skill-next-eff">▶ 다음: ${sk.nextDesc(lv)}</div>`:''}
           ${!unlocked?`<div class="skill-unlock-at">🔒 Lv.${sk.unlockLv} 해금</div>`:''}
@@ -5783,11 +5789,10 @@ function renderSkillTab(){
     const atMax=sk.maxLv&&lv>=sk.maxLv;
     return`<div class="skill-row${!unlocked?' locked-skill':''}${lv>0?' has-reset':''}" style="position:relative">
       <div class="skill-row-top">
-        <span class="skill-emoji">${skillImgTag(sk.id,sk.emoji,20)}</span>
+        <span class="skill-emoji">${skillImgTag(sk.id,sk.emoji,34)}</span>
         <div class="skill-info">
           <div class="skill-name">${sk.name} <span class="passive-tag">패시브</span></div>
           <div class="skill-type-lv">Lv.${lv}${sk.maxLv?' / '+sk.maxLv:''}${atMax?' <span style="color:var(--gold);font-size:9px">✨ MAX</span>':''}</div>
-          <div class="skill-desc-text">${sk.descFull}</div>
           <div class="skill-eff">${unlocked?sk.desc(Math.max(1,lv)):sk.desc(1)}</div>
           ${unlocked&&lv>0&&!atMax?`<div class="skill-next-eff">▶ 다음: ${sk.desc(lv+1)}</div>`:''}
           ${!unlocked?`<div class="skill-unlock-at">🔒 Lv.${sk.unlockLv} 해금</div>`:''}
@@ -5817,7 +5822,7 @@ function updateSkillBar(){
     const sk=ACTIVE_SKILLS.find(s=>s.id===sid);if(!sk)return'';
     const cd=G.skillCooldowns?.[sid]||0;const maxCd=sk.cd*1000;const pct=cd>0?Math.min(100,cd/maxCd*100):0;
     return`<div class="skill-icon-slot" data-sid="${sid}" title="${sk.name}">
-      <span class="s-emoji">${skillImgTag(sk.id,sk.emoji,14)}</span>
+      <span class="s-emoji">${skillImgTag(sk.id,sk.emoji,36)}</span>
       ${pct>0?`<div class="s-cd-overlay" style="height:${pct}%"></div>`:''}
     </div>`;
   }).join('');
@@ -5932,20 +5937,17 @@ function renderCollTab(){
     const done=G.achieveDone[a.id];
     const condMet=!done&&a.cond(G);
     const rStr=Object.entries(a.reward).map(([k,v])=>{
-      if(k==='gold')return`💰 골드 +${fmtNum(v)}`;
-      if(k==='shards')return`🔩 파편 +${v}`;
-      if(k==='tickets')return`🎫 뽑기권 +${v}`;
-      if(k==='skillPts')return`✨ 스킬포인트 +${v}`;
-      if(k==='permAtkPct')return`⚔️ 공격력 영구 +${v}%`;
-      if(k==='permHpPct')return`❤️ 체력 영구 +${v}%`;
-      if(k==='permDefPct')return`🛡️ 방어력 영구 +${v}%`;
-      if(k==='permAllPct')return`📈 전체 영구 +${v}%`;
-      if(k==='permBossDmg')return`👹 보스피해 영구 +${v}%`;
-      if(k==='permExpPct')return`🟢 경험치 영구 +${v}%`;
-      if(k==='permBossDmg')return`👹 보스피해 영구 +${v}%`;
-      if(k==='permExpPct')return`🟢 경험치 영구 +${v}%`;
-      if(k==='permDefPct')return`🛡️ 방어력 영구 +${v}%`;
-      if(k==='permGoldPct')return`💰 골드획득 영구 +${v}%`;
+      if(k==='gold')return curImgTag('gold',11)+` 골드 +${fmtNum(v)}`;
+      if(k==='shards')return curImgTag('shard',11)+` 파편 +${v}`;
+      if(k==='tickets')return curImgTag('ticket',11)+` 뽑기권 +${v}`;
+      if(k==='skillPts')return curImgTag('sp',11)+` 스킬포인트 +${v}`;
+      if(k==='permAtkPct')return statImgTag('atk','⚔️',11)+` 공격력 영구 +${v}%`;
+      if(k==='permHpPct')return statImgTag('hp','❤️',11)+` 체력 영구 +${v}%`;
+      if(k==='permDefPct')return statImgTag('def','🛡️',11)+` 방어력 영구 +${v}%`;
+      if(k==='permAllPct')return statImgTag('finaldmg','📈',11)+` 전체 영구 +${v}%`;
+      if(k==='permBossDmg')return statImgTag('bossdmg','👹',11)+` 보스피해 영구 +${v}%`;
+      if(k==='permExpPct')return expIconImg(11)+` 경험치 영구 +${v}%`;
+      if(k==='permGoldPct')return curImgTag('gold',11)+` 골드획득 영구 +${v}%`;
       return`${k}+${v}`;
     }).join(' ');
     return`<div class="achieve-item${done?' done':condMet?' ready':''}">
@@ -5990,13 +5992,13 @@ function claimAllAchieve(){
     claimAchieve(a.id);
     const r=a.reward;
     const parts=[];
-    if(r.gold){total.gold+=r.gold;parts.push(`💰 골드 +${fmtNum(r.gold)}`);}
-    if(r.tickets){total.tickets+=r.tickets;parts.push(`🎫 뽑기권 +${r.tickets}`);}
-    if(r.shards){total.shards+=r.shards;parts.push(`🔩 파편 +${r.shards}`);}
-    if(r.skillPts){total.skillPts+=r.skillPts;parts.push(`✨ 스킬포인트 +${r.skillPts}`);}
-    if(r.permAtkPct){total.permAtkPct+=r.permAtkPct;parts.push(`⚔️ 공격력 영구 +${r.permAtkPct}%`);}
-    if(r.permHpPct){total.permHpPct+=r.permHpPct;parts.push(`❤️ 체력 영구 +${r.permHpPct}%`);}
-    if(r.permAllPct){total.permAllPct+=r.permAllPct;parts.push(`📈 전체 영구 +${r.permAllPct}%`);}
+    if(r.gold){total.gold+=r.gold;parts.push(curImgTag('gold',12)+` 골드 +${fmtNum(r.gold)}`);}
+    if(r.tickets){total.tickets+=r.tickets;parts.push(curImgTag('ticket',12)+` 뽑기권 +${r.tickets}`);}
+    if(r.shards){total.shards+=r.shards;parts.push(curImgTag('shard',12)+` 파편 +${r.shards}`);}
+    if(r.skillPts){total.skillPts+=r.skillPts;parts.push(curImgTag('sp',12)+` 스킬포인트 +${r.skillPts}`);}
+    if(r.permAtkPct){total.permAtkPct+=r.permAtkPct;parts.push(statImgTag('atk','⚔️',12)+` 공격력 영구 +${r.permAtkPct}%`);}
+    if(r.permHpPct){total.permHpPct+=r.permHpPct;parts.push(statImgTag('hp','❤️',12)+` 체력 영구 +${r.permHpPct}%`);}
+    if(r.permAllPct){total.permAllPct+=r.permAllPct;parts.push(statImgTag('finaldmg','📈',12)+` 전체 영구 +${r.permAllPct}%`);}
     lines.push(`<div style="display:flex;align-items:center;gap:6px;padding:4px 6px;background:var(--bg3);border-radius:var(--radius)">
       <span style="font-size:14px">${a.icon}</span>
       <div style="flex:1;min-width:0">
@@ -6085,9 +6087,9 @@ function checkQuestProgress(){
 
 function _applyQuestReward(q){
   const rStr=[];
-  if(q.reward.gold){G.gold+=q.reward.gold;rStr.push('💰+'+fmtNum(q.reward.gold));}
-  if(q.reward.tickets){G.tickets=Math.min(9999,G.tickets+q.reward.tickets);rStr.push('🎫+'+q.reward.tickets);}
-  if(q.reward.shards){G.shards+=q.reward.shards;rStr.push('🔩+'+q.reward.shards);}
+  if(q.reward.gold){G.gold+=q.reward.gold;rStr.push(curImgTag('gold',11)+' 골드 +'+fmtNum(q.reward.gold));}
+  if(q.reward.tickets){G.tickets=Math.min(9999,G.tickets+q.reward.tickets);rStr.push(curImgTag('ticket',11)+' 뽑기권 +'+q.reward.tickets);}
+  if(q.reward.shards){G.shards+=q.reward.shards;rStr.push(curImgTag('shard',11)+' 파편 +'+q.reward.shards);}
   if(q.reward.exp){gainExp(q.reward.exp);rStr.push(expIconImg(12)+'EXP+'+fmtNum(q.reward.exp));}
   if(rStr.length)showNotif('✅ 퀘스트 완료! '+rStr.join(' '),'reward');
 }
@@ -6162,9 +6164,9 @@ function _tryTriggerBonusQuest(){
 function _completeBonusQuest(){
   const bq=G.bonusQuest;
   const rStr=[];
-  if(bq.reward.gold){G.gold+=bq.reward.gold;rStr.push('💰+'+fmtNum(bq.reward.gold));}
-  if(bq.reward.tickets){G.tickets=Math.min(9999,G.tickets+bq.reward.tickets);rStr.push('🎫+'+bq.reward.tickets);}
-  if(bq.reward.shards){G.shards+=bq.reward.shards;rStr.push('🔩+'+bq.reward.shards);}
+  if(bq.reward.gold){G.gold+=bq.reward.gold;rStr.push(curImgTag('gold',11)+' 골드 +'+fmtNum(bq.reward.gold));}
+  if(bq.reward.tickets){G.tickets=Math.min(9999,G.tickets+bq.reward.tickets);rStr.push(curImgTag('ticket',11)+' 뽑기권 +'+bq.reward.tickets);}
+  if(bq.reward.shards){G.shards+=bq.reward.shards;rStr.push(curImgTag('shard',11)+' 파편 +'+bq.reward.shards);}
   if(bq.reward.exp){gainExp(bq.reward.exp);rStr.push(expIconImg(12)+'EXP+'+fmtNum(bq.reward.exp));}
   bq.done=true;
   showNotif('⚡ 돌발 퀘스트 완료! '+rStr.join(' '),'reward');
@@ -6212,11 +6214,11 @@ function renderQuestPanel(){
   const rr=document.getElementById('qp-reward-row');
   if(rr){
     const parts=[];
-    if(q.reward.gold)parts.push('💰'+fmtNum(q.reward.gold));
-    if(q.reward.tickets)parts.push('🎫'+q.reward.tickets);
-    if(q.reward.shards)parts.push('🔩'+q.reward.shards);
+    if(q.reward.gold)parts.push(curImgTag('gold',10)+' 골드 '+fmtNum(q.reward.gold));
+    if(q.reward.tickets)parts.push(curImgTag('ticket',10)+' 뽑기권 '+q.reward.tickets);
+    if(q.reward.shards)parts.push(curImgTag('shard',10)+' 파편 '+q.reward.shards);
     if(q.reward.exp)parts.push(expIconImg(10)+'EXP+'+fmtNum(q.reward.exp));
-    rr.textContent='보상: '+parts.join(' ');
+    rr.innerHTML='보상: '+parts.join(' ');
   }
 
   _renderBonusQuest();
@@ -6309,12 +6311,12 @@ function checkTitles(){
 function showMilestonePopup(m){
   const p=document.getElementById('milestone-popup');
   const parts=[];
-  if(m.reward.gold)parts.push(`💰 +${fmtNum(m.reward.gold)}`);
-  if(m.reward.tickets)parts.push(`🎫 +${m.reward.tickets}`);
-  if(m.reward.shards)parts.push(`🔩 +${m.reward.shards}`);
-  if(m.reward.skillPts)parts.push(`✨ +${m.reward.skillPts}`);
+  if(m.reward.gold)parts.push(curImgTag('gold',12)+` +${fmtNum(m.reward.gold)}`);
+  if(m.reward.tickets)parts.push(curImgTag('ticket',12)+` +${m.reward.tickets}`);
+  if(m.reward.shards)parts.push(curImgTag('shard',12)+` +${m.reward.shards}`);
+  if(m.reward.skillPts)parts.push(curImgTag('sp',12)+` +${m.reward.skillPts}`);
   if(m.hint)parts.push(`💡 ${m.hint}`);
-  document.getElementById('milestone-text').textContent=parts.join(' · ');
+  document.getElementById('milestone-text').innerHTML=parts.join(' · ');
   p.style.display='block';setTimeout(()=>p.style.display='none',2800);
 }
 
@@ -6585,19 +6587,19 @@ function openProfileModal(){
   const bossDmgPct=(getBossDmgBonus()+(G.permBossDmg||0)/100)*100;
   const normMobDmgPct=((G.enhanceLevels.normaldmg||0)*0.1);
   sg.innerHTML=[
-    ['⚔️ 전투력',fmtNum(calcCP())],
-    ['⚔️ 공격력',fmtNum(Math.floor(getFinalAtk()))],
-    ['❤️ 체력',fmtNum(Math.floor(getFinalHp()))],
-    ['🛡️ 방어력',fmtNum(Math.floor(getFinalDef()))],
-    ['🎯 치명타율',(getFinalCrit()*100).toFixed(2)+'%'],
-    ['💥 치명타피해',(getFinalCritDmg()*100).toFixed(2)+'%'],
-    ['🌟 최종데미지',(getFinalDmgMult()*100).toFixed(2)+'%'],
-    ['🎯 명중',fmtNum(getFinalAcc())],
-    ['🗡️ 방어구 관통',String(getFinalPen())],
-    ['👹 보스 피해','+'+bossDmgPct.toFixed(1)+'%'],
-    ['🗡️ 일반몹 피해','+'+normMobDmgPct.toFixed(1)+'%'],
-    ['🩸 흡혈',totalDrainPct.toFixed(2)+'%'+(rawDrainPct>10?' (MAX)':'')+' <span onclick="showInfoModal(\'흡혈 안내\',\'가한 피해의 일부를 HP로 흡수합니다.<br><br>🩸 <b>최대 체력의 10%를 초과하여 회복할 수 없습니다.</b><br>(한 번의 공격으로 회복 가능한 최대량 제한\')" style="cursor:pointer;font-size:10px;color:var(--text3);border:1px solid var(--border);border-radius:50%;padding:0 3px;line-height:1.4;display:inline-block">ⓘ</span>'],
-  ].map(([l,v])=>`<div class="prof-stat-item"><div class="ps-label">${l}</div><div class="ps-val">${v}</div></div>`).join('');
+    [statImgTag('cp','⚔️',32),'전투력',fmtNum(calcCP())],
+    [statImgTag('atk','⚔️',32),'공격력',fmtNum(Math.floor(getFinalAtk()))],
+    [statImgTag('hp','❤️',32),'체력',fmtNum(Math.floor(getFinalHp()))],
+    [statImgTag('def','🛡️',32),'방어력',fmtNum(Math.floor(getFinalDef()))],
+    [statImgTag('crit','🎯',32),'치명타율',(getFinalCrit()*100).toFixed(2)+'%'],
+    [statImgTag('critdmg','💥',32),'치명타피해',(getFinalCritDmg()*100).toFixed(2)+'%'],
+    [statImgTag('finaldmg','🌟',32),'최종데미지',(getFinalDmgMult()*100).toFixed(2)+'%'],
+    [statImgTag('acc','🎯',32),'명중',fmtNum(getFinalAcc())],
+    [statImgTag('pen','🗡️',32),'방어구 관통',String(getFinalPen())],
+    [statImgTag('bossdmg','👹',32),'보스 피해','+'+bossDmgPct.toFixed(1)+'%'],
+    [statImgTag('normaldmg','🗡️',32),'일반몹 피해','+'+normMobDmgPct.toFixed(1)+'%'],
+    [statImgTag('lifeSteal','🩸',32),'흡혈',totalDrainPct.toFixed(2)+'%'+(rawDrainPct>10?' (MAX)':'')],
+  ].map(([icon,label,v])=>`<div class="prof-stat-item"><div class="ps-icon">${icon}</div><div class="ps-body"><div class="ps-label">${label}</div><div class="ps-val">${v}</div></div></div>`).join('');
   const rg=document.getElementById('prof-record-grid');
   const bestGs=G.highestGlobalStage||currGS();
   const bestChap=Math.ceil(bestGs/101);const bestSt=((bestGs-1)%101)+1;
@@ -6608,7 +6610,7 @@ function openProfileModal(){
     ['🎰 총 뽑기',fmtNum(G.gachaTotalCount||0)+'회'],
     ['📖 도감 수집',Object.keys(G.monsterColl).length+'종'],
     ['🏅 업적 달성',Object.keys(G.achieveDone).length+'/'+ACHIEVEMENTS.length],
-  ].map(([l,v])=>`<div class="prof-stat-item"><div class="ps-label">${l}</div><div class="ps-val">${v}</div></div>`).join('');
+  ].map(([l,v])=>`<div class="prof-stat-item"><div class="ps-label" style="font-size:10px">${l}</div><div class="ps-val" style="font-size:10px">${v}</div></div>`).join('');
   const el=document.getElementById('prof-equip-list');
   el.innerHTML=SLOTS.map(sl=>{
     const eq=G.equipped[sl.id];
@@ -6616,7 +6618,7 @@ function openProfileModal(){
     const ss=eq?Object.entries(eq.stats).map(([k,v])=>getStatLabel(k)+'+'+v).join(' '):'—';
     const slLv=G.slotLevels[sl.id]||0;
     return`<div class="prof-equip-row" style="border-color:${gc}">
-      <span class="pe-slot">${sl.emoji}</span>
+      <span class="pe-slot"><img src="assets/img/ui/slot/slot_${sl.id}.png" alt="${sl.name}" style="width:32px;height:32px;image-rendering:pixelated;object-fit:contain;vertical-align:middle" onerror="this.outerHTML='${sl.emoji}'"></span>
       <div class="pe-info">
         <div class="pe-grade" style="color:${gc}">${eq?`${GEMOJI[eq.gradeIdx]} ${GNAMES[eq.gradeIdx]} · Lv.${eq.itemLv}`:'미장착'}${slLv>0?` <span style="color:var(--shard)">슬롯+${slLv}</span>`:''}</div>
         <div class="pe-stats">${ss}</div>
@@ -6633,7 +6635,7 @@ function openProfileModal(){
       const sk=ACTIVE_SKILLS.find(s=>s.id===sid);if(!sk)return'';
       const lv=G.activeSkillLevels[sid]||0;
       return`<div class="prof-skill-row">
-        <span style="font-size:15px">${skillImgTag(sk.id,sk.emoji,15)}</span>
+        <span style="font-size:32px">${skillImgTag(sk.id,sk.emoji,32)}</span>
         <div style="flex:1">
           <div style="font-size:11px;font-weight:bold">${sk.name} <span style="color:var(--accent)">Lv.${lv}</span></div>
           <div style="font-size:9px;color:var(--text3)">${sk.desc(Math.max(1,lv))}</div>
@@ -6910,11 +6912,11 @@ function towerEnemyATK(floor){
 }
 function towerReward(floor){
   const r=[];
-  r.push({label:'💰 골드',val:Math.floor(5000*Math.pow(1.07,floor-1))});
-  if(floor%5===0)  r.push({label:'🎫 뽑기권',val:floor<=30?1:floor<=70?2:3});
-  if(floor%10===0) r.push({label:'🔩 파편',val:Math.ceil(floor/8)});
-  if(floor%30===0) r.push({label:'🔩 파편',val:Math.ceil(floor/5)});
-  if(floor%100===0)r.push({label:'⚡ 스탯포인트',val:Math.ceil(floor/100)});
+  r.push({label:curImgTag('gold',11)+' 골드',val:Math.floor(5000*Math.pow(1.07,floor-1))});
+  if(floor%5===0)  r.push({label:curImgTag('ticket',11)+' 뽑기권',val:floor<=30?1:floor<=70?2:3});
+  if(floor%10===0) r.push({label:curImgTag('shard',11)+' 파편',val:Math.ceil(floor/8)});
+  if(floor%30===0) r.push({label:curImgTag('shard',11)+' 파편',val:Math.ceil(floor/5)});
+  if(floor%100===0)r.push({label:curImgTag('sp',11)+' 스탯포인트',val:Math.ceil(floor/100)});
   return r;
 }
 function switchDungeonTab(id){
@@ -7334,7 +7336,7 @@ function updateUI(){
   const tl=document.getElementById('ticket-count-label');if(tl)tl.textContent=`🎫 ${G.tickets}`;
   document.getElementById('lv-badge').textContent='Lv.'+G.level;
   const avLv=document.getElementById('avatar-lv-badge');if(avLv)avLv.textContent='Lv.'+G.level;
-  document.getElementById('cp-val').textContent='⚔️ 전투력 '+fmtNum(calcCP());
+  document.getElementById('cp-val').innerHTML=statImgTag('cp','⚔️',13)+' 전투력 '+fmtNum(calcCP());
   document.getElementById('pts-val').textContent=G.pts;
   document.getElementById('skill-pt-val').textContent=G.skillPts;
   const enhGoldEl=document.getElementById('enh-gold-val');if(enhGoldEl)enhGoldEl.textContent=fmtNum(G.gold);
@@ -7527,7 +7529,7 @@ function showNotif(msg,channel='top'){
     showReward(msg);
   }else{
     const el=document.getElementById('notif-top');
-    el.textContent=msg;el.style.display='block';el.style.animation='none';void el.offsetWidth;
+    el.innerHTML=msg;el.style.display='block';el.style.animation='none';void el.offsetWidth;
     el.style.animation='fadeInOut 2.2s ease forwards';
     if(notifTopTimer)clearTimeout(notifTopTimer);
     notifTopTimer=setTimeout(()=>el.style.display='none',2300);
@@ -7545,9 +7547,9 @@ function showGainPopup(gold,exp,shards,souls){
     const q=_rewardQueue;
     _rewardQueue={gold:0,exp:0,shards:0,souls:0};
     _rewardTimer=null;
-    if(q.gold>0)showReward(`💰 +${fmtNum(q.gold)}`);
-    if(q.exp>0)showReward(`🟢 경험치 +${fmtNum(q.exp)}`);
-    if(q.shards>0)showReward(`🔩 +${q.shards}`);
+    if(q.gold>0)showReward(curImgTag('gold',12)+` 골드 +${fmtNum(q.gold)}`);
+    if(q.exp>0)showReward(expIconImg(12)+` 경험치 +${fmtNum(q.exp)}`);
+    if(q.shards>0)showReward(curImgTag('shard',12)+` 파편 +${q.shards}`);
     if(q.souls>0)showReward(`💫 혼 +${q.souls}`);
   },50);
 }
@@ -7555,7 +7557,7 @@ function showReward(msg){
   const container=document.getElementById('notif-reward');
   const el=document.createElement('div');
   el.className='notif-reward-item';
-  el.textContent=msg;
+  el.innerHTML=msg;
   container.appendChild(el);
   setTimeout(()=>{if(el.parentNode)el.parentNode.removeChild(el);},2000);
 }
