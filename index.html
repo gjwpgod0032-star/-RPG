@@ -506,11 +506,13 @@ input[type=range]{width:100%;accent-color:var(--accent)}
   border-radius:var(--radius);margin-bottom:2px;cursor:pointer;font-size:11px;color:var(--text2);
 }
 .popup-chap-header.open{border-color:var(--accent);color:var(--accent)}
-.popup-stage-scroll{display:none;margin-bottom:4px;max-height:80px;overflow-y:auto}
-.popup-stage-scroll.open{display:flex;flex-wrap:wrap;gap:3px;padding:3px}
+.popup-stage-scroll{display:none;margin-bottom:4px;max-height:120px;overflow-y:auto}
+.popup-stage-scroll.open{display:flex;flex-wrap:wrap;gap:2px;padding:3px}
 .popup-stage-item{
-  padding:2px 5px;background:var(--bg3);border:1px solid var(--border);
+  width:calc(10% - 2px);min-width:0;box-sizing:border-box;
+  padding:2px 1px;background:var(--bg3);border:1px solid var(--border);
   border-radius:var(--radius);font-size:10px;color:var(--text2);cursor:pointer;
+  text-align:center;display:flex;align-items:center;justify-content:center;min-height:20px;
 }
 .popup-stage-item:hover,.popup-stage-item.cur{border-color:var(--accent);color:var(--accent)}
 
@@ -968,7 +970,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 .rec-badge-inline.rec1{background:rgba(188,140,255,0.18);border-color:#bc8cff;color:#bc8cff;}
 .rec-badge-inline.rec2{background:rgba(63,185,80,0.15);border-color:#3fb950;color:#3fb950;}
 .rec-badge-inline.dps{background:rgba(240,136,62,0.18);border-color:#f0883e;color:#f0883e;}
-.s-icon{font-size:16px}
+.s-icon{font-size:24px}
 .s-info{flex:1;min-width:0}
 .s-name{font-size:11px;color:var(--text2)}
 .s-val{font-size:12px;font-weight:bold;text-shadow:1px 1px 0 rgba(0,0,0,0.8)}
@@ -1018,7 +1020,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 .eob-item{font-size:10px;padding:1px 4px;background:var(--bg3);border:1px solid var(--border);border-radius:1px;color:var(--text3)}
 .eob-item.done{border-color:var(--shard);color:var(--shard)}
 .enh-row{
-  display:flex;align-items:center;gap:6px;
+  display:flex;align-items:flex-start;gap:6px;
   padding:6px 7px;background:var(--bg2);border:2px solid var(--border);
   border-radius:var(--radius);margin-bottom:4px;
   box-shadow:2px 2px 0 rgba(0,0,0,0.4);
@@ -1026,12 +1028,13 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 }
 .enh-row.has-reset{padding-bottom:20px;}
 .enh-row.enh-locked{opacity:0.55;border-style:dashed}
-.enh-icon{font-size:22px}
+.enh-icon{font-size:28px}
 .enh-info{flex:1;min-width:0}
 .enh-name{font-size:11px;color:var(--text2)}
 .enh-lv{font-size:12px;font-weight:bold;text-shadow:1px 1px 0 rgba(0,0,0,0.8)}
 .enh-cost{font-size:10px;color:var(--text3)}
-.enh-btns{display:flex;gap:2px;flex-shrink:0}
+.enh-btns{display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0}
+.enh-btn-row{display:flex;gap:2px}
 .enh-btn{
   padding:3px 5px;font-size:10px;
   background:var(--bg3);border:2px solid var(--border2);
@@ -1058,7 +1061,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
   width:148px;min-width:148px;margin-bottom:0;
 }
 #equip-doll-wrap.split .equip-slot{width:40px;height:50px}
-#equip-doll-wrap.split .es-icon{font-size:16px}
+#equip-doll-wrap.split .es-icon{width:22px;height:22px}
 #equip-doll-wrap.split #edoll-char{width:80px;height:100px}
 #equip-doll-wrap.split #edoll-char-emoji{width:76px;height:96px;font-size:48px}
 #equip-doll-wrap.split #edoll-top,
@@ -1165,21 +1168,22 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 .equip-slot.gl-border{box-shadow:0 0 12px rgba(240,136,62,0.4),0 2px 5px rgba(0,0,0,0.5)}
 .equip-slot.gm-border{box-shadow:0 0 14px rgba(255,71,87,0.45),0 2px 5px rgba(0,0,0,0.5)}
 .equip-slot.gs-border{box-shadow:0 0 16px rgba(255,215,0,0.5),0 2px 5px rgba(0,0,0,0.5)}
-.es-icon{font-size:15px;line-height:1}
+.es-icon{width:28px;height:28px;display:flex;align-items:center;justify-content:center;line-height:1}
 .es-empty-name{font-size:7px;color:rgba(100,120,145,0.75);text-align:center;line-height:1.3;padding:0 3px}
 .es-grade-dot{
   position:absolute;top:4px;right:4px;
   width:6px;height:6px;border-radius:50%;
 }
 .es-ilvl-badge{
-  position:absolute;bottom:3px;right:3px;
-  font-size:7px;color:rgba(130,150,175,0.85);
-  background:rgba(0,0,0,0.45);border-radius:3px;padding:0 2px;line-height:1.5;
+  position:absolute;bottom:2px;right:2px;
+  font-size:7px;
+  background:rgba(0,0,0,0.55);border-radius:2px;padding:0 2px;line-height:1.4;
+  font-weight:bold;
 }
 .es-slv-badge{
-  position:absolute;top:3px;left:3px;
+  position:absolute;top:2px;left:2px;
   font-size:7px;color:var(--shard);font-weight:bold;
-  background:rgba(63,185,80,0.12);border-radius:3px;padding:0 2px;line-height:1.5;
+  background:rgba(0,0,0,0.45);border-radius:2px;padding:0 2px;line-height:1.4;
 }
 .es-tooltip{
   position:absolute;z-index:300;
@@ -1271,7 +1275,13 @@ input[type=range]{width:100%;accent-color:var(--accent)}
   display:flex;flex-direction:column;align-items:center;gap:1px;
   cursor:pointer;flex-shrink:0;box-shadow:2px 2px 0 rgba(0,0,0,0.4)
 }
-.active-skill-slot.equipped{border-color:var(--skill)}
+.active-skill-slot.equipped{border-color:#ffffff}
+#active-slots-grid{
+  display:flex;gap:4px;margin-bottom:8px;
+  overflow-x:auto;padding-bottom:2px;
+  scrollbar-width:none;
+}
+#active-slots-grid::-webkit-scrollbar{display:none}
 .active-skill-slot .as-emoji{width:36px;height:36px;display:flex;align-items:center;justify-content:center}
 .active-skill-slot .as-name{font-size:7px;color:var(--text3);font-weight:bold;text-align:center}
 .active-skill-slot .as-lv{font-size:8px;color:var(--skill)}
@@ -1757,7 +1767,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
         <span id="title-badge"></span>
       </div>
       <div id="cp-row">
-        <span id="cp-val" title="전투력: 공격력·크리·체력·방어력 종합 수치" style="cursor:help"><img src="assets/img/ui/stat/stat_cp.png" alt="⚔️" style="width:13px;height:13px;image-rendering:pixelated;vertical-align:middle" onerror="this.outerHTML='⚔️'"> 전투력 0</span>
+        <span id="cp-val" title="전투력: 공격력·크리·체력·방어력 종합 수치" style="cursor:help"><img src="assets/img/ui/stat/stat_cp.png" alt="⚔️" style="width:18px;height:18px;image-rendering:pixelated;vertical-align:middle" onerror="this.outerHTML='⚔️'"> 전투력 0</span>
       </div>
       <div id="exp-bar-row" onclick="toggleExpTooltip(event)">
         <div id="exp-bar-wrap">
@@ -1805,8 +1815,8 @@ input[type=range]{width:100%;accent-color:var(--accent)}
     <div id="farm-return-bar" style="display:none;padding:2px 8px 2px;background:rgba(0,0,0,0.6)">
       <button onclick="moveToMaxStage()" style="width:100%;padding:3px 8px;font-size:10px;background:rgba(88,166,255,0.25);border:2px solid var(--accent);border-radius:var(--radius);color:var(--accent);font-family:var(--font);font-weight:bold;cursor:pointer;box-shadow:1px 1px 0 rgba(0,0,0,0.6);text-shadow:0 0 6px rgba(88,166,255,0.5),1px 1px 0 rgba(0,0,0,1)" id="farm-return-btn">🏆 최고 스테이지로 복귀</button>
     </div>
-    <div id="boss-retry-bar" style="display:none;padding:3px 8px 2px;text-align:center">
-      <button id="boss-retry-btn" onclick="retryBoss()" style="font-size:11px;padding:3px 12px;background:rgba(255,71,87,0.15);border:2px solid var(--hp);border-radius:var(--radius);color:var(--hp);font-family:var(--font);font-weight:bold;cursor:pointer;animation:pulse2 .9s infinite">⚔️ 보스 재도전</button>
+    <div id="boss-retry-bar" style="display:none;padding:3px 8px 2px;text-align:center;background:rgba(0,0,0,0.75)">
+      <button id="boss-retry-btn" onclick="retryBoss()" style="font-size:11px;padding:3px 12px;background:rgba(255,71,87,0.35);border:2px solid var(--hp);border-radius:var(--radius);color:var(--hp);font-family:var(--font);font-weight:bold;cursor:pointer;animation:pulse2 .9s infinite;text-shadow:0 0 6px rgba(255,71,87,0.7)">⚔️ 보스 재도전</button>
     </div>
 
     <div id="stage-popup">
@@ -1873,8 +1883,8 @@ input[type=range]{width:100%;accent-color:var(--accent)}
     </div>
     <div id="gacha-main-wrap">
       <button id="gacha-main-btn" onclick="doGacha()">
-        🎰 장비 뽑기
-        <span class="g-sub"><img src="assets/img/ui/currency/cur_ticket.png" alt="🎫" style="width:12px;height:12px;image-rendering:pixelated;vertical-align:middle" onerror="this.outerHTML='🎫'"> 뽑기권 <span id="gacha-ticket-remain">0</span>개</span>
+        장비 뽑기
+        <span class="g-sub"><img src="assets/img/ui/currency/cur_ticket.png" alt="🎫" style="width:16px;height:16px;image-rendering:pixelated;vertical-align:middle" onerror="this.outerHTML='🎫'"> 뽑기권 <span id="gacha-ticket-remain">0</span>개</span>
       </button>
       <div class="notif-dot" id="dot-gacha" style="position:absolute;top:-3px;right:-3px"></div>
       <button id="gacha-lvup-overlay-btn" onclick="openGachaLvPopup()" style="display:none">
@@ -1898,7 +1908,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 
   <div id="gacha-lv-popup">
     <div id="gacha-lv-box">
-      <h4>🎰 장비뽑기 확률 정보</h4>
+      <h4 style="text-align:center;margin-bottom:8px">장비뽑기 확률 정보</h4>
       <div style="display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:8px">
         <button onclick="gachaLvNav(-1)" style="background:none;border:1px solid var(--border);border-radius:4px;color:var(--text2);font-size:13px;padding:1px 7px;cursor:pointer;line-height:1.4">◀</button>
         <span style="font-size:11px;color:var(--text3)">Lv.<span id="prob-view-lv">1</span> 확률</span>
@@ -1989,8 +1999,8 @@ input[type=range]{width:100%;accent-color:var(--accent)}
     <div class="tab-panel active" id="panel-growth">
       <div class="growth-sticky-hdr" id="growth-sticky-hdr">
         <div class="coll-tab-row" style="margin-bottom:6px">
-          <button class="coll-tab active" id="growth-sub-enhance" onclick="switchGrowthTab('enhance')" style="position:relative"><img src="assets/img/ui/tab/tab_enhance.png" alt="강화" style="width:13px;height:13px;image-rendering:pixelated;vertical-align:middle" onerror="this.outerHTML='🔩'"> 강화<div class="notif-dot" id="dot-enhance" style="top:-4px;right:-4px"></div></button>
-          <button class="coll-tab" id="growth-sub-stat" onclick="switchGrowthTab('stat')" style="position:relative"><img src="assets/img/ui/tab/tab_stat.png" alt="스탯" style="width:13px;height:13px;image-rendering:pixelated;vertical-align:middle" onerror="this.outerHTML='📊'"> 스탯<div class="notif-dot" id="dot-stat" style="top:-4px;right:-4px"></div></button>
+          <button class="coll-tab active" id="growth-sub-enhance" onclick="switchGrowthTab('enhance')" style="position:relative"><img src="assets/img/ui/tab/tab_enhance.png" alt="강화" style="width:18px;height:18px;image-rendering:pixelated;vertical-align:middle" onerror="this.outerHTML='🔩'"> 강화<div class="notif-dot" id="dot-enhance" style="top:-4px;right:-4px"></div></button>
+          <button class="coll-tab" id="growth-sub-stat" onclick="switchGrowthTab('stat')" style="position:relative"><img src="assets/img/ui/tab/tab_stat.png" alt="스탯" style="width:18px;height:18px;image-rendering:pixelated;vertical-align:middle" onerror="this.outerHTML='📊'"> 스탯<div class="notif-dot" id="dot-stat" style="top:-4px;right:-4px"></div></button>
         </div>
         <div id="stat-sub-hdr" class="growth-sub-hdr-row" style="display:none">
           <span id="pts-badge" style="flex:1">포인트 <span id="pts-val">0</span></span>
@@ -2057,8 +2067,8 @@ input[type=range]{width:100%;accent-color:var(--accent)}
       <div style="font-size:9px;color:var(--text3);margin-bottom:5px">장착 슬롯 (7개)</div>
       <div id="active-slots-grid"></div>
       <div class="coll-tab-row" style="margin-top:6px">
-        <button class="coll-tab active" id="skill-sub-active" onclick="switchSkillTab('active')"><img src="assets/img/ui/tab/tab_active.png" alt="액티브" style="width:13px;height:13px;image-rendering:pixelated;vertical-align:middle" onerror="this.outerHTML='⚡'"> 액티브</button>
-        <button class="coll-tab" id="skill-sub-passive" onclick="switchSkillTab('passive')"><img src="assets/img/ui/tab/tab_passive.png" alt="패시브" style="width:13px;height:13px;image-rendering:pixelated;vertical-align:middle" onerror="this.outerHTML='🌀'"> 패시브</button>
+        <button class="coll-tab active" id="skill-sub-active" onclick="switchSkillTab('active')"><img src="assets/img/ui/tab/tab_active.png" alt="액티브" style="width:18px;height:18px;image-rendering:pixelated;vertical-align:middle" onerror="this.outerHTML='⚡'"> 액티브</button>
+        <button class="coll-tab" id="skill-sub-passive" onclick="switchSkillTab('passive')"><img src="assets/img/ui/tab/tab_passive.png" alt="패시브" style="width:18px;height:18px;image-rendering:pixelated;vertical-align:middle" onerror="this.outerHTML='🌀'"> 패시브</button>
       </div>
       <div id="active-skill-list"></div>
       <div id="passive-skill-list" style="display:none"></div>
@@ -2116,7 +2126,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 <script>
 const SAVE_KEY = 'dotrium_v1';
 
-const GAME_VERSION = 'v03_61';
+const GAME_VERSION = 'v03_68';
 const VERSION_CHECK_URL = 'version.json';
 const VERSION_CHECK_INTERVAL = 1 * 60 * 1000;
 
@@ -2839,7 +2849,7 @@ function expIconImg(size){
   return`<img src="assets/img/ui/currency/cur_exp.png" alt="EXP" style="width:${size}px;height:${size}px;image-rendering:pixelated;object-fit:contain;vertical-align:middle" onerror="this.outerHTML='✨'">`;
 }
 function statImgTag(id,emoji,size){
-  size=size||22;
+  size=size||24;
   return`<img src="assets/img/ui/stat/stat_${id}.png" alt="${emoji}" style="width:${size}px;height:${size}px;image-rendering:pixelated;object-fit:contain;vertical-align:middle" onerror="this.outerHTML='${emoji}'">`;
 }
 function curImgTag(type,size){
@@ -4094,11 +4104,11 @@ function spawnMonster(){
     nameEl.style.color='';nameEl.style.fontSize='';nameEl.style.textShadow='';
     titleEl.style.display='none';titleEl.innerHTML='';
   }
-  const bossLabel=bt==='elite'?monTypeImg('elite')+' 엘리트':bt==='vip'?monTypeImg('vip')+' 정예':monTypeImg('boss')+' 보스';
+  const bossLabel=monTypeImg(bt==='elite'?'elite':bt==='vip'?'vip':'boss')+' '+(bt==='elite'?'엘리트':bt==='vip'?'정예':'보스');
   const nextBossType=getBossType(G.stage);
   const nextBossIcon=monTypeImg(nextBossType==='elite'?'elite':nextBossType==='vip'?'vip':'boss');
   const mcEl=document.getElementById('monster-count');
-  if(mcEl)mcEl.innerHTML=G.isBoss?bossLabel:`${G.stageKillCount}/5 ${nextBossIcon}`;
+  if(mcEl)mcEl.innerHTML=G.isBoss?bossLabel:`${G.stageKillCount}/5 ${monTypeImg('normal')} ${nextBossIcon}`;
   document.getElementById('boss-alert').style.display=G.isBoss?'block':'none';
   if(!G.isBoss){hideBossGauge();}
   if(!G.isBoss){
@@ -4166,7 +4176,7 @@ function updateKillCounter(){
   const bt=getBossType(G.stage);
   const bossIcon=bt==='elite'?monTypeImg('elite'):bt==='vip'?monTypeImg('vip'):monTypeImg('boss');
   const el=document.getElementById('monster-count');
-  if(el)el.innerHTML=`${G.stageKillCount}/5 ${bossIcon}`;
+  if(el)el.innerHTML=`${G.stageKillCount}/5 ${monTypeImg('normal')} ${bossIcon}`;
   const old=document.getElementById('kill-counter');
   if(old)old.style.display='none';
 }
@@ -4867,23 +4877,19 @@ function renderEnhanceTab(){
     const enhBadge2=(!isEFirst&&isESecond)?'<span class="rec-badge-inline rec2">👍 추천</span>':'';
     const enhDpsBadge=(item.id===dpsEId&&!isEFirst)?'<span class="rec-badge-inline dps">⚡ 효율</span>':'';
     return`${separator}<div class="enh-row${!unlocked?' enh-locked':''}${lv>0?' has-reset':''}" style="${indent}position:relative">
-      <span class="enh-icon">${statImgTag(item.id,item.emoji,22)}</span>
+      <span class="enh-icon">${statImgTag(item.id,item.emoji,28)}</span>
       <div class="enh-info">
-        <div class="enh-name">${item.name}${enhBadge1}${enhBadge2}${enhDpsBadge}<span style="font-size:9px;color:var(--text3);margin-left:4px">Lv.${lv}</span></div>
+        <div class="enh-name">${item.name}${enhBadge1}${enhBadge2}${enhDpsBadge}</div>
         <div class="enh-lv">Lv.${lv}${item.maxLv?` / ${item.maxLv}`:''} <span style="font-size:9px;color:var(--shard)">+${totalVal}${unit}</span></div>
         <div class="enh-cost">${unlocked?`${curImgTag('gold',11)} ${fmtNum(cost)}`:'—'}</div>
-        <div style="font-size:9px;color:var(--text3);margin-top:1px">강화 레벨 당 +${perLvVal}${unit} 증가</div>
         ${lockStr}${masterBar}
       </div>
-      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px">
-        ${unlocked?`<div class="enh-btns">
-          <button class="enh-btn" onclick="doEnhance('${item.id}',1)" ${canAfford?'':'disabled'}>+1</button>
-          <button class="enh-btn" onclick="doEnhance('${item.id}',10)" ${G.gold>=cost*5&&unlocked?'':'disabled'}>+10</button>
-          <button class="enh-btn" onclick="doEnhance('${item.id}',100)" ${G.gold>=cost*50&&unlocked?'':'disabled'}>+100</button>
-          <button class="enh-btn max" onclick="doEnhanceMax('${item.id}')">최대</button>
-        </div>`:`<div class="enh-btns"><button class="enh-btn" disabled style="opacity:.3">🔒</button></div>`}
+      <div class="enh-btns">
+        <div class="enh-btn-row">
+          ${unlocked?`<button class="enh-btn" onclick="doEnhance('${item.id}',1)" ${canAfford?'':' disabled'}>+1</button><button class="enh-btn" onclick="doEnhance('${item.id}',10)" ${G.gold>=cost*5&&unlocked?'':' disabled'}>+10</button><button class="enh-btn" onclick="doEnhance('${item.id}',100)" ${G.gold>=cost*50&&unlocked?'':' disabled'}>+100</button><button class="enh-btn max" onclick="doEnhanceMax('${item.id}')">최대</button>`:`<button class="enh-btn" disabled style="opacity:.3">🔒</button>`}
+        </div>
+        ${lv>0?`<button onclick="resetOneEnhance('${item.id}')" style="font-size:8px;padding:1px 5px;background:rgba(255,71,87,0.07);border:1px solid rgba(255,71,87,0.3);border-radius:2px;color:var(--hp);cursor:pointer;font-family:var(--font);line-height:1.4;white-space:nowrap;align-self:flex-end">↺ 초기화</button>`:''}
       </div>
-      ${lv>0?`<button onclick="resetOneEnhance('${item.id}')" title="이 항목 초기화" style="position:absolute;bottom:4px;right:4px;font-size:8px;padding:1px 5px;background:rgba(255,71,87,0.07);border:1px solid rgba(255,71,87,0.3);border-radius:2px;color:var(--hp);cursor:pointer;font-family:var(--font);line-height:1.4;white-space:nowrap">↺ 초기화</button>`:''}
     </div>`;
   }).join('');
   updateAutoDistButtons();
@@ -5286,7 +5292,7 @@ function _renderGachaLvPopup(){
   const cost=gachaCostFor(G.gachaLevel);const needed=gachaThreshFor(G.gachaLevel);
   const canUp=isCurrentLv&&G.gachaTotalCount>=needed&&G.gold>=cost;
   document.getElementById('lv-up-cost').innerHTML=isCurrentLv
-    ?`필요 뽑기: ${fmtNum(needed)}회 (현재 ${G.gachaTotalCount})<br>비용: 💰 ${fmtNum(cost)}`
+    ?`필요 뽑기: ${fmtNum(needed)}회 (현재 ${G.gachaTotalCount})<br>비용: ${curImgTag('gold',13)} ${fmtNum(cost)}`
     :`<span style="color:var(--text3);font-size:10px">Lv.${lv} 확률 미리보기</span>`;
   document.getElementById('gacha-do-lvup-btn').disabled=!canUp;
   document.getElementById('gacha-do-lvup-btn').style.display=isCurrentLv?'':'none';
@@ -5360,8 +5366,8 @@ function fragToTicket(){if(G.shards<100){showNotif('🔩 파편 100개 필요','
 
 const DOLL_LAYOUT={
   top:['helmet','necklace','shoulder'],
-  left:['weapon'],
-  right:['gloves'],
+  left:[],
+  right:['weapon','gloves'],
   bot:['armor','boots','ring']
 };
 const GRADE_COLORS=['#999','#3fb950','#58a6ff','#bc8cff','#f0883e','#ff4757','#ffd700'];
@@ -5411,8 +5417,10 @@ function _buildSlotEl(slotId){
     div.appendChild(nm);
   }
   if(eq){
+    const gc=GRADE_COLORS[eq.gradeIdx]||'#999';
     const ib=document.createElement('div');
     ib.className='es-ilvl-badge';
+    ib.style.color=gc;
     ib.textContent='L'+eq.itemLv;
     div.appendChild(ib);
   }
@@ -5838,6 +5846,7 @@ function _collMonIcon(mData, collected){
     const dim=collected?'':'filter:brightness(0.25) grayscale(0.5);';
     return `<img src="${mData.img}" style="width:28px;height:28px;object-fit:contain;image-rendering:pixelated;${dim}" onerror="this.outerHTML='${mData.e||'❓'}'">`;
   }
+  if(!collected) return monTypeImg('normal',28);
   return mData.e||'❓';
 }
 
@@ -6428,69 +6437,102 @@ function renderStagePopup(){
     const hitColor=accFull?'var(--shard)':curHitRate>=0.9?'var(--shard)':curHitRate>=0.8?'var(--gold)':'var(--hp)';
     const penColor=penFull?'var(--shard)':defRedPct<=30?'var(--shard)':defRedPct<=50?'var(--gold)':'var(--hp)';
 
-    let html=`<div style="font-size:9px;color:var(--accent);margin-bottom:3px">${THEMES[0].segments[getSegIdx(G.stage)]?.name||''}</div>`;
-    html+=`<div class="popup-monster-row"><span>${d.monster.e} ${d.monster.n}</span><span style="color:var(--text3)">체력:${fmtNum(stats.hp)} 공격:${fmtNum(stats.atk)}</span></div>`;
-    html+=`<div style="font-size:10px;color:var(--gold);padding:2px 0;border-bottom:1px solid var(--border)">💰 ${fmtNum(goldPerKill)} &nbsp;<span style="display:inline-block;background:#1a4d2a;color:#3fb950;font-size:8px;font-weight:bold;padding:1px 4px;border-radius:3px;border:1px solid #2ea043;vertical-align:middle">경험치</span> ${fmtNum(expPerKill)}</div>`;
-    html+=`<div class="popup-monster-row" style="color:var(--hp);margin-top:2px"><span>${d.boss.e} ${d.boss.n} <span style="font-size:9px;opacity:.7">(${bossLabel})</span></span><span style="color:var(--text3)">체력:${fmtNum(bs.hp)} ⏱${bs.bossTimer}s</span></div>`;
-    html+=`<div style="font-size:10px;color:var(--gold);padding:2px 0;border-bottom:1px solid var(--border)">💰 ${fmtNum(bossGold)} &nbsp;<span style="display:inline-block;background:#1a4d2a;color:#3fb950;font-size:8px;font-weight:bold;padding:1px 4px;border-radius:3px;border:1px solid #2ea043;vertical-align:middle">경험치</span> ${fmtNum(bossExp)}</div>`;
-    if(penalty.pct>0)html+=`<div style="font-size:9px;color:var(--hp);margin-top:3px">⚠ 파밍 패널티 ${penalty.label} 적용됨</div>`;
+    const goldI=curImgTag('gold',14);
+    const expI=expIconImg(14);
+    const hpI=statImgTag('hp','❤️',14);
+    const atkI=statImgTag('atk','⚔️',14);
+    const accI=statImgTag('acc','🎯',14);
+    const penI=statImgTag('pen','🗡️',14);
+    const bt2=bt==='elite'?'elite':bt==='vip'?'vip':'boss';
+    const seg2=THEMES[0].segments[getSegIdx(G.stage)];
+    const repMon=(seg2.monsters&&seg2.monsters.length>0?seg2.monsters[0]:seg2.monster)||{n:'???',e:'❓'};
+    const bossData=(bt2==='elite'||bt2==='vip')?seg2.eliteBoss:seg2.boss;
+    const bossRealName=bossData?bossData.n:(bt2==='elite'?'엘리트보스':bt2==='vip'?'정예보스':'보스');
+    const monImgSrc=repMon.img||'';
+    const bossImgSrc=bossData?bossData.img:'';
+    const bossTypeName=bt2==='elite'?'엘리트':bt2==='vip'?'정예':'보스';
+    const bossGradeIcon=monTypeImg(bt2,11);
+    const monGradeIcon=monTypeImg('normal',11);
 
-    html+=`<div style="margin-top:6px;border-top:1px solid var(--border);padding-top:5px">`;
-    html+=`<div style="font-size:9px;color:var(--accent);margin-bottom:5px">⚙ 이 스테이지 권장 스탯</div>`;
+    // 몬 이미지 카드
+    function monCard(imgSrc,emoji,grade,gradeIcon,gradeColor,gradeBg,name,nameColor){
+      let c=`<div style="display:flex;flex-direction:column;align-items:center;gap:2px;min-width:62px;max-width:72px">`;
+      c+=`<div style="display:flex;align-items:center;gap:2px;font-size:9px;color:${gradeColor};background:${gradeBg};border:1px solid ${gradeColor};border-radius:3px;padding:1px 4px;white-space:nowrap">${gradeIcon}<span>${grade}</span></div>`;
+      if(imgSrc){
+        c+=`<img src="${imgSrc}" style="width:54px;height:54px;image-rendering:pixelated;object-fit:contain" onerror="this.outerHTML='<div style=\\'font-size:30px;width:54px;height:54px;display:flex;align-items:center;justify-content:center\\'>${emoji}</div>'">`;
+      } else {
+        c+=`<div style="font-size:30px;width:54px;height:54px;display:flex;align-items:center;justify-content:center">${emoji}</div>`;
+      }
+      c+=`<div style="font-size:9px;color:${nameColor};text-align:center;line-height:1.3;word-break:keep-all">${name}</div>`;
+      c+=`</div>`;
+      return c;
+    }
+    // 스탯 열
+    function infoCol(hp,atk,gold,exp){
+      return `<div style="display:flex;flex-direction:column;gap:3px;font-size:10px;justify-content:center">
+        <div style="display:flex;align-items:center;gap:3px">${hpI}<span style="color:var(--text3)">체력</span><span style="color:var(--text2)">${fmtShort(hp)}</span></div>
+        <div style="display:flex;align-items:center;gap:3px">${atkI}<span style="color:var(--text3)">공격력</span><span style="color:var(--text2)">${fmtShort(atk)}</span></div>
+        <div style="display:flex;align-items:center;gap:3px">${goldI}<span style="color:var(--text3)">골드</span><span style="color:var(--gold)">${fmtShort(gold)}</span></div>
+        <div style="display:flex;align-items:center;gap:3px">${expI}<span style="color:var(--text3)">경험치</span><span style="color:var(--shard)">${fmtShort(exp)}</span></div>
+      </div>`;
+    }
+    // 보스 등급 색상: 일반=파랑, 정예=보라, 엘리트=빨강
+    const bossNameColor=bt2==='elite'?'var(--hp)':bt2==='vip'?'var(--skill)':'var(--accent)';
+    const bossBadgeBg=bt2==='elite'?'rgba(255,71,87,0.15)':bt2==='vip'?'rgba(188,140,255,0.15)':'rgba(88,166,255,0.15)';
 
-    function statGauge(emoji, label, curVal, targetVal, curPct, targetPct, unitLabel, statusText, statusColor, shortfall){
+    // 4열 레이아웃: [일반몬이미지] [일반몬스탯] | [보스이미지] [보스스탯]
+    let html=`<div style="display:grid;grid-template-columns:auto 1fr 2px auto 1fr;gap:4px 5px;align-items:center;padding-bottom:5px;border-bottom:1px solid var(--border);margin-bottom:5px">`;
+    // 일반몬스터 이미지 카드
+    html+=monCard(monImgSrc,repMon.e,'일반',monGradeIcon,'var(--accent)','rgba(88,166,255,0.12)',repMon.n,'var(--text2)');
+    // 일반몬스터 스탯
+    html+=infoCol(stats.hp,stats.atk,goldPerKill,expPerKill);
+    // 구분선
+    html+=`<div style="background:var(--border);width:2px;height:100%;min-height:70px;align-self:stretch"></div>`;
+    // 보스 이미지 카드
+    html+=monCard(bossImgSrc,bossData?bossData.e:'👹',bossTypeName,bossGradeIcon,bossNameColor,bossBadgeBg,bossRealName,bossNameColor);
+    // 보스 스탯
+    html+=infoCol(bs.hp,bs.atk,bossGold,bossExp);
+    html+=`</div>`;
+    html+=`</div>`;
+    if(penalty.pct>0)html+=`<div style="font-size:9px;color:var(--hp);margin-bottom:4px">⚠ 파밍 패널티 ${penalty.label}</div>`;
+    // 권장 스탯
+    html+=`<div style="border-top:1px solid var(--border);padding-top:5px">`;
+    html+=`<div style="font-size:9px;color:var(--accent);margin-bottom:5px">⚙ 권장 스탯</div>`;
+    function statGauge(iconHtml,label,curVal,targetVal,curPct,statusText,statusColor,shortfall){
       const barFill=Math.min(100,curPct);
       const barColor=curPct>=100?'var(--shard)':curPct>=75?'var(--gold)':'var(--hp)';
-      const targetMarkerLeft=Math.min(98,targetPct);
-      let h='';
-      h+=`<div style="margin-bottom:5px">`;
+      let h=`<div style="margin-bottom:5px">`;
       h+=`<div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:2px">`;
-      h+=`<span style="font-size:9px;color:var(--text2);font-weight:bold">${emoji} ${label}</span>`;
+      h+=`<span style="font-size:9px;color:var(--text2);font-weight:bold">${iconHtml} ${label}</span>`;
       h+=`<span style="font-size:9px;color:${statusColor}">${statusText}</span>`;
       h+=`</div>`;
-      h+=`<div style="position:relative;height:7px;background:var(--bg4);border-radius:3px;border:1px solid var(--border);overflow:visible">`;
+      h+=`<div style="position:relative;height:7px;background:var(--bg4);border-radius:3px;border:1px solid var(--border)">`;
       h+=`<div style="height:100%;width:${barFill}%;background:${barColor};border-radius:3px;transition:width .3s"></div>`;
-      h+=`<div style="position:absolute;top:-2px;bottom:-2px;left:${targetMarkerLeft}%;width:2px;background:var(--text3);border-radius:1px;opacity:0.7"></div>`;
       h+=`</div>`;
       h+=`<div style="display:flex;justify-content:space-between;margin-top:2px">`;
-      h+=`<span style="font-size:8px;color:var(--text3)">현재 <span style="color:${barColor}">${curVal}</span>${unitLabel}</span>`;
-      if(shortfall>0){
-        h+=`<span style="font-size:8px;color:var(--hp)">▲ ${shortfall} 부족</span>`;
-      } else {
-        h+=`<span style="font-size:8px;color:var(--shard)">✓ 충분</span>`;
-      }
-      h+=`<span style="font-size:8px;color:var(--text3)">목표 <span style="color:var(--text2)">${targetVal}</span>${unitLabel}</span>`;
-      h+=`</div>`;
-      h+=`</div>`;
+      h+=`<span style="font-size:8px;color:var(--text3)">현재 <span style="color:${barColor}">${curVal}</span></span>`;
+      if(shortfall>0) h+=`<span style="font-size:8px;color:var(--hp)">▲ ${shortfall} 부족</span>`;
+      else h+=`<span style="font-size:8px;color:var(--shard)">✓ 충분</span>`;
+      h+=`<span style="font-size:8px;color:var(--text3)">목표 <span style="color:var(--text2)">${targetVal}</span></span>`;
+      h+=`</div></div>`;
       return h;
     }
-
     if(monEva>0){
-      const target=monEva;
-      const curPct=Math.min(100,curAcc/target*100);
-      const shortfall=accFull?0:Math.max(0,target-curAcc);
-      const statusText=accFull?'⚡ 무조건 명중!':curHitPct+'% 명중';
-      html+=statGauge('🎯','명중',curAcc,target,curPct,100,'',statusText,hitColor,shortfall);
-      if(!accFull) html+=`<div style="font-size:8px;color:var(--text3);margin-top:-2px;margin-bottom:4px">목표(${monEva}) 달성 시 무조건 명중 / 회피력 ${monEva}</div>`;
-      else html+=`<div style="font-size:8px;color:var(--shard);margin-top:-2px;margin-bottom:4px">✓ 명중(${curAcc}) ≥ 회피(${monEva}) — 100% 명중</div>`;
+      const curPct=Math.min(100,curAcc/monEva*100);
+      const shortfall=accFull?0:Math.max(0,monEva-curAcc);
+      html+=statGauge(accI,'명중',curAcc,monEva,curPct,accFull?'무조건 명중':curHitPct+'% 명중',hitColor,shortfall);
     } else {
-      html+=`<div style="font-size:9px;color:var(--text3);margin-bottom:5px">🎯 명중: 회피 없음 — 100% 명중</div>`;
+      html+=`<div style="font-size:9px;color:var(--text3);margin-bottom:5px">${accI} 명중: 회피 없음 — 100%</div>`;
     }
-
     if(monDef>0){
-      const target=monDef;
-      const curPct=Math.min(100,curPen/target*100);
-      const shortfall=penFull?0:Math.max(0,target-curPen);
-      const statusText=penFull?'⚡ 완전 관통!':'실질피해 '+effDmgPct+'%';
-      html+=statGauge('🗡️','방어구 관통',curPen,target,curPct,100,'',statusText,penColor,shortfall);
-      if(!penFull) html+=`<div style="font-size:8px;color:var(--text3);margin-top:-2px;margin-bottom:4px">목표(${monDef}) 달성 시 피해 100% / 관통 0 시 피해 ${effDmgBase}%</div>`;
-      else html+=`<div style="font-size:8px;color:var(--shard);margin-top:-2px;margin-bottom:4px">✓ 관통(${curPen}) ≥ 방어(${monDef}) — 피해 100%</div>`;
+      const curPct=Math.min(100,curPen/monDef*100);
+      const shortfall=penFull?0:Math.max(0,monDef-curPen);
+      html+=statGauge(penI,'관통',curPen,monDef,curPct,penFull?'완전 관통':'실질피해 '+effDmgPct+'%',penColor,shortfall);
     } else {
-      html+=`<div style="font-size:9px;color:var(--text3);margin-bottom:5px">🗡️ 관통: 방어 없음 — 피해 100%</div>`;
+      html+=`<div style="font-size:9px;color:var(--text3);margin-bottom:5px">${penI} 관통: 방어 없음 — 100%</div>`;
     }
-
     html+=`</div>`;
-
+    document.getElementById('popup-info-content').innerHTML=html;
     document.getElementById('popup-info-content').innerHTML=html;
   }else{
     const bestGs=G.highestGlobalStage||currGS();
@@ -6514,7 +6556,7 @@ function renderStagePopup(){
     </div>`;
     document.getElementById('popup-move-fixed').innerHTML=fixedHtml;
 
-    const autoOpen=new Set([bestChap,bestChap-1,bestChap-2,G.chapter].filter(c=>c>=1));
+    const autoOpen=new Set([bestChap,G.chapter].filter(c=>c>=1));
     let chapHtml='';
     for(let c=bestChap;c>=1;c--){
       const maxS=c<bestChap?100:bestStInChap;
@@ -6530,8 +6572,9 @@ function renderStagePopup(){
         for(let s=1;s<=maxS;s++){
           const isCurS=isCur&&s===G.stage;
           const bt2=getBossType(s);
-          const stMark=bt2==='elite'?'👑':bt2==='vip'?'💎':'';
-          chapHtml+=`<div class="popup-stage-item${isCurS?' cur':''}" onclick="moveToStage(${c},${s})">${s}${stMark}</div>`;
+          const isVip=bt2==='vip',isElite=bt2==='elite';
+          const stLabel=isVip?monTypeImg('vip',16):isElite?monTypeImg('elite',16):`${s}`;
+          chapHtml+=`<div class="popup-stage-item${isCurS?' cur':''}" onclick="moveToStage(${c},${s})" title="${s}스테이지">${stLabel}</div>`;
         }
         chapHtml+=`</div>`;
       }
@@ -7382,9 +7425,9 @@ function showDmgPopup(dmg,isCrit,isSkill=false){
   const b=document.getElementById('battle');
   if(!b)return;
   const el=document.createElement('div');
-  el.className='dmg-popup'+(isCrit?' crit':isSkill?' skill':'');
-  el.textContent=(isCrit?'💥':isSkill?'⚡':'')+fmtNum(dmg);
-  el.style.color=isSkill?'#bc8cff':isCrit?'#e3b341':'#ff6b6b';
+  el.className='dmg-popup'+(isCrit?' crit':'');
+  el.textContent=fmtNum(dmg);
+  el.style.color=isCrit?'#e3b341':'#ff6b6b';
 
   const slot=Math.min(_dmgStack.length, DMG_STACK_MAX-1);
   const rx=(Math.random()-0.5)*14+(slot%2===0?-6:6);
@@ -7403,7 +7446,7 @@ function showHealPopup(amt){
   el.className='heal-popup';
   el.textContent='+'+fmtNum(amt);
   const ry=(Math.random()-0.5)*6;
-  _popupAt(b,el,'player-emoji',-46,ry);
+  _popupAt(b,el,'player-emoji',36,ry);
   b.appendChild(el);setTimeout(()=>el.remove(),900);
 }
 function showMonsterDmgPopup(dmg){
@@ -7412,7 +7455,7 @@ function showMonsterDmgPopup(dmg){
   el.textContent='-'+fmtNum(dmg);
   el.style.color='#bc8cff';
   const ry=(Math.random()-0.5)*6;
-  _popupAt(b,el,'player-emoji',46,ry);
+  _popupAt(b,el,'player-emoji',56,ry);
   b.appendChild(el);setTimeout(()=>el.remove(),950);
 }
 function showMissPopup(){
@@ -7429,8 +7472,8 @@ function showEvadePopup(){
   el.className='heal-popup';
   el.textContent='회피';
   el.style.color='#58a6ff';el.style.fontSize='13px';
-  const ry=(Math.random()-0.5)*6;
-  _popupAt(b,el,'player-emoji',-30,ry);
+  const ry=(Math.random()-0.5)*6-10;
+  _popupAt(b,el,'player-emoji',-46,ry);
   b.appendChild(el);setTimeout(()=>el.remove(),900);
 }
 function _getPlayerEl(){
@@ -7567,6 +7610,14 @@ function fmtNum(n){
   if(n>=1e8)return(n/1e8).toFixed(1)+'억';
   if(n>=1e4)return(n/1e4).toFixed(1)+'만';
   return Math.floor(n).toLocaleString();
+}
+function fmtShort(n){
+  if(n>=1e16)return(n/1e16).toFixed(1)+'경';
+  if(n>=1e12)return(n/1e12).toFixed(1)+'조';
+  if(n>=1e8)return(n/1e8).toFixed(2)+'억';
+  if(n>=1e4)return(n/1e4).toFixed(1)+'만';
+  if(n>=1000)return(n/1000).toFixed(1)+'천';
+  return Math.floor(n)+'';
 }
 
 let _activeTab='growth';
