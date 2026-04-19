@@ -2133,7 +2133,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 // ========== [CONFIG] SAVE / VERSION ==========
 const SAVE_KEY = 'dotrium_v1';
 
-const GAME_VERSION = 'v03_82';
+const GAME_VERSION = 'v03_83';
 const VERSION_CHECK_URL = 'version.json';
 const VERSION_CHECK_INTERVAL = 1 * 60 * 1000;
 
@@ -3217,15 +3217,15 @@ function getFinalDmgMult(){
   return 1+(G.ptFinalDmg||0)*0.0005+getSlotBonus('ring','finaldmg')*0.001;
 }
 function getFinalAcc(){
-  const base=Math.floor((G.ptAcc||0)*2+getSlotBonus('necklace','acc')+getSlotBonus('bracelet','acc')+getEqPrefixSum('acc')+(G.enhanceLevels.acc||0)*0.1);
+  const base=Math.floor(10+(G.ptAcc||0)*2+getSlotBonus('necklace','acc')+getSlotBonus('bracelet','acc')+getEqPrefixSum('acc')+(G.enhanceLevels.acc||0)*0.1);
   const precPct=(getPassiveStat('precision')||{precisionPct:0}).precisionPct;
   return Math.floor(base*(1+precPct/100));
 }
 function getFinalEva(){
-  return Math.floor((G.ptEva||0)*2+getSlotBonus('boots','eva')+getSlotBonus('earring','eva')+getEqPrefixSum('eva')+(G.enhanceLevels.eva||0)*0.1);
+  return Math.floor(10+(G.ptEva||0)*2+getSlotBonus('boots','eva')+getSlotBonus('earring','eva')+getEqPrefixSum('eva')+(G.enhanceLevels.eva||0)*0.1);
 }
 function getFinalPen(){
-  const base=Math.floor((G.ptPen||0)*3+(G.level-1)*2+getSlotBonus('gloves','pen')+getEqPrefixSum('pen')+(G.enhanceLevels.pen||0)*2);
+  const base=Math.floor((G.ptPen||0)*3+10+(G.level-1)*2+getSlotBonus('gloves','pen')+getEqPrefixSum('pen')+(G.enhanceLevels.pen||0)*2);
   const penPct=(getPassiveStat('penetration')||{penetrationPct:0}).penetrationPct;
   return Math.floor(base*(1+penPct/100));
 }
